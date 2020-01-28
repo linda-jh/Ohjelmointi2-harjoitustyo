@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import fi.jyu.mit.fxgui.ComboBoxChooser?>
+<?import fi.jyu.mit.fxgui.ListChooser?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxPentu.PentuGUIController">
+   <top>
+      <MenuBar BorderPane.alignment="CENTER">
+        <menus>
+          <Menu mnemonicParsing="false" text="Tiedosto">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Tallenna" />
+                  <MenuItem mnemonicParsing="false" text="Lopeta" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Muokkaa">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Muokkaa..." />
+                  <MenuItem mnemonicParsing="false" text="Poista..." />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Apua">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Tietoa..." />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+   </top>
+   <center>
+      <TabPane tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+        <tabs>
+          <Tab text="Vanhemmat">
+            <content>
+              <AnchorPane prefWidth="553.0">
+                     <children>
+                        <BorderPane>
+                           <center>
+                              <VBox>
+                                 <children>
+                                    <ScrollPane fitToWidth="true">
+                                      <content>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0">
+                                             <children>
+                                                <GridPane hgap="10.0" prefHeight="325.0" prefWidth="302.0">
+                                                  <columnConstraints>
+                                                    <ColumnConstraints fillWidth="false" halignment="RIGHT" hgrow="SOMETIMES" maxWidth="118.19998779296876" minWidth="10.0" prefWidth="108.60001220703126" />
+                                                    <ColumnConstraints fillWidth="false" halignment="RIGHT" hgrow="SOMETIMES" maxWidth="192.0000122070313" minWidth="10.0" prefWidth="152.59998779296873" />
+                                                  </columnConstraints>
+                                                  <rowConstraints>
+                                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints vgrow="SOMETIMES" />
+                                                  </rowConstraints>
+                                                   <padding>
+                                                      <Insets bottom="10.0" left="10.0" right="20.0" top="10.0" />
+                                                   </padding>
+                                                   <children>
+                                                      <Label text="Nimi" />
+                                                      <Label text="Kutsumanimi" GridPane.rowIndex="1" />
+                                                      <Label text="Syntymäpäivä" GridPane.rowIndex="2" />
+                                                      <Label text="Sukupuoli" GridPane.rowIndex="3" />
+                                                      <Label text="Sirunumero" GridPane.rowIndex="4" />
+                                                      <Label text="Äiti" GridPane.rowIndex="5" />
+                                                      <Label text="Isä" GridPane.rowIndex="6" />
+                                                      <Label text="Lisätietoja" GridPane.rowIndex="7" />
+                                                      <TextField text="Karvatassu Mirzam" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" />
+                                                      <TextField text="Nelli" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" />
+                                                      <TextField text="20.07.2015" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" />
+                                                      <TextField text="tyttö" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" />
+                                                      <TextField text="985 112 001 346 227" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="4" />
+                                                      <TextField GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="5" />
+                                                      <TextField GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="6" />
+                                                      <HBox GridPane.columnIndex="1" GridPane.rowIndex="8">
+                                                         <children>
+                                                            <Button mnemonicParsing="false" text="Muokkaa">
+                                                               <HBox.margin>
+                                                                  <Insets bottom="5.0" left="5.0" right="5.0" top="10.0" />
+                                                               </HBox.margin>
+                                                            </Button>
+                                                            <Button mnemonicParsing="false" text="Poista">
+                                                               <HBox.margin>
+                                                                  <Insets bottom="5.0" left="5.0" right="5.0" top="10.0" />
+                                                               </HBox.margin>
+                                                            </Button>
+                                                         </children>
+                                                      </HBox>
+                                                      <TextArea prefHeight="50.0" prefWidth="148.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                                                   </children>
+                                                </GridPane>
+                                             </children>
+                                          </AnchorPane>
+                                      </content>
+                                    </ScrollPane>
+                                    <BorderPane>
+                                       <center>
+                                          <ScrollPane BorderPane.alignment="CENTER">
+                                            <content>
+                                              <AnchorPane minHeight="0.0" minWidth="0.0">
+                                                   <children>
+                                                      <ListChooser prefHeight="158.0" prefWidth="283.0" rivit="Karvatassu Rigel&#10;Karvatassu Spica&#10;Karvatassu Castor&#10;Karvatassu Hadar&#10;" />
+                                                   </children>
+                                                </AnchorPane>
+                                            </content>
+                                          </ScrollPane>
+                                       </center>
+                                       <top>
+                                          <Label text="Pennut" BorderPane.alignment="CENTER">
+                                             <BorderPane.margin>
+                                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                             </BorderPane.margin>
+                                          </Label>
+                                       </top>
+                                       <bottom>
+                                          <HBox BorderPane.alignment="CENTER">
+                                             <children>
+                                                <Label text="Pentujen lukumäärä:">
+                                                   <HBox.margin>
+                                                      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                   </HBox.margin>
+                                                </Label>
+                                                <Label text="4">
+                                                   <HBox.margin>
+                                                      <Insets bottom="10.0" right="10.0" top="10.0" />
+                                                   </HBox.margin>
+                                                </Label>
+                                             </children>
+                                          </HBox>
+                                       </bottom>
+                                       <padding>
+                                          <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                       </padding>
+                                    </BorderPane>
+                                 </children>
+                              </VBox>
+                           </center>
+                           <top>
+                              <HBox BorderPane.alignment="CENTER">
+                                 <children>
+                                    <ComboBoxChooser rivit="Nimi">
+                                       <HBox.margin>
+                                          <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                       </HBox.margin>
+                                    </ComboBoxChooser>
+                                    <Label text="Haku">
+                                       <HBox.margin>
+                                          <Insets bottom="15.0" left="30.0" right="5.0" top="15.0" />
+                                       </HBox.margin>
+                                    </Label>
+                                    <TextField>
+                                       <HBox.margin>
+                                          <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                       </HBox.margin>
+                                    </TextField>
+                                 </children>
+                              </HBox>
+                           </top>
+                           <left>
+                              <VBox BorderPane.alignment="CENTER">
+                                 <children>
+                                    <ListChooser prefHeight="525.0" prefWidth="248.0" rivit="Karvatassu Mirzam&#10;Karvatassu Regor&#10;Karvatassu Jupiter&#10;" />
+                                    <HBox>
+                                       <children>
+                                          <Button mnemonicParsing="false" text="Lisää">
+                                             <HBox.margin>
+                                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                             </HBox.margin>
+                                          </Button>
+                                          <Button mnemonicParsing="false" text="Siirrä">
+                                             <HBox.margin>
+                                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                             </HBox.margin>
+                                          </Button>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                           </left>
+                        </BorderPane>
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+          <Tab text="Pennut">
+            <content>
+              <AnchorPane>
+                     <children>
+                        <BorderPane>
+                           <center>
+                              <VBox BorderPane.alignment="CENTER">
+                                 <children>
+                                    <ScrollPane>
+                                      <content>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0">
+                                             <children>
+                                                <GridPane hgap="10.0" prefHeight="325.0" prefWidth="302.0">
+                                                   <columnConstraints>
+                                                      <ColumnConstraints fillWidth="false" halignment="RIGHT" hgrow="SOMETIMES" maxWidth="118.19998779296876" minWidth="10.0" prefWidth="108.60001220703126" />
+                                                      <ColumnConstraints fillWidth="false" halignment="RIGHT" hgrow="SOMETIMES" maxWidth="192.0000122070313" minWidth="10.0" prefWidth="152.59998779296873" />
+                                                   </columnConstraints>
+                                                   <rowConstraints>
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints vgrow="SOMETIMES" />
+                                                   </rowConstraints>
+                                                   <padding>
+                                                      <Insets bottom="10.0" left="10.0" right="20.0" top="10.0" />
+                                                   </padding>
+                                                   <children>
+                                                      <Label text="Nimi" />
+                                                      <Label text="Kutsumanimi" GridPane.rowIndex="1" />
+                                                      <Label text="Syntymäpäivä" GridPane.rowIndex="2" />
+                                                      <Label text="Sukupuoli" GridPane.rowIndex="3" />
+                                                      <Label text="Sirunumero" GridPane.rowIndex="4" />
+                                                      <Label text="Äiti" GridPane.rowIndex="5" />
+                                                      <Label text="Isä" GridPane.rowIndex="6" />
+                                                      <Label text="Lisätietoja" GridPane.rowIndex="7" />
+                                                      <TextField text="Karvatassu Rigel" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" />
+                                                      <TextField text="Simba" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" />
+                                                      <TextField text="15.04.2018" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" />
+                                                      <TextField text="poika" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" />
+                                                      <TextField text="985 112 001 635 024" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="4" />
+                                                      <TextField text="Karvatassu Mirzam" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="5" />
+                                                      <TextField text="Karvatassu Regor" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="6" />
+                                                      <HBox GridPane.columnIndex="1" GridPane.rowIndex="8">
+                                                         <children>
+                                                            <Button mnemonicParsing="false" text="Muokkaa">
+                                                               <HBox.margin>
+                                                                  <Insets bottom="5.0" left="5.0" right="5.0" top="10.0" />
+                                                               </HBox.margin>
+                                                            </Button>
+                                                            <Button mnemonicParsing="false" text="Poista">
+                                                               <HBox.margin>
+                                                                  <Insets bottom="5.0" left="5.0" right="5.0" top="10.0" />
+                                                               </HBox.margin>
+                                                            </Button>
+                                                         </children>
+                                                      </HBox>
+                                                      <TextArea prefHeight="50.0" prefWidth="148.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                                                   </children>
+                                                </GridPane>
+                                             </children>
+                                          </AnchorPane>
+                                      </content>
+                                    </ScrollPane>
+                                    <BorderPane>
+                                       <center>
+                                          <ScrollPane BorderPane.alignment="CENTER">
+                                             <content>
+                                                <GridPane hgap="10.0" minHeight="-Infinity" minWidth="-Infinity">
+                                                   <columnConstraints>
+                                                      <ColumnConstraints fillWidth="false" halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" />
+                                                      <ColumnConstraints fillWidth="false" halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" />
+                                                      <ColumnConstraints hgrow="ALWAYS" />
+                                                   </columnConstraints>
+                                                   <rowConstraints>
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                                                   </rowConstraints>
+                                                   <padding>
+                                                      <Insets left="10.0" right="10.0" top="10.0" />
+                                                   </padding>
+                                                   <children>
+                                                      <Label text="Nimi" />
+                                                      <Label text="Osoite" GridPane.rowIndex="1" />
+                                                      <Label GridPane.rowIndex="2" />
+                                                      <Label text="Puhelinnumero" GridPane.rowIndex="3" />
+                                                      <Label text="Sähköpostiosoite" GridPane.rowIndex="4" />
+                                                      <Label text="Luovutuspäivämäärä" GridPane.rowIndex="5" />
+                                                      <TextField text="Ari Katajavuori" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" />
+                                                      <TextField text="Kuusitie 12" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" />
+                                                      <TextField text="56210 Virmutjoki" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" />
+                                                      <TextField text="0405632942" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" />
+                                                      <TextField text="ari.kvuori@gmail.com" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="4" />
+                                                      <TextField text="22.07.2018" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="5" />
+                                                      <HBox GridPane.columnIndex="1" GridPane.rowIndex="6">
+                                                         <children>
+                                                            <Button mnemonicParsing="false" text="Muokkaa">
+                                                               <HBox.margin>
+                                                                  <Insets bottom="5.0" left="10.0" right="10.0" top="10.0" />
+                                                               </HBox.margin>
+                                                            </Button>
+                                                         </children>
+                                                      </HBox>
+                                                   </children>
+                                                </GridPane>
+                                             </content>
+                                          </ScrollPane>
+                                       </center>
+                                       <top>
+                                          <Label text="Uusi omistaja" BorderPane.alignment="CENTER">
+                                             <BorderPane.margin>
+                                                <Insets left="5.0" right="5.0" top="5.0" />
+                                             </BorderPane.margin></Label>
+                                       </top>
+                                    </BorderPane>
+                                 </children>
+                              </VBox>
+                           </center>
+                           <top>
+                              <HBox BorderPane.alignment="CENTER">
+                                 <children>
+                                    <ComboBoxChooser rivit="Nimi">
+                                       <HBox.margin>
+                                          <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                       </HBox.margin>
+                                    </ComboBoxChooser>
+                                    <Label text="Haku">
+                                       <HBox.margin>
+                                          <Insets bottom="15.0" left="30.0" right="5.0" top="15.0" />
+                                       </HBox.margin>
+                                    </Label>
+                                    <TextField>
+                                       <HBox.margin>
+                                          <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                       </HBox.margin>
+                                    </TextField>
+                                 </children>
+                              </HBox>
+                           </top>
+                           <left>
+                              <VBox BorderPane.alignment="CENTER">
+                                 <children>
+                                    <ListChooser prefHeight="525.0" prefWidth="248.0" rivit="Karvatassu Rigel&#10;Karvatassu Spica&#10;Karvatassu Castor&#10;Karvatassu Hadar&#10;" />
+                                    <HBox>
+                                       <children>
+                                          <Button mnemonicParsing="false" text="Lisää">
+                                             <HBox.margin>
+                                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                             </HBox.margin>
+                                          </Button>
+                                          <Button mnemonicParsing="false" text="Siirrä">
+                                             <HBox.margin>
+                                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                             </HBox.margin>
+                                          </Button>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                           </left></BorderPane>
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+        </tabs>
+      </TabPane>
+   </center>
+   <bottom>
+      <ToolBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+        <items>
+          <Button mnemonicParsing="false" text="Tallenna" />
+            <Button mnemonicParsing="false" text="Lopeta" />
+        </items>
+      </ToolBar>
+   </bottom>
+</BorderPane>
