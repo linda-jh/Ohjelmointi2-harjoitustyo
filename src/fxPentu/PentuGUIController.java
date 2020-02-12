@@ -80,12 +80,11 @@ public class PentuGUIController {
     
     
     private void lisaa() {
-        ModalController.showModal(PentuGUIController.class.getResource("PentuDialogView.fxml"), "Lisää", null, "");
+        ModalController.showModal(PentuDialogController.class.getResource("PentuDialogView.fxml"), "Lisää", null, "");
     }
     
-    
     private void muokkaa() {
-        ModalController.showModal(PentuGUIController.class.getResource("PentuDialogView.fxml"), "Muokkaa", null, "");
+        ModalController.showModal(PentuDialogController.class.getResource("PentuDialogView.fxml"), "Muokkaa", null, "");
     }
     
     
@@ -123,8 +122,8 @@ public class PentuGUIController {
     
     
     /**
-     * Alustaa kerhon lukemalla sen valitun nimisestä tiedostosta
-     * @param nimi tiedosto josta kerhon tiedot luetaan
+     * Alustaa kasvattajan tiedossa olevat tiedot lukemalla ne valitusta tiedostosta
+     * @param nimi tiedosto josta kasvattajan tiedot luetaan
      */
     protected void lueTiedosto(String nimi) {
         kasvattajannimi = nimi;
