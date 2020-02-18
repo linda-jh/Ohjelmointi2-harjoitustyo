@@ -4,18 +4,30 @@ import fi.jyu.mit.fxgui.Dialogs;
 import fi.jyu.mit.fxgui.ModalController;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import pentu.Pentu;
 
 /**
  * @author linda
  * @version 4.2.2020
  *
  */
-public class PentuGUIController {
+public class PentuGUIController implements Initializable{
     @FXML private Label labelVirhe;
     @FXML private TextField textHaku;
     private String kasvattajannimi = "Karvatassu";
+    private Pentu pentu;
+    @FXML ListChooser<Elain> chooserElaimet; // TODO: lisää fxml tiedostoon chooserEläimet
+    
+    
+
+    @Override
+    public void initialize(URL url, ResourceBundle bundle) {
+        alusta();      
+    }
+    
      
     @FXML private void handleTallenna() {
         tallenna();
@@ -88,6 +100,14 @@ public class PentuGUIController {
     }
     
     
+    /**
+     * @param pentu pentu
+     */
+    public void setPentu(Pentu pentu) {
+        this.pentu = pentu;
+    }
+    
+    
     private void naytaVirhe(String virhe) {
                  if ( virhe == null || virhe.isEmpty() ) {
                      labelVirhe.setText("");
@@ -131,6 +151,16 @@ public class PentuGUIController {
         String virhe = "Ei osata lukea vielä";  // TODO: tähän oikea tiedoston lukeminen
         // if (virhe != null) 
             Dialogs.showMessageDialog(virhe);
+    }
+    
+    private void alusta() {
+        chooserElaimet.clear();
+        chooserElaimet.addSelectionListener(e -> naytaElain());
+    }
+    
+    
+    private void naytaJasen() {
+        //
     }
     
     

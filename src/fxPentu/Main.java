@@ -27,6 +27,8 @@ public class Main extends Application {
             primaryStage.setScene(scene);
             primaryStage.setScene(scene2);
             primaryStage.show();*/
+		    
+		    primaryStage.setResizable(false);
             
 		    final FXMLLoader ldr = new FXMLLoader(getClass().getResource("PentuGUI.fxml"));
             final BorderPane root = (BorderPane)ldr.load();
