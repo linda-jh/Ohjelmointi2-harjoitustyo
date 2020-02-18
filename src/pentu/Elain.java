@@ -28,7 +28,7 @@ public class Elain {
         //
     }
     
-    
+        
     /**
      * Antaa jäsenelle seuraavan rekisterinumeron.
      * @return eläimen uusi tunnusnumero
@@ -52,6 +52,15 @@ public class Elain {
     
     
     /**
+     * Hakee eläimen nimen
+     * @return eläimen nimen
+     */
+    public String getNimi() {
+        return nimi;
+    }
+      
+    
+    /**
      * @return tunnusnumero
      */
     public int getTunnusNro() {
@@ -60,9 +69,9 @@ public class Elain {
     
     
     /**
-     * 
+     * Täytetään eläimen tiedot
      */
-    public void taytaMirTiedoilla() {
+    public void taytaElainTiedoilla() {
         nimi = "Karvatassu Mirzam" + " " + rand(1000,9999);
         kutsumanimi = "Nelli";
         syntymapaiva = "20.7.2015";
@@ -93,12 +102,12 @@ public class Elain {
         mirzam2.rekisteroi();
         
         mirzam.tulosta(System.out);
-        mirzam.taytaMirTiedoilla();
+        mirzam.taytaElainTiedoilla();
         mirzam.tulosta(System.out);
         
 
         mirzam2.tulosta(System.out);
-        mirzam2.taytaMirTiedoilla();
+        mirzam2.taytaElainTiedoilla();
         mirzam2.tulosta(System.out);
 
     }

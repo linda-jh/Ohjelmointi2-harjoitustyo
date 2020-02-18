@@ -75,9 +75,9 @@ public class Pentu {
         
         Elain mirzam = new Elain(), mirzam2 = new Elain();
         mirzam.rekisteroi();
-        mirzam.taytaMirTiedoilla();
+        mirzam.taytaElainTiedoilla();
         mirzam2.rekisteroi();
-        mirzam2.taytaMirTiedoilla();        
+        mirzam2.taytaElainTiedoilla();        
         
         try {
             pentu.lisaa(mirzam2);

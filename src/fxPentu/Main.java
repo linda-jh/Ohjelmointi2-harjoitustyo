@@ -3,8 +3,9 @@ package fxPentu;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;
+import pentu.Pentu;
 import javafx.scene.Scene;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import javafx.fxml.FXMLLoader;
 
 
@@ -14,30 +15,25 @@ import javafx.fxml.FXMLLoader;
  *
  */
 public class Main extends Application {
+    
 	@Override
 	public void start(Stage primaryStage) {
+	    
+	    primaryStage.setResizable(false);
+	    
 		try {
-			/**BorderPane root = (BorderPane)FXMLLoader.load(getClass().getResource("PentuGUI.fxml"));
-			BorderPane root2 = (BorderPane)FXMLLoader.load(getClass().getResource("PentuNimiView.fxml"));
-			
-			Scene scene = new Scene(root);
-			scene.getStylesheets().add(getClass().getResource("pentu.css").toExternalForm());
-			Scene scene2 = new Scene(root2);
-            scene.getStylesheets().add(getClass().getResource("pentu.css").toExternalForm());
-            primaryStage.setScene(scene);
-            primaryStage.setScene(scene2);
-            primaryStage.show();*/
-		    
-		    primaryStage.setResizable(false);
-            
+
 		    final FXMLLoader ldr = new FXMLLoader(getClass().getResource("PentuGUI.fxml"));
-            final BorderPane root = (BorderPane)ldr.load();
+            final Pane root = (Pane)ldr.load();
             final PentuGUIController pentuCtrl = (PentuGUIController)ldr.getController();
 
             final Scene scene = new Scene(root);
             scene.getStylesheets().add(getClass().getResource("pentu.css").toExternalForm());
             primaryStage.setScene(scene);
             primaryStage.setTitle("Pentu");
+            
+            Pentu pentu = new Pentu();
+            pentuCtrl.setPentu(pentu);
             
             // Platform.setImplicitExit(false); // tätä ei kai saa laittaa
 
