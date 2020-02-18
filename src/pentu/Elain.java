@@ -61,6 +61,7 @@ public class Elain {
       
     
     /**
+     * Hakee eläimen tunnusnumeron
      * @return tunnusnumero
      */
     public int getTunnusNro() {
@@ -80,6 +81,7 @@ public class Elain {
     }
 
     /**
+     * Arpoo satunnaisen luvun annetulla välillä
      * @param ala arvonnan alaraja
      * @param yla arvonna ylaraja
      * @return satunnainen luku välillä [ala, yla]

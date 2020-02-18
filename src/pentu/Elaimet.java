@@ -8,7 +8,7 @@ package pentu;
  */
 public class Elaimet {
     
-    private static final int    MAX_ELAIMIA       = 5;
+    private static final int    MAX_ELAIMIA     = 5;
     private int                 lkm             = 0;
     private String              tiedostonNimi   = "";
     private Elain[]             alkiot;
@@ -19,13 +19,12 @@ public class Elaimet {
      * Oletusmuodostaja
      */
     public Elaimet() {
-        //
         alkiot = new Elain[MAX_ELAIMIA];
     }
     
     
     /**
-     * Lisää uuden jäsenen tietorakenteeseen.  Ottaa jäsenen omistukseensa.
+     * Lisää uuden eläimen tietorakenteeseen.  Ottaa eläimen omistukseensa.
      * @param elain liitettävän eläimen viite.
      * @throws SailoException jos tietorakenne on jo täynnä
      * @example
@@ -57,6 +56,7 @@ public class Elaimet {
     
     
     /**
+     * Hakee lukumäärän arvon
      * @return lukumäärä
      */
     public int getLkm() {
