@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<BorderPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fi.jyu.mit.fxgui.ModalController">
+<BorderPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxPentu.PentuDialogController">
    <center>
       <GridPane hgap="10.0" BorderPane.alignment="CENTER">
          <columnConstraints>
@@ -42,14 +42,14 @@
             <Label text="Äiti" GridPane.rowIndex="5" />
             <Label text="Isä" GridPane.rowIndex="6" />
             <Label text="Lisätietoja" GridPane.rowIndex="7" />
-            <TextField GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" />
-            <TextField GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" />
-            <TextField GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" />
-            <TextField GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="4" />
-            <TextArea prefHeight="50.0" prefWidth="148.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+            <TextField fx:id="textNimiD" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" />
+            <TextField fx:id="textKutsumanimiD" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" />
+            <TextField fx:id="textSukupuoliD" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" />
+            <TextField fx:id="textSirunroD" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="4" />
+            <TextArea fx:id="textLisatietojaD" prefHeight="50.0" prefWidth="148.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
             <ChoiceBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
             <ChoiceBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-            <DatePicker GridPane.columnIndex="1" GridPane.rowIndex="2">
+            <DatePicker fx:id="datepSyntymapaivaD" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <GridPane.margin>
                   <Insets left="4.0" />
                </GridPane.margin>

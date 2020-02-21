@@ -49,7 +49,7 @@ public class Elain {
         seuraavaNro++;
         return tunnusNro;
     }
-    
+   
     
     /**
      * Hakee eläimen nimen

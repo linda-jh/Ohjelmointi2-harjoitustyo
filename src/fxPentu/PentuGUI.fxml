@@ -30,6 +30,7 @@
         <menus>
           <Menu mnemonicParsing="false" text="Tiedosto">
             <items>
+                  <MenuItem mnemonicParsing="false" onAction="#handleAvaa" text="Avaa" />
               <MenuItem mnemonicParsing="false" onAction="#handleTallenna" text="Tallenna" />
                   <MenuItem mnemonicParsing="false" onAction="#handleLopeta" text="Lopeta" />
             </items>
@@ -157,7 +158,7 @@
                            <top>
                               <HBox BorderPane.alignment="CENTER">
                                  <children>
-                                    <ComboBoxChooser rivit="Nimi">
+                                    <ComboBoxChooser fx:id="cbHaku" rivit="Nimi">
                                        <HBox.margin>
                                           <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                        </HBox.margin>

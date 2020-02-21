@@ -4,6 +4,7 @@ import java.io.PrintStream;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import fi.jyu.mit.fxgui.ComboBoxChooser;
 import fi.jyu.mit.fxgui.Dialogs;
 import fi.jyu.mit.fxgui.ListChooser;
 import fi.jyu.mit.fxgui.ModalController;
@@ -26,6 +27,7 @@ import pentu.SailoException;
  *
  */
 public class PentuGUIController implements Initializable{
+    @FXML ComboBoxChooser<String> cbHaku;
     @FXML private Label labelVirhe;
     @FXML private TextField textHaku;
     @FXML private ScrollPane panelElain;
@@ -33,6 +35,7 @@ public class PentuGUIController implements Initializable{
     
     private String kasvattajannimi = "Karvatassu";
     private Pentu pentu;
+    private Elain elainKohdalla;
     private TextArea areaElain = new TextArea();
     
     
@@ -42,6 +45,7 @@ public class PentuGUIController implements Initializable{
     public void initialize(URL url, ResourceBundle bundle) {
         alusta();      
     }
+    
     
     /**
      * Käsittelee tapahtuman, kun painetaan tallenna 
@@ -69,7 +73,7 @@ public class PentuGUIController implements Initializable{
      * Käsittelee tapahtuman, kun hakukenttään kirjoitetaan
      */
     @FXML private void handleHaku() {
-                  String hakukentta = textHaku.getSelectedText();
+                  String hakukentta = cbHaku.getSelectedText();
                   String ehto = textHaku.getText(); 
                   if ( ehto.isEmpty() )
                       naytaVirhe(null);
@@ -151,13 +155,16 @@ public class PentuGUIController implements Initializable{
         muokkaa();
     }
     
+    @FXML private void handleAvaa() {
+        avaa();
+    }
+    
     
     
 // -----------------------------------------------------------------------------------------------------------------
 
     
     
-    // TODO: jokaisesta painikkeesta tulee tapahtua jotain
     // ModalController.showModal(PentuGUIController.class.getResource("PentuDialogView.fxml"), "Muokkaa", null, "");
     
     /**
@@ -176,7 +183,7 @@ public class PentuGUIController implements Initializable{
         }
         hae(uusi.getTunnusNro());
     }
-    
+        
     
     /**
      * Hakee eläimen tiedot listaan
@@ -222,6 +229,7 @@ public class PentuGUIController implements Initializable{
      */
     private void muokkaa() {
         ModalController.showModal(PentuDialogController.class.getResource("PentuDialogView.fxml"), "Muokkaa", null, "");
+        
     }
      
     
@@ -303,7 +311,7 @@ public class PentuGUIController implements Initializable{
      * Näyttää listasta valitun eläimen tiedot, tilapäisesti yhteen isoon edit-kenttään
      */
     private void naytaElain() {
-        Elain elainKohdalla = chooserElaimet.getSelectedObject();
+        elainKohdalla = chooserElaimet.getSelectedObject();
 
         if (elainKohdalla == null) return;
 

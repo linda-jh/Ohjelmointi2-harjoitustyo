@@ -67,17 +67,23 @@ public class Elaimet {
     /**
      * @param i numero
      * @return taulukon alkiot
-     */
+     *
     public Elain anna(int i) {
         return alkiot[i];
-    }
+    }*/
+    
     
     /**
+     * Palauttaa viitteen i:teen eläimeen.
+     * @param i monennenko eläimen viite halutaan
+     * @return viite elläimeen, jonka indeksi on i
+     * @throws IndexOutOfBoundsException jos i ei ole sallitulla alueella
+     */
     public Elain anna(int i) throws IndexOutOfBoundsException {
         if (i < 0 || lkm <= i)
-            throw new IndexOutOfBoundsExceptions("Laitoin indeksi: " + i):
+            throw new IndexOutOfBoundsException("Laitoin indeksi: " + i);
         return alkiot[i];
-    } */
+    }
     
     
     /**
