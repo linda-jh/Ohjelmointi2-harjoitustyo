@@ -62,16 +62,7 @@ public class Elaimet {
     public int getLkm() {
         return lkm;
     }
-    
         
-    /**
-     * @param i numero
-     * @return taulukon alkiot
-     *
-    public Elain anna(int i) {
-        return alkiot[i];
-    }*/
-    
     
     /**
      * Palauttaa viitteen i:teen eläimeen.
@@ -87,13 +78,23 @@ public class Elaimet {
     
     
     /**
-     * Lukee eläimet tiedostosta.  Kesken.
+     * Lukee eläinten tiedostosta.  Kesken.
      * @param hakemisto tiedoston hakemisto
      * @throws SailoException jos lukeminen epäonnistuu
      */
     public void lueTiedostosta(String hakemisto) throws SailoException {
         tiedostonNimi = hakemisto + "/nimet.dat";
         throw new SailoException("Ei osata vielä lukea tiedostoa " + tiedostonNimi);
+    }
+    
+    
+    /**
+     * Tallentaa eläinten tiedostoon.  
+     * TODO Kesken.
+     * @throws SailoException jos talletus epäonnistuu
+     */
+    public void talleta() throws SailoException {
+        throw new SailoException("Ei osata vielä tallettaa tiedostoa " + tiedostonNimi);
     }
     
     

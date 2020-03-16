@@ -8,8 +8,8 @@ package pentu;
  */
 public class Pentu {
     
-    Elaimet elaimet = new Elaimet();
-    // Omistajat omistajat = new Omistajat(); <- tämä tulee sitten kun on omistajat luokka tehty yms
+    private Elaimet elaimet = new Elaimet();
+    private Omistajat omistajat = new Omistajat(); // <- tämä tulee sitten kun on omistajat luokka tehty yms
     
     /**
      * Alustetaan Pennun tiedot (tätä ei ole pakko tehdä)
@@ -49,11 +49,49 @@ public class Pentu {
     
     
     /**
+     * Listään uusi harrastus kerhoon
+     * @param o lisättävä omistaja 
+     */
+    public void lisaa(Omistaja o) {
+        omistajat.lisaa(o);
+    }
+    
+    
+    /**
+     * Lukee penturekisterin tiedot tiedostosta
+     * @param nimi jota käyteään lukemisessa
+     * @throws SailoException jos lukeminen epäonnistuu
+     */
+    public void lueTiedostosta(String nimi) throws SailoException {
+        elaimet.lueTiedostosta(nimi);
+        omistajat.lueTiedostosta(nimi);
+    }
+    
+    /**
+     * Tallettaa penturekisterin tiedot tiedostoon
+     * @throws SailoException jos tallettamisessa ongelmia
+     */
+    public void talleta() throws SailoException {
+        elaimet.talleta();
+        omistajat.talleta();
+        // TODO: yritä tallettaa toinen vaikka toinen epäonnistuisi
+    }
+    
+    
+    /**
      * Haetaan eläinten lukumäärän eläimet luokasta
      * @return palauttaa lukumäärän
      */
     public int getElaimia() {
         return elaimet.getLkm();
+    }
+    
+    /**
+     * Haetaan omistajien lukumäärän omistajat luokasta
+     * @return palauttaa lukumäärän
+     */
+    public int getOmistajia() {
+        return omistajat.getLkm();
     }
     
     
@@ -67,6 +105,17 @@ public class Pentu {
         return elaimet.anna(i);
     }
     
+    
+    /**
+     * Palauttaa i:n omistajan
+     * @param i monesko omistaja palautetaan
+     * @return viite i:teen eläimeen 
+     * @throws IndexOutOfBoundsException jos tulee poikkeus
+     */
+    public Omistaja annaOmistaja(int i) throws IndexOutOfBoundsException {
+        return omistajat.anna(i);
+    }
+    
     /**
      * @param args ei käytössä
      */
@@ -77,7 +126,13 @@ public class Pentu {
         mirzam.rekisteroi();
         mirzam.taytaElainTiedoilla();
         mirzam2.rekisteroi();
-        mirzam2.taytaElainTiedoilla();        
+        mirzam2.taytaElainTiedoilla(); 
+        
+        Omistaja ari = new Omistaja(), aino = new Omistaja();
+        ari.rekisteroi();
+        ari.taytaTiedoilla();
+        aino.rekisteroi();
+        aino.taytaTiedoilla();
         
         try {
             pentu.lisaa(mirzam2);
@@ -92,7 +147,7 @@ public class Pentu {
             System.err.println(e.getMessage());
             System.err.flush();
         }
-                
+        
         System.out.println("=========== Eläimet testi ===========");
         
         for (int i = 0; i < pentu.getElaimia(); i++) {
@@ -100,6 +155,28 @@ public class Pentu {
             System.out.println("Eläin paikassa: " + i);
             elain.tulosta(System.out);
         }
+        
+        
+        pentu.lisaa(ari);
+        pentu.lisaa(aino);
+        pentu.lisaa(ari);
+        pentu.lisaa(aino);
+        pentu.lisaa(ari);
+                
+        System.out.println("\n" + "=========== Omistajat testi ===========");
+        
+        for(Omistaja o : pentu.omistajat) {
+            o.tulosta(System.out);
+        }
     }
 
+
+    public Omistajat getOmistajat() {
+        return omistajat;
+    }
+
+
+    public void setOmistajat(Omistajat omistajat) {
+        this.omistajat = omistajat;
+    }
 }

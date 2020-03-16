@@ -15,8 +15,12 @@ public class Elain {
     private String      kutsumanimi      = "";
     private String      syntymapaiva     = "";
     private String      sukupuoli        = "";
-    private int         sirunumero       = 0;
+    private long        sirunumero       = 0;
     private String      lisatietoja      = "";
+    private Elain       aiti;
+    private Elain       isa;
+    private String      omistaja;
+    private String      luovutusPv;
     
     private static int  seuraavaNro      = 1;
     
@@ -77,7 +81,10 @@ public class Elain {
         kutsumanimi = "Nelli";
         syntymapaiva = "20.7.2015";
         sukupuoli = "tyttö";
-        sirunumero = 98;
+        sirunumero = 985112001635024L;
+                
+        // Vanhempi v = new Vanhempi(tunnusNro);
+        
     }
 
     /**
@@ -124,7 +131,10 @@ public class Elain {
         out.println("Syntymäpäivä: " + syntymapaiva);
         out.println("Sukupuoli: " + sukupuoli);
         out.println("Sirunumero: " + sirunumero);
+        out.println("Äiti: " + aiti.getNimi());
+        out.println("Isä: " + isa.getNimi());
         out.println("Lisätiedot: " + lisatietoja);
+        
         
     }
 

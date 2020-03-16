@@ -18,6 +18,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Font;
 import pentu.Elain;
+import pentu.Omistaja;
 import pentu.Pentu;
 import pentu.SailoException;
 
@@ -32,11 +33,15 @@ public class PentuGUIController implements Initializable{
     @FXML private TextField textHaku;
     @FXML private ScrollPane panelElain;
     @FXML ListChooser<Elain> chooserElaimet;
+    @FXML private ScrollPane panelOmistaja;
+    @FXML ListChooser<Omistaja> chooserOmistajat;
     
     private String kasvattajannimi = "Karvatassu";
     private Pentu pentu;
     private Elain elainKohdalla;
     private TextArea areaElain = new TextArea();
+    private TextArea areaOmistaja = new TextArea();
+    private Omistaja omistajaKohdalla;
     
     
     
@@ -129,7 +134,7 @@ public class PentuGUIController implements Initializable{
      * Käsittelee tapahtuman, kun halutaan lisätä uusi omistaja
      */
     @FXML private void handleLisaaOmistaja() {
-        lisaa();
+        uusiOmistaja();
     }
     
     
@@ -183,6 +188,18 @@ public class PentuGUIController implements Initializable{
         }
         hae(uusi.getTunnusNro());
     }
+    
+    
+    /** 
+     * Tekee uuden tyhjän omistajan editointia varten 
+     */ 
+    public void uusiOmistaja() { 
+        Omistaja uusi = new Omistaja();
+        uusi.rekisteroi();
+        uusi.taytaTiedoilla();
+        pentu.lisaa(uusi);
+        haeOmistaja(uusi.getTunnusNro());
+    }
         
     
     /**
@@ -199,6 +216,22 @@ public class PentuGUIController implements Initializable{
             chooserElaimet.add(elain.getNimi(), elain);
         }
         chooserElaimet.setSelectedIndex(index); // tästä tulee muutosviesti joka näyttää jäsenen
+    }
+    
+    /**
+     * Hakee omistajan tiedot listaan
+     * @param enro omistajan numero, joka aktivoidaan haun jälkeen
+     */
+    private void haeOmistaja(int enro) {
+        chooserOmistajat.clear();
+
+        int index = 0;
+        for (int i = 0; i < pentu.getOmistajia(); i++) {
+            Omistaja o = pentu.annaOmistaja(i);
+            if (o.getTunnusNro() == enro) index = i;
+            chooserOmistajat.add(o.getNimi(), o);
+        }
+        chooserOmistajat.setSelectedIndex(index); // tästä tulee muutosviesti joka näyttää jäsenen
     }
     
     /**
@@ -304,6 +337,13 @@ public class PentuGUIController implements Initializable{
         
         chooserElaimet.clear();
         chooserElaimet.addSelectionListener(e -> naytaElain());
+        
+        panelOmistaja.setContent(areaOmistaja);
+        areaOmistaja.setFont(new Font("Courier New", 12));
+        panelOmistaja.setFitToHeight(true);
+        
+        chooserOmistajat.clear();
+        chooserOmistajat.addSelectionListener(e -> naytaOmistaja());
     }
     
     
@@ -318,6 +358,21 @@ public class PentuGUIController implements Initializable{
         areaElain.setText("");
         try (PrintStream os = TextAreaOutputStream.getTextPrintStream(areaElain)) {
             elainKohdalla.tulosta(os);
+        }
+    }
+    
+    
+    /**
+     * Näyttää listasta valitun omistajan tiedot, tilapäisesti yhteen isoon edit-kenttään
+     */
+    private void naytaOmistaja() {
+        omistajaKohdalla = chooserOmistajat.getSelectedObject();
+
+        if (omistajaKohdalla == null) return;
+
+        areaOmistaja.setText("");
+        try (PrintStream os = TextAreaOutputStream.getTextPrintStream(areaOmistaja)) {
+            omistajaKohdalla.tulosta(os);
         }
     }
     
