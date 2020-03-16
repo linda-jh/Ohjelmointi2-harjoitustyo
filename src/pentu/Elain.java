@@ -1,6 +1,7 @@
 package pentu;
 
 import java.io.PrintStream;
+import java.util.ArrayList;
 
 /**
  * CRC-kortit
@@ -19,6 +20,8 @@ public class Elain {
     private String      lisatietoja      = "";
     private int         aiti;
     private int         isa;
+    
+    private ArrayList<Elain> pennut = new ArrayList<Elain>();
     
     private static int  seuraavaNro      = 1;
     
@@ -134,15 +137,14 @@ public class Elain {
     
     
     /**
-     * Etsii eläimen vanhemmat ja alustaa ne. 
+     * Etsii eläimen pennut ja lisää ne listaan. 
      * @param e eläinten taulukko
      */
-    public void vanhemmat(Elain[] e) {
+    public void pennut(Elain[] e) {
         for(int i = 0; i < e.length; i++) {
             if(tunnusNro != e[i].tunnusNro) {
                 if(tunnusNro == e[i].isa || tunnusNro == e[i].aiti) {
-                    if(e[i].onkoPoika() == true) isa = e[i].getTunnusNro();
-                    else aiti = e[i].getTunnusNro();
+                    pennut.add(e[i]);
                 }
             }
         }
@@ -180,6 +182,11 @@ public class Elain {
         mirzam2.tulosta(System.out);
         mirzam2.taytaElainTiedoilla();
         mirzam2.tulosta(System.out);
+        
+        Elain[] t = new Elain[5];
+        t[0] = mirzam;
+        t[1] = mirzam2;
+        
 
     }
     
@@ -196,6 +203,11 @@ public class Elain {
         //out.println("Äiti: " + aiti.getNimi());
         //out.println("Isä: " + isa.getNimi());
         out.println("Lisätiedot: " + lisatietoja);
+        out.println("Pennut: ");
+        for(int i = 0; i < pennut.size(); i++) {
+            out.println(pennut.get(i).nimi);
+        }
+        out.println("Pentujen lukumäärä: " + pennut.size());
         
         
     }

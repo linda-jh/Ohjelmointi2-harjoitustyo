@@ -39,8 +39,8 @@ public class Vanhempi {
      * Täyttää olion atribuutit tiedoilla.
      */
     public void taytaTiedoilla() {
-        aitiId = 4;
-        isaId = 5;
+        aitiId = 1;
+        isaId = 2;
         pv = "23.6.2017";
         omistaja = 1;
     }
