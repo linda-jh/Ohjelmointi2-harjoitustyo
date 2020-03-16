@@ -17,10 +17,8 @@ public class Elain {
     private String      sukupuoli        = "";
     private long        sirunumero       = 0;
     private String      lisatietoja      = "";
-    private Elain       aiti;
-    private Elain       isa;
-    private String      omistaja;
-    private String      luovutusPv;
+    private int         aiti;
+    private int         isa;
     
     private static int  seuraavaNro      = 1;
     
@@ -32,7 +30,71 @@ public class Elain {
         //
     }
     
+    
+    /**
+     * Palauttaa isän id
+     * @return id
+     */
+    public int getIsa() {
+        return isa;
+    }
+    
+    
+    /**
+     * Palauttaa äidin id
+     * @return id
+     */
+    public int getAiti() {
+        return aiti;
+    }
+    
+    
+    /**
+     * Asetaa isän id:n.
+     * @param i id
+     */
+    public void setIsa(int i) {
+        isa = i;
+    }
+    
+    
+    /**
+     * Asetaa äidin id:n.
+     * @param i id
+     */
+    public void setAiti(int i) {
+        aiti = i;
+    }
+    
+    
+    /**
+     * Onko eläin poika
+     * @return true, jos on. Muuten false.
+     */
+    public boolean onkoPoika() {
+        if(sukupuoli == "poika") return true;
+        return false;
+    }
+    
         
+    /**
+     * Hakee eläimen nimen
+     * @return eläimen nimen
+     */
+    public String getNimi() {
+        return nimi;
+    }
+      
+    
+    /**
+     * Hakee eläimen tunnusnumeron
+     * @return tunnusnumero
+     */
+    public int getTunnusNro() {
+        return tunnusNro;
+    }
+
+
     /**
      * Antaa jäsenelle seuraavan rekisterinumeron.
      * @return eläimen uusi tunnusnumero
@@ -53,24 +115,6 @@ public class Elain {
         seuraavaNro++;
         return tunnusNro;
     }
-   
-    
-    /**
-     * Hakee eläimen nimen
-     * @return eläimen nimen
-     */
-    public String getNimi() {
-        return nimi;
-    }
-      
-    
-    /**
-     * Hakee eläimen tunnusnumeron
-     * @return tunnusnumero
-     */
-    public int getTunnusNro() {
-        return tunnusNro;
-    }
     
     
     /**
@@ -83,9 +127,27 @@ public class Elain {
         sukupuoli = "tyttö";
         sirunumero = 985112001635024L;
                 
-        // Vanhempi v = new Vanhempi(tunnusNro);
+        Vanhempi v = new Vanhempi(tunnusNro);
+        v.taytaTiedoilla();
         
     }
+    
+    
+    /**
+     * Etsii eläimen vanhemmat ja alustaa ne. 
+     * @param e eläinten taulukko
+     */
+    public void vanhemmat(Elain[] e) {
+        for(int i = 0; i < e.length; i++) {
+            if(tunnusNro != e[i].tunnusNro) {
+                if(tunnusNro == e[i].isa || tunnusNro == e[i].aiti) {
+                    if(e[i].onkoPoika() == true) isa = e[i].getTunnusNro();
+                    else aiti = e[i].getTunnusNro();
+                }
+            }
+        }
+    }
+    
 
     /**
      * Arpoo satunnaisen luvun annetulla välillä
@@ -131,8 +193,8 @@ public class Elain {
         out.println("Syntymäpäivä: " + syntymapaiva);
         out.println("Sukupuoli: " + sukupuoli);
         out.println("Sirunumero: " + sirunumero);
-        out.println("Äiti: " + aiti.getNimi());
-        out.println("Isä: " + isa.getNimi());
+        //out.println("Äiti: " + aiti.getNimi());
+        //out.println("Isä: " + isa.getNimi());
         out.println("Lisätiedot: " + lisatietoja);
         
         

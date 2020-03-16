@@ -194,11 +194,18 @@ public class PentuGUIController implements Initializable{
      * Tekee uuden tyhjän omistajan editointia varten 
      */ 
     public void uusiOmistaja() { 
-        Omistaja uusi = new Omistaja();
-        uusi.rekisteroi();
-        uusi.taytaTiedoilla();
-        pentu.lisaa(uusi);
-        haeOmistaja(uusi.getTunnusNro());
+        if(pentu.getOmistajia() == 0) {
+            Omistaja u = new Omistaja();
+            u.rekisteroi();
+            pentu.lisaa(u);
+            haeOmistaja(u.getTunnusNro());
+        } else {
+            Omistaja uusi = new Omistaja();
+            uusi.rekisteroi();
+            uusi.taytaTiedoilla();
+            pentu.lisaa(uusi);
+            haeOmistaja(uusi.getTunnusNro());
+        }
     }
         
     

@@ -17,7 +17,7 @@ public class Pentu {
     public Pentu() {
         // ei tarvitse tehdä mitään
     }
-    
+        
     
     /**
      * Listätään uusia eläimiä rekisteriin
@@ -126,13 +126,13 @@ public class Pentu {
         mirzam.rekisteroi();
         mirzam.taytaElainTiedoilla();
         mirzam2.rekisteroi();
-        mirzam2.taytaElainTiedoilla(); 
+        mirzam2.taytaElainTiedoilla();
         
-        Omistaja ari = new Omistaja(), aino = new Omistaja();
+        Omistaja kasvattaja = new Omistaja(), ari = new Omistaja(); 
+        kasvattaja.rekisteroi();
         ari.rekisteroi();
         ari.taytaTiedoilla();
-        aino.rekisteroi();
-        aino.taytaTiedoilla();
+        
         
         try {
             pentu.lisaa(mirzam2);
@@ -157,26 +157,15 @@ public class Pentu {
         }
         
         
+        pentu.lisaa(kasvattaja);
         pentu.lisaa(ari);
-        pentu.lisaa(aino);
+        pentu.lisaa(kasvattaja);
         pentu.lisaa(ari);
-        pentu.lisaa(aino);
-        pentu.lisaa(ari);
-                
+        
         System.out.println("\n" + "=========== Omistajat testi ===========");
         
         for(Omistaja o : pentu.omistajat) {
             o.tulosta(System.out);
         }
-    }
-
-
-    public Omistajat getOmistajat() {
-        return omistajat;
-    }
-
-
-    public void setOmistajat(Omistajat omistajat) {
-        this.omistajat = omistajat;
     }
 }

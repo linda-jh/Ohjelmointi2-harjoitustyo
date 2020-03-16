@@ -2,9 +2,7 @@ package pentu;
 
 import java.io.OutputStream;
 import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+// import java.util.ArrayList;
 
 /**
  * @author linda
@@ -12,13 +10,13 @@ import java.util.List;
  *
  */
 public class Omistaja {
-    private int         tunnusNro       = 0;
-    private String      nimi            = "";
-    private String      katuosoite      = "";
-    private String      nroKaupunki     = "";
-    private String      puhelin         = "";
-    private String      sposti          = "";
-    private Collection<Elain> lemmikit  = new ArrayList<Elain>();
+    private int              tunnusNro       = 0;
+    private String           nimi            = "";
+    private String           katuosoite      = "";
+    private String           nroKaupunki     = "";
+    private String           puhelin         = "";
+    private String           sposti          = "";
+    // private ArrayList<Elain> lemmikit        = new ArrayList<Elain>();
     
     private static int seuraavaNro = 1;
     
@@ -27,7 +25,7 @@ public class Omistaja {
      * Oletusmuodostaja
      */
     public Omistaja() {
-        //
+        nimi = "Kasvattaja";
     }
     
     
@@ -92,7 +90,20 @@ public class Omistaja {
         out.println("Osoite: " + katuosoite + ", " + nroKaupunki);
         out.println("Puhelinnumero: " + puhelin);
         out.println("Sähkoposti: " + sposti);
-    }    
+    }
+    
+    
+    /**
+     * Palauttaa i:n eläimen
+     * @param i monesko eläin palautetaan
+     * @return viite i:teen eläimeen 
+     * @throws IndexOutOfBoundsException jos tulee poikkeus
+     */
+    public Elain annaElain(int i) throws IndexOutOfBoundsException {
+        Elaimet elaimet = new Elaimet();
+        return elaimet.anna(i);
+    }
+    
     
     /**
      * @param args ei käytössä
@@ -102,7 +113,6 @@ public class Omistaja {
         ariK.taytaTiedoilla();
         ariK.rekisteroi();
         ariK.tulosta(System.out);
-        // ariK.haeElaimet();
         
         Omistaja ainoA = new Omistaja();
         ainoA.taytaTiedoilla();

@@ -1,5 +1,8 @@
 package pentu;
 
+import java.io.OutputStream;
+import java.io.PrintStream;
+
 /**
  * @author linda
  * @version 15.3.2020
@@ -7,12 +10,11 @@ package pentu;
  */
 public class Vanhempi {
     
-    private Vanhempi v = new Vanhempi(0);
-    private int nro;
-    private Elain isa;
-    private Elain aiti;
-    private Omistaja omistaja;
-    private String pv = "";
+    private int         nro;
+    private int         isaId       = 0;
+    private int         aitiId      = 0;
+    private int         omistaja    = 1;
+    private String      pv          = "";
     
     
     /**
@@ -24,60 +26,67 @@ public class Vanhempi {
     }
     
     
-
-
     /**
-     * Palauttaa äidiksi merkityn Elain-olion
-     * @return Elain-olio
+     * Hakee ja palauttaa
+     * @return luovutuspäivämäärän
      */
-    public Elain getAiti() {
-        return aiti;
-    }
-    
-    
-    /**
-     * Palauttaa isäksi merkityn Elain-olion
-     * @return Elain-olio
-     */
-    public Elain getIsa() {
-        return isa;
-    }
-    
-    
-    /**
-     * Asettaa äidin
-     * @param a Elain-olion äiti
-     */
-    public void setAiti(Elain a) {
-        aiti = a;
-    }
-    
-    /**
-     * Asettaa isän
-     * @param i Elain-olion äiti
-     */
-    public void setIsa(Elain i) {
-        isa = i;
-    }
-    
     public String getLuovutusPv() {
         return pv;
     }
-
+    
     
     /**
-     * Hakee omistajan
-     * @return palauttaa omistajan nimen
+     * Täyttää olion atribuutit tiedoilla.
      */
-    public String getOmistaja() {
-        return omistaja.getNimi();
+    public void taytaTiedoilla() {
+        aitiId = 4;
+        isaId = 5;
+        pv = "23.6.2017";
+        omistaja = 1;
+    }
+    
+    
+    /**
+     * Arpoo satunnaisen luvun annetulla välillä
+     * @param ala arvonnan alaraja
+     * @param yla arvonna ylaraja
+     * @return satunnainen luku välillä [ala, yla]
+     */
+    public static int rand(int ala, int yla) {
+        double n = (yla-ala) * Math.random() + ala;
+        return (int)Math.round(n);
     }
 
-
-    /**public void lisaaVanhemmat() {
-        aiti = 
-        v.setIsa(Vanhemmat.getIsa());
-        pv = v.getLuovutusPv();
-        omistaja = v.getOmistaja();        
-    }*/
+    
+    
+    /**
+     * @param os tietovirta, johon tulostetaan
+     */
+    public void tulosta(OutputStream os) {
+        tulosta(new PrintStream(os));
+    }
+    
+    
+    /**
+     * Tulostetaan omistajan tiedot
+     * @param out tietovirta johon tulostetaan
+     */
+    public void tulosta(PrintStream out) {
+        out.println(rand(1000,9999));
+        out.println(String.format("%03d", nro));
+        out.println("Äiti id: " + aitiId);
+        out.println("Isä id: " + isaId);
+        out.println("Omistaja id: " + omistaja);
+    }
+    
+    
+    /**
+     * @param args ei käytössä
+     */
+    public static void main(String[] args) {        
+        Vanhempi v = new Vanhempi(0);
+        v.taytaTiedoilla();
+        v.tulosta(System.out);
+        
+    }
 }

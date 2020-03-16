@@ -1,7 +1,6 @@
 package pentu;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 
 /**
@@ -13,9 +12,9 @@ public class Omistajat implements Iterable<Omistaja> {
     /** Taulukko omistajista */
     private final ArrayList<Omistaja> alkiot         = new ArrayList<Omistaja>();
     
-    private String                     tiedostonNimi  = "";
-    private int                        lkm            = 0;
-    private int                        pentuLkm       = 0;
+    private String                    tiedostonNimi  = "";
+    private int                       lkm            = 0;
+    private int                       pentuLkm       = 0;
 
     @Override
     public Iterator<Omistaja> iterator() {
@@ -31,6 +30,8 @@ public class Omistajat implements Iterable<Omistaja> {
         alkiot.add(o);
         lkm = alkiot.size();
     }
+    
+
     
     
     /**
@@ -88,6 +89,18 @@ public class Omistajat implements Iterable<Omistaja> {
      */
     public int getLkm() {
         return lkm;
+    }
+    
+    
+    /**
+     * Palauttaa i:n eläimen
+     * @param i monesko eläin palautetaan
+     * @return viite i:teen eläimeen 
+     * @throws IndexOutOfBoundsException jos tulee poikkeus
+     */
+    public Elain annaElain(int i) throws IndexOutOfBoundsException {
+        Elaimet elaimet = new Elaimet();
+        return elaimet.anna(i);
     }
     
     

@@ -12,6 +12,7 @@ public class Elaimet {
     private int                 lkm             = 0;
     private String              tiedostonNimi   = "";
     private Elain[]             alkiot;
+    
 
     
     
@@ -20,6 +21,15 @@ public class Elaimet {
      */
     public Elaimet() {
         alkiot = new Elain[MAX_ELAIMIA];
+    }
+    
+    
+    /**
+     * Palauttaa eläin taulukon.
+     * @return elain taulukon
+     */
+    public Elain[] getElaimet() {
+        return alkiot;
     }
     
     
@@ -98,6 +108,22 @@ public class Elaimet {
     }
     
     
+    /**
+     * Etsii eläimen vanhemmat ja alustaa ne. 
+     *
+    public void vanhemmat() {
+        Elain[] e = getElaimet();
+        Elain e2;
+        Elain vali;
+        for(int i = 0; i < e.length; i++) {
+            if(tunnusNro != e[i].tunnusNro) {
+                if(tunnusNro == e[i].isa || tunnusNro == e[i].aiti) {
+                    if(e[i].onkoPoika() == true) isa = e[i].getTunnusNro();
+                    else aiti = e[i].getTunnusNro();
+                }
+            }
+        }
+    }*/
     
     
     /**
