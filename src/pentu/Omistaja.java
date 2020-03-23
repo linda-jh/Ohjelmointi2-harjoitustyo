@@ -2,6 +2,7 @@ package pentu;
 
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.util.ArrayList;
 // import java.util.ArrayList;
 
 /**
@@ -16,7 +17,7 @@ public class Omistaja {
     private String           nroKaupunki     = "";
     private String           puhelin         = "";
     private String           sposti          = "";
-    // private ArrayList<Elain> lemmikit        = new ArrayList<Elain>();
+    private ArrayList<Elain> lemmikit        = new ArrayList<Elain>();
     
     private static int seuraavaNro = 1;
     

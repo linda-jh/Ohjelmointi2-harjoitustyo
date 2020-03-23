@@ -1,5 +1,7 @@
 package pentu;
 
+import java.util.ArrayList;
+
 /**
  * Hoitelee sen, että monta jäsentä (CRC-kortit)
  * @author linda
@@ -17,10 +19,16 @@ public class Elaimet {
     
     
     /**
-     * Oletusmuodostaja
+     * Oletusmuodostaja. Lisää eläinten taulukkoon automaattisesti tyhjän eläimen.
      */
     public Elaimet() {
+        Elain e = new Elain();
         alkiot = new Elain[MAX_ELAIMIA];
+        try {
+            lisaa(e);
+        } catch (SailoException e1) {
+            e1.printStackTrace();
+        }
     }
     
     
@@ -127,6 +135,43 @@ public class Elaimet {
     
     
     /**
+     * Etsii eläimen pennut ja lisää ne listaan. 
+     * @param e eläin
+     * @return lista pennuista
+     */
+    public ArrayList<Elain> pennut(Elain e) {
+        ArrayList<Elain> l = new ArrayList<Elain>();
+        if (l.size() != 0) {
+            for (int i = 0; i < alkiot.length; i++) {
+                if (e.getTunnusNro() != alkiot[i].getTunnusNro()) {
+                    if (e.getTunnusNro() == alkiot[i].getIsaId() || e.getTunnusNro() == alkiot[i].getAitiId()) {
+                        l.add(alkiot[i]);
+                    }
+                }
+            }
+        }
+        return l;
+    }
+    
+    
+    /**
+     * Haetaan omistajan omistamat eläimet
+     * @param o kenen eläimet haetaan
+     * @return lista eläimistä
+     */
+    public ArrayList<Elain> omistajanElaimet(Omistaja o) {
+        ArrayList<Elain> l = new ArrayList<Elain>();
+        if (l.size() != 0) {
+            for (int i = 0; i < alkiot.length; i++) {
+                if (o.getTunnusNro() == alkiot[i].getOmistajaId()) l.add(alkiot[i]);
+            }
+        }
+        return l;
+    }
+    
+    
+    
+    /**
      * Testiohjelma eläimille
      * @param args ei käytössä
      */
@@ -138,6 +183,7 @@ public class Elaimet {
         mirzam.taytaElainTiedoilla();
         mirzam2.rekisteroi();
         mirzam2.taytaElainTiedoilla();
+       
        
         try {
             elaimet.lisaa(mirzam);

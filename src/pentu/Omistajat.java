@@ -23,6 +23,15 @@ public class Omistajat implements Iterable<Omistaja> {
     
     
     /**
+     * Oletusmuodostaja. Lisää alkiot listaan kasvattajan automaattisesti.
+     */
+    public Omistajat() {
+        Omistaja o = new Omistaja();
+        lisaa(o);
+    }
+    
+    
+    /**
      * Lisätään omistaja omistajiin.
      * @param o lisättävä omistaja
      */
@@ -30,8 +39,6 @@ public class Omistajat implements Iterable<Omistaja> {
         alkiot.add(o);
         lkm = alkiot.size();
     }
-    
-
     
     
     /**

@@ -1,5 +1,7 @@
 package pentu;
 
+import java.util.ArrayList;
+
 /**
  * CRC korteista samat tekstit
  * @author linda
@@ -116,6 +118,27 @@ public class Pentu {
         return omistajat.anna(i);
     }
     
+    
+    /**
+     * Etsii eläimen pennut
+     * @param e eläin, jonka pentuja etsitään
+     * @return lista pennuista
+     */
+    public ArrayList<Elain> getPennut(Elain e) {
+        return elaimet.pennut(e);
+    }
+    
+    
+    /**
+     * Hakee omistajan eläimet
+     * @param o kenen eläimet haetaan
+     * @return lista eläimistä
+     */
+    public ArrayList<Elain> getElaimet(Omistaja o) {
+        return elaimet.omistajanElaimet(o);        
+    }
+    
+    
     /**
      * @param args ei käytössä
      */
@@ -127,6 +150,7 @@ public class Pentu {
         mirzam.taytaElainTiedoilla();
         mirzam2.rekisteroi();
         mirzam2.taytaElainTiedoilla();
+        
         
         Omistaja kasvattaja = new Omistaja(), ari = new Omistaja(); 
         kasvattaja.rekisteroi();
@@ -148,6 +172,8 @@ public class Pentu {
             System.err.flush();
         }
         
+        ArrayList<Elain> p = pentu.getPennut(mirzam2);
+        
         System.out.println("=========== Eläimet testi ===========");
         
         for (int i = 0; i < pentu.getElaimia(); i++) {
@@ -167,5 +193,12 @@ public class Pentu {
         for(Omistaja o : pentu.omistajat) {
             o.tulosta(System.out);
         }
+        
+        
+        System.out.println("\n" + "=========== Pennut testi ===========");
+        for(Elain e : p) {
+            System.out.println(e.getNimi());
+        }
+        System.out.println("Pentujen lukumäärä: " + p.size());
     }
 }

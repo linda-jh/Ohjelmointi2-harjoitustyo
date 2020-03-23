@@ -12,16 +12,16 @@ import java.util.ArrayList;
 public class Elain {
     
     private int         tunnusNro;   
-    private String      nimi             = "";
+    private String      nimi             = "(tyhjä)";
     private String      kutsumanimi      = "";
     private String      syntymapaiva     = "";
     private String      sukupuoli        = "";
     private long        sirunumero       = 0;
     private String      lisatietoja      = "";
-    private int         aiti;
-    private int         isa;
-    
-    private ArrayList<Elain> pennut = new ArrayList<Elain>();
+    private int         aitiId           = 0;
+    private int         isaId            = 0;  
+    private int         omistajaId       = 0;
+    private String      luovutusPv       = "";
     
     private static int  seuraavaNro      = 1;
     
@@ -38,8 +38,8 @@ public class Elain {
      * Palauttaa isän id
      * @return id
      */
-    public int getIsa() {
-        return isa;
+    public int getIsaId() {
+        return isaId;
     }
     
     
@@ -47,8 +47,8 @@ public class Elain {
      * Palauttaa äidin id
      * @return id
      */
-    public int getAiti() {
-        return aiti;
+    public int getAitiId() {
+        return aitiId;
     }
     
     
@@ -57,7 +57,7 @@ public class Elain {
      * @param i id
      */
     public void setIsa(int i) {
-        isa = i;
+        isaId = i;
     }
     
     
@@ -66,7 +66,7 @@ public class Elain {
      * @param i id
      */
     public void setAiti(int i) {
-        aiti = i;
+        aitiId = i;
     }
     
     
@@ -95,6 +95,24 @@ public class Elain {
      */
     public int getTunnusNro() {
         return tunnusNro;
+    }
+    
+    
+    /**
+     * Palauttaa eläimen omistajan id:n
+     * @return omistajan id
+     */
+    public int getOmistajaId() {
+        return omistajaId;
+    }
+    
+    
+    /**
+     * Palauttaa eläimen omistajan id:n
+     * @return omistajan id
+     */
+    public String getLuovutusPv() {
+        return luovutusPv;
     }
 
 
@@ -129,27 +147,11 @@ public class Elain {
         syntymapaiva = "20.7.2015";
         sukupuoli = "tyttö";
         sirunumero = 985112001635024L;
-                
-        Vanhempi v = new Vanhempi(tunnusNro);
-        v.taytaTiedoilla();
-        
+        luovutusPv = "20.05.2015";
     }
     
     
-    /**
-     * Etsii eläimen pennut ja lisää ne listaan. 
-     * @param e eläinten taulukko
-     */
-    public void pennut(Elain[] e) {
-        for(int i = 0; i < e.length; i++) {
-            if(tunnusNro != e[i].tunnusNro) {
-                if(tunnusNro == e[i].isa || tunnusNro == e[i].aiti) {
-                    pennut.add(e[i]);
-                }
-            }
-        }
-    }
-    
+
 
     /**
      * Arpoo satunnaisen luvun annetulla välillä
@@ -186,7 +188,7 @@ public class Elain {
         Elain[] t = new Elain[5];
         t[0] = mirzam;
         t[1] = mirzam2;
-        
+              
 
     }
     
@@ -200,16 +202,8 @@ public class Elain {
         out.println("Syntymäpäivä: " + syntymapaiva);
         out.println("Sukupuoli: " + sukupuoli);
         out.println("Sirunumero: " + sirunumero);
-        //out.println("Äiti: " + aiti.getNimi());
-        //out.println("Isä: " + isa.getNimi());
-        out.println("Lisätiedot: " + lisatietoja);
-        out.println("Pennut: ");
-        for(int i = 0; i < pennut.size(); i++) {
-            out.println(pennut.get(i).nimi);
-        }
-        out.println("Pentujen lukumäärä: " + pennut.size());
-        
-        
+        out.println("Äidin indeksi: " + aitiId);
+        out.println("Isän indeksi: " + isaId);
+        out.println("Lisätiedot: " + lisatietoja);       
     }
-
 }

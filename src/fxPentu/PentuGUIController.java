@@ -2,6 +2,7 @@ package fxPentu;
 
 import java.io.PrintStream;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import fi.jyu.mit.fxgui.ComboBoxChooser;
@@ -35,13 +36,22 @@ public class PentuGUIController implements Initializable{
     @FXML ListChooser<Elain> chooserElaimet;
     @FXML private ScrollPane panelOmistaja;
     @FXML ListChooser<Omistaja> chooserOmistajat;
+    @FXML ListChooser<Elain> chooserPennut;
+    @FXML ListChooser<Elain> chooserOmistajanElaimet;
+    @FXML private ScrollPane panelPennut;
+    @FXML private Label pentujenLkm;
+    @FXML private Label omistajaNimi;
+    @FXML private Label luovutusPv;
+    @FXML private Label luovutusPv2;
     
     private String kasvattajannimi = "Karvatassu";
     private Pentu pentu;
     private Elain elainKohdalla;
     private TextArea areaElain = new TextArea();
     private TextArea areaOmistaja = new TextArea();
+    private TextArea areaPennut = new TextArea();
     private Omistaja omistajaKohdalla;
+
     
     
     
@@ -172,75 +182,7 @@ public class PentuGUIController implements Initializable{
     
     // ModalController.showModal(PentuGUIController.class.getResource("PentuDialogView.fxml"), "Muokkaa", null, "");
     
-    /**
-     * Luodaan uusi eläin, rekisteröidään se, täytetään tiedoilla ja lisätään listaan
-     */
-    private void uusiElain() {
-        // TODO: oikeasti tässä avattaisiin uusi dialogi johon täytettäisiin uuden eläimen tiedot
-        Elain uusi = new Elain();
-        uusi.rekisteroi();
-        uusi.taytaElainTiedoilla();
-        try {
-            pentu.lisaa(uusi);
-        } catch (SailoException e) {
-            Dialogs.showMessageDialog("Ongelmia uuden luomisessa " + e.getMessage());
-            return;
-        }
-        hae(uusi.getTunnusNro());
-    }
-    
-    
-    /** 
-     * Tekee uuden tyhjän omistajan editointia varten 
-     */ 
-    public void uusiOmistaja() { 
-        if(pentu.getOmistajia() == 0) {
-            Omistaja u = new Omistaja();
-            u.rekisteroi();
-            pentu.lisaa(u);
-            haeOmistaja(u.getTunnusNro());
-        } else {
-            Omistaja uusi = new Omistaja();
-            uusi.rekisteroi();
-            uusi.taytaTiedoilla();
-            pentu.lisaa(uusi);
-            haeOmistaja(uusi.getTunnusNro());
-        }
-    }
-        
-    
-    /**
-     * Hakee eläimen tiedot listaan
-     * @param enro eläimen numero, joka aktivoidaan haun jälkeen
-     */
-    private void hae(int enro) {
-        chooserElaimet.clear();
 
-        int index = 0;
-        for (int i = 0; i < pentu.getElaimia(); i++) {
-            Elain elain = pentu.annaElain(i);
-            if (elain.getTunnusNro() == enro) index = i;
-            chooserElaimet.add(elain.getNimi(), elain);
-        }
-        chooserElaimet.setSelectedIndex(index); // tästä tulee muutosviesti joka näyttää jäsenen
-    }
-    
-    /**
-     * Hakee omistajan tiedot listaan
-     * @param enro omistajan numero, joka aktivoidaan haun jälkeen
-     */
-    private void haeOmistaja(int enro) {
-        chooserOmistajat.clear();
-
-        int index = 0;
-        for (int i = 0; i < pentu.getOmistajia(); i++) {
-            Omistaja o = pentu.annaOmistaja(i);
-            if (o.getTunnusNro() == enro) index = i;
-            chooserOmistajat.add(o.getNimi(), o);
-        }
-        chooserOmistajat.setSelectedIndex(index); // tästä tulee muutosviesti joka näyttää jäsenen
-    }
-    
     /**
      * Tallentaa tiedot
      */
@@ -333,6 +275,77 @@ public class PentuGUIController implements Initializable{
     
     
     /**
+     * Luodaan uusi eläin, rekisteröidään se, täytetään tiedoilla ja lisätään listaan
+     */
+    private void uusiElain() {
+        // TODO: oikeasti tässä avattaisiin uusi dialogi johon täytettäisiin uuden eläimen tiedot
+        Elain uusi = new Elain();
+        uusi.rekisteroi();
+        uusi.taytaElainTiedoilla();
+        try {
+            pentu.lisaa(uusi);
+        } catch (SailoException e) {
+            Dialogs.showMessageDialog("Ongelmia uuden luomisessa " + e.getMessage());
+            return;
+        }
+        hae(uusi.getTunnusNro());
+    }
+    
+    
+    /** 
+     * Tekee uuden tyhjän omistajan editointia varten 
+     */ 
+    public void uusiOmistaja() { 
+        if(pentu.getOmistajia() == 0) {
+            Omistaja u = new Omistaja();
+            u.rekisteroi();
+            pentu.lisaa(u);
+            haeOmistaja(u.getTunnusNro());
+        } else {
+            Omistaja uusi = new Omistaja();
+            uusi.rekisteroi();
+            uusi.taytaTiedoilla();
+            pentu.lisaa(uusi);
+            haeOmistaja(uusi.getTunnusNro());
+        }
+    }
+        
+    
+    /**
+     * Hakee eläimen tiedot listaan
+     * @param enro eläimen numero, joka aktivoidaan haun jälkeen
+     */
+    private void hae(int enro) {
+        chooserElaimet.clear();
+
+        int index = 0;
+        for (int i = 0; i < pentu.getElaimia(); i++) {
+            Elain elain = pentu.annaElain(i);
+            if (elain.getTunnusNro() == enro) index = i;
+            chooserElaimet.add(elain.getNimi(), elain);
+        }
+        chooserElaimet.setSelectedIndex(index); // tästä tulee muutosviesti joka näyttää jäsenen
+    }
+    
+    
+    /**
+     * Hakee omistajan tiedot listaan
+     * @param enro omistajan numero, joka aktivoidaan haun jälkeen
+     */
+    private void haeOmistaja(int enro) {
+        chooserOmistajat.clear();
+
+        int index = 0;
+        for (int i = 0; i < pentu.getOmistajia(); i++) {
+            Omistaja o = pentu.annaOmistaja(i);
+            if (o.getTunnusNro() == enro) index = i;
+            chooserOmistajat.add(o.getNimi(), o);
+        }
+        chooserOmistajat.setSelectedIndex(index); // tästä tulee muutosviesti joka näyttää jäsenen
+    }
+    
+    
+    /**
      * Tekee tarvittavat muut alustukset. Vaihdetaan GridPanen tilalle
      * yksi iso tekstikenttä, johon voidaan tulostaa eläinten tiedot.
      * Alustetaan myös eläinlistan kuuntelija. 
@@ -351,21 +364,53 @@ public class PentuGUIController implements Initializable{
         
         chooserOmistajat.clear();
         chooserOmistajat.addSelectionListener(e -> naytaOmistaja());
+        
+        chooserPennut.clear();
+        chooserOmistajanElaimet.clear();
     }
     
     
     /**
-     * Näyttää listasta valitun eläimen tiedot, tilapäisesti yhteen isoon edit-kenttään
+     * Näyttää listasta valitun eläimen tiedot, tilapäisesti yhteen isoon edit-kenttään.
+     * Näyttää myös eläimen pentujen nimet toisessa edit-kentässä ja eläimen omistajan nimen ja luovutuspäivämäärän.
      */
     private void naytaElain() {
         elainKohdalla = chooserElaimet.getSelectedObject();
 
         if (elainKohdalla == null) return;
-
+        //ArrayList<Elain> pennut = pentu.getPennut(elainKohdalla);
+        
+//------------------------Lisätään eläinten tekstikenttään eläimen tiedot------------------------------------------
+        
         areaElain.setText("");
         try (PrintStream os = TextAreaOutputStream.getTextPrintStream(areaElain)) {
             elainKohdalla.tulosta(os);
+            
         }
+//-------------------------Lisätään pentujen listaan tietyn eläimen pennut----------------------------------  
+        
+        chooserPennut.clear();
+        Elain uusi = new Elain();
+        int lkm = 0;
+        chooserPennut.add("kissa", uusi);
+        lkm++;
+        /**for (int k = 0; k < pennut.size(); k++) {
+            Elain p = pennut.get(k);
+            String s = p.getNimi();
+            chooserPennut.add(s, p);
+        }*/
+        
+        // String s = Integer.toString(pennut.size());
+        pentujenLkm.setText(Integer.toString(lkm));
+        
+        
+//-------------------------Lisätään omistaja kenttään eläimen omistajan nimi ja luovutuspäivämäärä-----------------
+        
+        Omistaja o;
+        int i = elainKohdalla.getOmistajaId();
+        o = pentu.annaOmistaja(i);
+        omistajaNimi.setText(o.getNimi()); 
+        luovutusPv.setText(elainKohdalla.getLuovutusPv());
     }
     
     
@@ -374,6 +419,7 @@ public class PentuGUIController implements Initializable{
      */
     private void naytaOmistaja() {
         omistajaKohdalla = chooserOmistajat.getSelectedObject();
+        
 
         if (omistajaKohdalla == null) return;
 
@@ -381,6 +427,29 @@ public class PentuGUIController implements Initializable{
         try (PrintStream os = TextAreaOutputStream.getTextPrintStream(areaOmistaja)) {
             omistajaKohdalla.tulosta(os);
         }
+        
+        // ArrayList<Elain> elaimet = pentu.getElaimet(omistajaKohdalla);
+        
+        chooserOmistajanElaimet.clear();
+        Elain uusi = new Elain();
+        uusi.taytaElainTiedoilla();
+        chooserOmistajanElaimet.add("kissa", uusi);
+        
+        /**for (int k = 0; k < elaimet.size(); k++) {
+            Elain p = pennut.get(k);
+            chooserPennut.add(p.getNimi(), p);
+        }*/
+        
+        chooserOmistajanElaimet.addSelectionListener(e -> naytaPv());        
+    }
+    
+    
+    /**
+     * Näyttää listasta valitun eläimen luovutuspäivämäärän.
+     */
+    public void naytaPv() {
+        elainKohdalla = chooserOmistajanElaimet.getSelectedObject();
+        luovutusPv2.setText(elainKohdalla.getLuovutusPv());
     }
     
     
