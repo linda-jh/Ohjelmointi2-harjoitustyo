@@ -1,7 +1,14 @@
 package pentu;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Scanner;
 
 /**
  * @author linda
@@ -12,9 +19,8 @@ public class Omistajat implements Iterable<Omistaja> {
     /** Taulukko omistajista */
     private final ArrayList<Omistaja> alkiot         = new ArrayList<Omistaja>();
     
-    private String                    tiedostonNimi  = "";
     private int                       lkm            = 0;
-    private int                       pentuLkm       = 0;
+    // private String                    tiedostonNimi  = "";
 
     @Override
     public Iterator<Omistaja> iterator() {
@@ -23,11 +29,10 @@ public class Omistajat implements Iterable<Omistaja> {
     
     
     /**
-     * Oletusmuodostaja. Lisää alkiot listaan kasvattajan automaattisesti.
+     * Oletusmuodostaja.
      */
     public Omistajat() {
-        Omistaja o = new Omistaja();
-        lisaa(o);
+        //
     }
     
     
@@ -61,20 +66,27 @@ public class Omistajat implements Iterable<Omistaja> {
      * @throws SailoException jos lukeminen epäonnistuu
      */
     public void lueTiedostosta(String hakemisto) throws SailoException {
-        tiedostonNimi = hakemisto + ".har";
-        throw new SailoException("Ei osata vielä lukea tiedostoa " + tiedostonNimi);
+        File tied = new File(hakemisto + "/omistajat.dat");
+        //throw new SailoException("Ei osata vielä lukea tiedostoa " + tiedostonNimi);
+        
+        try (Scanner fi = new Scanner(new FileInputStream(tied.getCanonicalPath()))) { // Jotta UTF8/ISO-8859 toimii
+            String kokoNimi = fi.nextLine();
+            if (kokoNimi == null) throw new SailoException("Kasvattajan nimi puuttuu");
+            while ( fi.hasNext()) {
+                String rivi = fi.nextLine();
+                rivi = rivi.trim();
+                if ("".equals(rivi) || rivi.charAt(0) == ';') continue;
+                Omistaja omistaja = new Omistaja();
+                omistaja.parse(rivi);
+                lisaa(omistaja);
+            }
+        } catch (FileNotFoundException ex) {
+            throw new SailoException("Tiedosto " + tied + " ei aukea.");
+        } catch (IOException ex) {
+            throw new SailoException("Tiedostoon " + tied + " kirjoittaminen ei onnistu.");
+        }
+
     }
-    
-    
-    /**
-     * Tallentaa omistajien tiedostoon.  
-     * TODO Kesken.
-     * @throws SailoException jos talletus epäonnistuu
-     */
-    public void talleta() throws SailoException {
-        throw new SailoException("Ei osata vielä tallettaa tiedostoa " + tiedostonNimi);
-    }
-    
        
     
     /**
@@ -108,6 +120,27 @@ public class Omistajat implements Iterable<Omistaja> {
     public Elain annaElain(int i) throws IndexOutOfBoundsException {
         Elaimet elaimet = new Elaimet();
         return elaimet.anna(i);
+    }
+    
+    
+    /**
+     * Tallentaa omistajien tiedot tiedostoon.
+     * @throws SailoException jos ei onnistu
+     */
+    public void tallenna() throws SailoException {
+        File tied = new File("karvatassu/omistajat.dat");
+        try (PrintStream fo = new PrintStream(new FileOutputStream(tied.getCanonicalPath()))) {
+            fo.println("Karvatassu");
+            for (int i = 0; i < getLkm(); i++) {
+                Omistaja omistaja = anna(i);
+                fo.println(omistaja.toString());
+                
+            }
+        } catch (FileNotFoundException ex) {
+            throw new SailoException("Tiedosto " + tied.getName() + " ei aukea.");
+        } catch (IOException ex) {
+            throw new SailoException("Tiedostoon " + tied.getName() + " kirjoittaminen ei onnistu.");
+        }
     }
     
     

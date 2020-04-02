@@ -2,8 +2,8 @@ package pentu;
 
 import java.io.OutputStream;
 import java.io.PrintStream;
-import java.util.ArrayList;
-// import java.util.ArrayList;
+import fi.jyu.mit.ohj2.Mjonot;
+
 
 /**
  * @author linda
@@ -17,7 +17,6 @@ public class Omistaja {
     private String           nroKaupunki     = "";
     private String           puhelin         = "";
     private String           sposti          = "";
-    private ArrayList<Elain> lemmikit        = new ArrayList<Elain>();
     
     private static int seuraavaNro = 1;
     
@@ -105,6 +104,67 @@ public class Omistaja {
         return elaimet.anna(i);
     }
     
+    
+    /**
+     * Palauttaa eläimen tiedot merkkijonona jonka voi tallentaa tiedostoon.
+     * @return jäsen tolppaeroteltuna merkkijonona 
+     * @example
+     * <pre name="test">
+     *   Omistaja omistaja = new Omistaja();
+     *   omistaja.parse("   3  |  Ari Katajavuori   | Kuusitie 12");
+     *   omistaja.toString().startsWith("3|Ari Katajavuori|Kuusitie 12|") === true; // on enemmäkin kuin 3 kenttää, siksi loppu |
+     * </pre>  
+     */
+    @Override
+    public String toString() {
+        return "" +
+                getTunnusNro() + "|" +
+                nimi + "|" +
+                katuosoite + "|" +
+                nroKaupunki + "|" +
+                puhelin + "|" +
+                sposti + "|";
+    }
+    
+    
+    /**
+     * Asettaa tunnusnumeron ja samalla varmistaa että
+     * seuraava numero on aina suurempi kuin tähän mennessä suurin.
+     * @param nr asetettava tunnusnumero
+     */
+    private void setTunnusNro(int nr) {
+        tunnusNro = nr;
+        if (tunnusNro >= seuraavaNro) seuraavaNro = tunnusNro + 1;
+    }
+    
+    
+    /**
+     * Selvitää harrastuksen tiedot | erotellusta merkkijonosta.
+     * Pitää huolen että seuraavaNro on suurempi kuin tuleva tunnusnro.
+     * @param rivi josta harrastuksen tiedot otetaan
+     * @example
+     * <pre name="test">
+     *   Omistaja omistaja = new Omistaja();
+     *   omistaja.parse("   1   |  Ari Katajavuori  |   Kuusitie 12  ");
+     *   omistaja.getTunnusNro() === 1;
+     *   omistaja.toString().startsWith("1|Ari Katajavuori|Kuusitie 12|") === true;
+     *   
+     *   omistaja.rekisteroi();
+     *   int n = omistaja.getTunnusNro();
+     *   omistaja.parse(""+(n+20));
+     *   omistaja.rekisteroi();
+     *   omistaja.getTunnusNro() === n+20+1;
+     * </pre>
+     */
+    public void parse(String rivi) {
+        StringBuilder sb = new StringBuilder(rivi);
+        setTunnusNro(Mjonot.erota(sb, '|', getTunnusNro()));
+        nimi = Mjonot.erota(sb, '|', nimi);
+        katuosoite = Mjonot.erota(sb, '|', katuosoite);
+        nroKaupunki = Mjonot.erota(sb, '|', nroKaupunki);
+        puhelin = Mjonot.erota(sb, '|', puhelin);
+        sposti = Mjonot.erota(sb, '|', sposti);
+    }
     
     /**
      * @param args ei käytössä

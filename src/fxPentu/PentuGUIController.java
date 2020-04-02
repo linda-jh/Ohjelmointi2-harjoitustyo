@@ -187,7 +187,13 @@ public class PentuGUIController implements Initializable{
      * Tallentaa tiedot
      */
     private void tallenna() {
-        Dialogs.showMessageDialog("Ei osata tallentaa vielä.");
+        // Dialogs.showMessageDialog("Ei osata tallentaa vielä.");
+        
+        try {
+            pentu.tallenna();
+        } catch (SailoException e) {
+            Dialogs.showMessageDialog("Tallennuksessa tuli virhe: " + e.getMessage());
+        }
     }
     
     /**
@@ -222,21 +228,6 @@ public class PentuGUIController implements Initializable{
     public void setPentu(Pentu pentu) {
         this.pentu = pentu;
     }
-    
-    
-    /**
-     * Näyttää virheen
-     * @param virhe virhe ilmoitus
-     */
-    private void naytaVirhe(String virhe) {
-                 if ( virhe == null || virhe.isEmpty() ) {
-                     labelVirhe.setText("");
-                     labelVirhe.getStyleClass().removeAll("virhe");
-                     return;
-                 }
-                 labelVirhe.setText(virhe);
-                 labelVirhe.getStyleClass().add("virhe");
-             }
 
 
     /**
@@ -258,7 +249,22 @@ public class PentuGUIController implements Initializable{
         if (uusinimi == null) return false;
         lueTiedosto(uusinimi);
         return true;
-    }
+    }    
+    
+    
+    /**
+     * Näyttää virheen
+     * @param virhe virhe ilmoitus
+     */
+    private void naytaVirhe(String virhe) {
+         if ( virhe == null || virhe.isEmpty() ) {
+             labelVirhe.setText("");
+             labelVirhe.getStyleClass().removeAll("virhe");
+             return;
+         }
+         labelVirhe.setText(virhe);
+         labelVirhe.getStyleClass().add("virhe");
+     }
     
     
     /**
@@ -268,9 +274,17 @@ public class PentuGUIController implements Initializable{
     private void lueTiedosto(String nimi) {
         kasvattajannimi = nimi;
         setTitle("Kasvattaja - " + kasvattajannimi);
-        String virhe = "Ei osata lukea vielä";  // TODO: tähän oikea tiedoston lukeminen
-        // if (virhe != null) 
-            Dialogs.showMessageDialog(virhe);
+
+        try {
+            pentu.lueTiedostosta(nimi.toLowerCase());
+            hae(0);
+            haeOmistaja(0);
+            // haePennut(0);
+            // haeOmistajanElaimet(0);
+        } catch (SailoException e) {
+            hae(0);
+            Dialogs.showMessageDialog(e.getMessage());
+        }
     }
     
     
@@ -296,18 +310,18 @@ public class PentuGUIController implements Initializable{
      * Tekee uuden tyhjän omistajan editointia varten 
      */ 
     public void uusiOmistaja() { 
-        if(pentu.getOmistajia() == 0) {
+        /*if(pentu.getOmistajia() == 0) {
             Omistaja u = new Omistaja();
             u.rekisteroi();
             pentu.lisaa(u);
             haeOmistaja(u.getTunnusNro());
-        } else {
+        } else {*/
             Omistaja uusi = new Omistaja();
             uusi.rekisteroi();
             uusi.taytaTiedoilla();
             pentu.lisaa(uusi);
             haeOmistaja(uusi.getTunnusNro());
-        }
+        // }
     }
         
     
@@ -319,7 +333,7 @@ public class PentuGUIController implements Initializable{
         chooserElaimet.clear();
 
         int index = 0;
-        for (int i = 0; i < pentu.getElaimia(); i++) {
+        for (int i = 1; i < pentu.getElaimia(); i++) {
             Elain elain = pentu.annaElain(i);
             if (elain.getTunnusNro() == enro) index = i;
             chooserElaimet.add(elain.getNimi(), elain);
@@ -336,12 +350,48 @@ public class PentuGUIController implements Initializable{
         chooserOmistajat.clear();
 
         int index = 0;
-        for (int i = 0; i < pentu.getOmistajia(); i++) {
+        for (int i = 1; i < pentu.getOmistajia(); i++) {
             Omistaja o = pentu.annaOmistaja(i);
             if (o.getTunnusNro() == enro) index = i;
             chooserOmistajat.add(o.getNimi(), o);
         }
         chooserOmistajat.setSelectedIndex(index); // tästä tulee muutosviesti joka näyttää jäsenen
+    }
+    
+    
+    /**
+     * Hakee eläinten pentujen tiedot listaan
+     */
+    private void haePennut() {
+        chooserPennut.clear();
+
+        ArrayList<Elain> pennut = pentu.getPennut(elainKohdalla);
+        
+        
+        for (int k = 0; k < pennut.size(); k++) {
+            Elain p = pennut.get(k);
+            chooserPennut.add(p.getNimi(), p);
+        }
+        chooserPennut.setSelectedIndex(0);
+        
+        String s = Integer.toString(pennut.size());
+        pentujenLkm.setText(s);
+    }
+    
+    /**
+     * Hakee omistajan eläimet tiedot listaan
+     */
+    private void haeOmistajanElaimet() {
+        ArrayList<Elain> elaimet = pentu.getElaimet(omistajaKohdalla);
+        
+        chooserOmistajanElaimet.clear();
+        
+        for (int k = 0; k < elaimet.size(); k++) {
+            Elain p = elaimet.get(k);
+            chooserOmistajanElaimet.add(p.getNimi(), p);
+        }
+        chooserOmistajanElaimet.setSelectedIndex(0);
+        chooserOmistajanElaimet.addSelectionListener(e -> naytaPv());
     }
     
     
@@ -376,34 +426,19 @@ public class PentuGUIController implements Initializable{
      */
     private void naytaElain() {
         elainKohdalla = chooserElaimet.getSelectedObject();
-
-        if (elainKohdalla == null) return;
-        //ArrayList<Elain> pennut = pentu.getPennut(elainKohdalla);
+        if (elainKohdalla == null) return;        
         
 //------------------------Lisätään eläinten tekstikenttään eläimen tiedot------------------------------------------
         
         areaElain.setText("");
         try (PrintStream os = TextAreaOutputStream.getTextPrintStream(areaElain)) {
-            elainKohdalla.tulosta(os);
-            
-        }
-//-------------------------Lisätään pentujen listaan tietyn eläimen pennut----------------------------------  
+            elainKohdalla.tulosta(os);            
+        }      
         
-        chooserPennut.clear();
-        Elain uusi = new Elain();
-        int lkm = 0;
-        chooserPennut.add("kissa", uusi);
-        lkm++;
-        /**for (int k = 0; k < pennut.size(); k++) {
-            Elain p = pennut.get(k);
-            String s = p.getNimi();
-            chooserPennut.add(s, p);
-        }*/
-        
-        // String s = Integer.toString(pennut.size());
-        pentujenLkm.setText(Integer.toString(lkm));
-        
-        
+//-------------------------Lisätään pentujen listaan tietyn eläimen pennut----------------------------------
+
+        haePennut();    
+                
 //-------------------------Lisätään omistaja kenttään eläimen omistajan nimi ja luovutuspäivämäärä-----------------
         
         Omistaja o;
@@ -411,7 +446,7 @@ public class PentuGUIController implements Initializable{
         o = pentu.annaOmistaja(i);
         omistajaNimi.setText(o.getNimi()); 
         luovutusPv.setText(elainKohdalla.getLuovutusPv());
-    }
+    }    
     
     
     /**
@@ -428,19 +463,9 @@ public class PentuGUIController implements Initializable{
             omistajaKohdalla.tulosta(os);
         }
         
-        // ArrayList<Elain> elaimet = pentu.getElaimet(omistajaKohdalla);
+// -----------------------Lisätään omistajan pennut listaan---------------------------------------------------------
         
-        chooserOmistajanElaimet.clear();
-        Elain uusi = new Elain();
-        uusi.taytaElainTiedoilla();
-        chooserOmistajanElaimet.add("kissa", uusi);
-        
-        /**for (int k = 0; k < elaimet.size(); k++) {
-            Elain p = pennut.get(k);
-            chooserPennut.add(p.getNimi(), p);
-        }*/
-        
-        chooserOmistajanElaimet.addSelectionListener(e -> naytaPv());        
+        haeOmistajanElaimet();         
     }
     
     

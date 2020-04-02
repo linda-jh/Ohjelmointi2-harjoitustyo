@@ -1,7 +1,8 @@
 package pentu;
 
 import java.io.PrintStream;
-import java.util.ArrayList;
+
+import fi.jyu.mit.ohj2.Mjonot;
 
 /**
  * CRC-kortit
@@ -115,6 +116,17 @@ public class Elain {
         return luovutusPv;
     }
 
+    
+    /**
+     * Asettaa tunnusnumeron ja samalla varmistaa että
+     * seuraava numero on aina suurempi kuin tähän mennessä suurin.
+     * @param nr asetettava tunnusnumero
+     */
+    private void setTunnusNro(int nr) {
+        tunnusNro = nr;
+        if (tunnusNro >= seuraavaNro) seuraavaNro = tunnusNro + 1;
+    }
+    
 
     /**
      * Antaa jäsenelle seuraavan rekisterinumeron.
@@ -151,6 +163,67 @@ public class Elain {
     }
     
     
+    /**
+     * Selvitää jäsenen tiedot | erotellusta merkkijonosta
+     * Pitää huolen että seuraavaNro on suurempi kuin tuleva tunnusNro.
+     * @param rivi josta jäsenen tiedot otetaan
+     * 
+     * @example
+     * <pre name="test">
+     *   Elain elain = new Elain();
+     *   elain.parse("   2  |  Karvatassu Mirzam   | Nelli");
+     *   elain.getTunnusNro() === 2;
+     *   elain.toString().startsWith("2|Karvatassu Mirzam|Nelli|") === true; // on enemmäkin kuin 3 kenttää, siksi loppu |
+     *
+     *   elain.rekisteroi();
+     *   int n = elain.getTunnusNro();
+     *   elain.parse(""+(n+20));       // Otetaan merkkijonosta vain tunnusnumero
+     *   elain.rekisteroi();           // ja tarkistetaan että seuraavalla kertaa tulee yhtä isompi
+     *   elain.getTunnusNro() === n+20+1;
+     *     
+     * </pre>
+     */
+    public void parse(String rivi) {
+        StringBuilder sb = new StringBuilder(rivi);
+        setTunnusNro(Mjonot.erota(sb, '|', getTunnusNro()));
+        nimi = Mjonot.erota(sb, '|', nimi);
+        kutsumanimi = Mjonot.erota(sb, '|', kutsumanimi);
+        syntymapaiva = Mjonot.erota(sb, '|', syntymapaiva);
+        sukupuoli = Mjonot.erota(sb, '|', sukupuoli);
+        sirunumero = (long) Mjonot.erota(sb, '|', sirunumero);
+        aitiId = Mjonot.erota(sb, '|', aitiId);
+        isaId = Mjonot.erota(sb, '|', isaId);
+        omistajaId = Mjonot.erota(sb, '|', omistajaId);
+        luovutusPv = Mjonot.erota(sb, '|', luovutusPv);
+        lisatietoja = Mjonot.erota(sb, '|', lisatietoja);
+    }
+    
+    
+    /**
+     * Palauttaa eläimen tiedot merkkijonona jonka voi tallentaa tiedostoon.
+     * @return jäsen tolppaeroteltuna merkkijonona 
+     * @example
+     * <pre name="test">
+     *   Elain elain = new Elain();
+     *   elain.parse("   2  |  Karvatassu Mirzam   | Nelli");
+     *   elain.toString().startsWith("2|Karvatassu Mirzam|Nelli|") === true; // on enemmäkin kuin 3 kenttää, siksi loppu |
+     * </pre>  
+     */
+    @Override
+    public String toString() {
+        return "" +
+                getTunnusNro() + "|" +
+                nimi + "|" +
+                kutsumanimi + "|" +
+                syntymapaiva + "|" +
+                sukupuoli + "|" +
+                sirunumero + "|" +
+                aitiId + "|" +
+                isaId + "|" +
+                omistajaId + "|" +
+                luovutusPv + "|" +
+                lisatietoja + "|";
+    }
 
 
     /**

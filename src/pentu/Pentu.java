@@ -68,17 +68,7 @@ public class Pentu {
         elaimet.lueTiedostosta(nimi);
         omistajat.lueTiedostosta(nimi);
     }
-    
-    /**
-     * Tallettaa penturekisterin tiedot tiedostoon
-     * @throws SailoException jos tallettamisessa ongelmia
-     */
-    public void talleta() throws SailoException {
-        elaimet.talleta();
-        omistajat.talleta();
-        // TODO: yritä tallettaa toinen vaikka toinen epäonnistuisi
-    }
-    
+       
     
     /**
      * Haetaan eläinten lukumäärän eläimet luokasta
@@ -136,6 +126,33 @@ public class Pentu {
      */
     public ArrayList<Elain> getElaimet(Omistaja o) {
         return elaimet.omistajanElaimet(o);        
+    }
+    
+    
+    /**
+     * Tallentaa tiedostot eläimistä ja omistajista.
+     * @throws SailoException jos ei onnistu
+     */
+    public void tallenna() throws SailoException {
+        String virhe = "";
+        
+        try {
+            elaimet.tallenna();
+        } catch (SailoException e) {
+            // TODO Auto-generated catch block
+            virhe += e.getMessage();
+        }
+        
+        try {
+            omistajat.tallenna();
+        } catch (SailoException e) {
+            // TODO Auto-generated catch block
+            virhe += e.getMessage();
+        }
+        
+        if (virhe.length() > 0) {
+            throw new SailoException(virhe);
+        }
     }
     
     
