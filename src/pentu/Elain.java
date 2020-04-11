@@ -10,7 +10,7 @@ import fi.jyu.mit.ohj2.Mjonot;
  * @version 17.2.2020
  *
  */
-public class Elain {
+public class Elain implements Cloneable {
     
     private int         tunnusNro;   
     private String      nimi             = "(tyhjä)";
@@ -36,6 +36,16 @@ public class Elain {
     
     
     /**
+     * Onko eläin poika
+     * @return true, jos on. Muuten false.
+     */
+    public boolean onkoPoika() {
+        if(sukupuoli == "poika") return true;
+        return false;
+    }
+    
+    
+    /**
      * Palauttaa isän id
      * @return id
      */
@@ -50,34 +60,6 @@ public class Elain {
      */
     public int getAitiId() {
         return aitiId;
-    }
-    
-    
-    /**
-     * Asetaa isän id:n.
-     * @param i id
-     */
-    public void setIsa(int i) {
-        isaId = i;
-    }
-    
-    
-    /**
-     * Asetaa äidin id:n.
-     * @param i id
-     */
-    public void setAiti(int i) {
-        aitiId = i;
-    }
-    
-    
-    /**
-     * Onko eläin poika
-     * @return true, jos on. Muuten false.
-     */
-    public boolean onkoPoika() {
-        if(sukupuoli == "poika") return true;
-        return false;
     }
     
         
@@ -115,6 +97,24 @@ public class Elain {
     public String getLuovutusPv() {
         return luovutusPv;
     }
+    
+    
+    /**
+     * Palauttaa eläimen kutsumanimen
+     * @return kutsumanimi
+     */
+    public String getKutsumanimi() {
+        return kutsumanimi;
+    }
+
+
+    /**
+     * Palauttaa sirunumeron merkkijonona
+     * @return sirunumero
+     */
+    public String getSiruNro() {
+        return Long.toString(sirunumero);
+    }
 
     
     /**
@@ -127,6 +127,57 @@ public class Elain {
         if (tunnusNro >= seuraavaNro) seuraavaNro = tunnusNro + 1;
     }
     
+    
+    /**
+     * Asettaa eläimen nimen
+     * @param s nimi
+     * @return virheilmoitus, null jos ok
+     */
+    public String setNimi(String s) {
+        nimi = s;
+        return null;
+    }
+    
+    
+    /**
+     * Asettaa eläimen kutsumanimen
+     * @param s kutsumanimi
+     * @return virheilmoitus, null jos ok
+     */
+    public String setKutsumanimi(String s) {
+        kutsumanimi = s;
+        return null;
+    }
+    
+    
+    /**
+     * Asettaa eläimen nimen
+     * @param s nimi
+     * @return virheilmoitus, null jos ok
+     */
+    public String setSirunumero(String s) {
+        if (!s.matches("[0-9]*")) return "Sirunumeron on oltava numeerinen";
+        sirunumero = Long.parseLong(s);
+        return null;
+    }
+    
+    
+    /**
+     * Asettaa eläimen omistajan id:n
+     * @param i id
+     */
+    public void setOmistajaId(int i) {
+        omistajaId = i;
+    }
+    
+    
+    /**
+     * Asettaa eläimen luovutuspäivämään
+     * @param s päivämäärä
+     */
+    public void setLuovutusPv(String s) {
+        luovutusPv = s;
+    }
 
     /**
      * Antaa jäsenelle seuraavan rekisterinumeron.
@@ -237,6 +288,12 @@ public class Elain {
         return (int)Math.round(n);
     }
 
+    
+    @Override
+    public Elain clone() throws CloneNotSupportedException {
+        Elain uusi = (Elain) super.clone();
+        return uusi;
+    }
 
     /**
      * @param args ei käytössä

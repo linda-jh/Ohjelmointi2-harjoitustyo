@@ -20,7 +20,8 @@ public class Elaimet {
     private static final int    MAX_ELAIMIA     = 5;
     private int                 lkm             = 0;
     private Elain[]             alkiot;
-    // private String              tiedostonNimi   = "";
+    private boolean             muutettu;
+    private String              tiedostonNimi   = "";
     
     
 
@@ -158,12 +159,13 @@ public class Elaimet {
     
     /**
      * Tallentaa eläinten tiedot tiedostoon.
+     * @param hakemisto minne tallennetaan
      * @throws SailoException jos ei onnistu
      */
-    public void tallenna() throws SailoException {
-        File tied = new File("karvatassu/elaimet.dat");
+    public void tallenna(String hakemisto) throws SailoException {
+        File tied = new File(hakemisto.toLowerCase() + "/elaimet.dat");
         try (PrintStream fo = new PrintStream(new FileOutputStream(tied.getCanonicalPath()))) {
-            fo.println("Karvatassu");
+            fo.println(hakemisto);
             for (int i = 0; i < getLkm(); i++) {
                 Elain elain = anna(i);
                 fo.println(elain.toString());
@@ -184,6 +186,7 @@ public class Elaimet {
      */
     public void lueTiedostosta(String hakemisto) throws SailoException {
         File tied = new File(hakemisto + "/elaimet.dat");
+        tiedostonNimi = hakemisto;
         
         try (Scanner fi = new Scanner(new FileInputStream(tied.getCanonicalPath()))) {
             String kokoNimi = fi.nextLine();
@@ -201,7 +204,51 @@ public class Elaimet {
         } catch (IOException ex) {
             throw new SailoException("Tiedostoon " + tied + " kirjoittaminen ei onnistu.");
         }
+    }
+    
+    
+    /**
+     * Etsii eläimen indeksin taulukosta.
+     * @param id eläimen tunnusnumero
+     * @return indeksin, jos ei löydy niin palauttaa -1.
+     */
+    public int etsiId(int id) { 
+        for (int i = 0; i < lkm; i++) 
+             if (id == alkiot[i].getTunnusNro()) return i; 
+        return -1; 
+    } 
+    
 
+    /**
+     * Poistaa eläimen tiedostosta ja taulukosta.
+     * @param elain mikä eläin poistetaan
+     */
+    public void poista(Elain elain) {
+        int nro = elain.getTunnusNro();
+        int ind = etsiId(nro);
+        
+        if (ind < 0) return; 
+            lkm--; 
+            for (int i = ind; i < lkm; i++) 
+                 alkiot[i] = alkiot[i + 1]; 
+            alkiot[lkm] = null; 
+            // muutettu = true; 
+         // return 1; 
+    }
+    
+    /**
+     * @param elain lisättävän viite
+     */
+    public void korvaaTaiLisaa(Elain elain) {
+        int id = elain.getTunnusNro();
+        for (int i = 0; i < lkm; i++) {
+            if (alkiot[i].getTunnusNro() == id) {
+                alkiot[i] = elain;
+                muutettu = true;
+                return;
+            }
+        }
+        lisaa(elain);
     }
     
     
@@ -211,17 +258,20 @@ public class Elaimet {
      */
     public static void main(String[] args) {
         Elaimet elaimet = new Elaimet();
-        Elain mirzam = new Elain(), mirzam2 = new Elain();
+        Elain mirzam = new Elain(), mirzam2 = new Elain(), teppo = new Elain();
         
         mirzam.rekisteroi();
         mirzam.taytaElainTiedoilla();
         mirzam2.rekisteroi();
         mirzam2.taytaElainTiedoilla();
+        teppo.rekisteroi();
+        teppo.taytaElainTiedoilla();
        
        
         elaimet.lisaa(mirzam);
         elaimet.lisaa(mirzam2);
         elaimet.lisaa(mirzam);
+        elaimet.lisaa(teppo);
         elaimet.lisaa(mirzam2);
         elaimet.lisaa(mirzam);
         elaimet.lisaa(mirzam2);
@@ -234,5 +284,17 @@ public class Elaimet {
             elain.tulosta(System.out);
         }
         System.out.println("\nEläimiä on " + elaimet.lkm);
+        
+        int tNro = teppo.getTunnusNro();
+        elaimet.poista(teppo);
+        Elain e2 = new Elain();
+        
+        for (int i = 0; i < elaimet.getLkm(); i++) {
+            Elain e = elaimet.anna(i);
+            if (e.getTunnusNro() == tNro) e2 = e;
+        }
+        
+        if ( e2.getTunnusNro() == tNro) System.out.println("Eläin ei poistunut!");
+        else System.out.println("Eläintä ei löydy! Eläimiä on enää " + elaimet.lkm);
     }
 }

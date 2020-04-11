@@ -12,8 +12,9 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 
-<BorderPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxPentu.PentuDialogController">
+<BorderPane stylesheets="@pentu.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxPentu.PentuDialogController">
    <center>
       <GridPane hgap="10.0" BorderPane.alignment="CENTER">
          <columnConstraints>
@@ -42,11 +43,11 @@
             <Label text="Äiti" GridPane.rowIndex="5" />
             <Label text="Isä" GridPane.rowIndex="6" />
             <Label text="Lisätietoja" GridPane.rowIndex="7" />
-            <TextField fx:id="textNimiD" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" />
-            <TextField fx:id="textKutsumanimiD" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" />
-            <TextField fx:id="textSukupuoliD" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" />
-            <TextField fx:id="textSirunroD" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="4" />
-            <TextArea fx:id="textLisatietojaD" prefHeight="50.0" prefWidth="148.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+            <TextField fx:id="editNimi" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" />
+            <TextField fx:id="editKutsumanimi" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" />
+            <ChoiceBox fx:id="editSukupuoli" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <TextField fx:id="editSirunro" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="4" />
+            <TextArea fx:id="editLisatietoja" prefHeight="50.0" prefWidth="148.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
             <ChoiceBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
             <ChoiceBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
             <DatePicker fx:id="datepSyntymapaivaD" GridPane.columnIndex="1" GridPane.rowIndex="2">
@@ -54,18 +55,24 @@
                   <Insets left="4.0" />
                </GridPane.margin>
             </DatePicker>
+            
          </children>
       </GridPane>
    </center>
    <bottom>
-      <ButtonBar BorderPane.alignment="CENTER">
-        <buttons>
-          <Button defaultButton="true" mnemonicParsing="false" onAction="#handleDefaultOK" text="OK" />
-            <Button cancelButton="true" mnemonicParsing="false" onAction="#handleDefaultCancel" text="Kumoa" />
-        </buttons>
-         <BorderPane.margin>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-         </BorderPane.margin>
-      </ButtonBar>
+      <VBox BorderPane.alignment="CENTER">
+         <children>
+            <Label fx:id="labelVirhe" alignment="CENTER" prefWidth="303.0" textAlignment="CENTER" />
+            <ButtonBar>
+              <buttons>
+                <Button defaultButton="true" mnemonicParsing="false" onAction="#handleOK" text="OK" />
+                  <Button cancelButton="true" mnemonicParsing="false" onAction="#handleCancel" text="Kumoa" />
+              </buttons>
+               <VBox.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </VBox.margin>
+            </ButtonBar>
+         </children>
+      </VBox>
    </bottom>
 </BorderPane>

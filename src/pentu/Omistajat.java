@@ -20,7 +20,7 @@ public class Omistajat implements Iterable<Omistaja> {
     private final ArrayList<Omistaja> alkiot         = new ArrayList<Omistaja>();
     
     private int                       lkm            = 0;
-    // private String                    tiedostonNimi  = "";
+    private String                    tiedostonNimi  = "";
 
     @Override
     public Iterator<Omistaja> iterator() {
@@ -67,6 +67,7 @@ public class Omistajat implements Iterable<Omistaja> {
      */
     public void lueTiedostosta(String hakemisto) throws SailoException {
         File tied = new File(hakemisto + "/omistajat.dat");
+        tiedostonNimi = hakemisto;
         //throw new SailoException("Ei osata vielä lukea tiedostoa " + tiedostonNimi);
         
         try (Scanner fi = new Scanner(new FileInputStream(tied.getCanonicalPath()))) { // Jotta UTF8/ISO-8859 toimii
@@ -112,25 +113,14 @@ public class Omistajat implements Iterable<Omistaja> {
     
     
     /**
-     * Palauttaa i:n eläimen
-     * @param i monesko eläin palautetaan
-     * @return viite i:teen eläimeen 
-     * @throws IndexOutOfBoundsException jos tulee poikkeus
-     */
-    public Elain annaElain(int i) throws IndexOutOfBoundsException {
-        Elaimet elaimet = new Elaimet();
-        return elaimet.anna(i);
-    }
-    
-    
-    /**
      * Tallentaa omistajien tiedot tiedostoon.
+     * @param hakemisto mihin tallennetaan
      * @throws SailoException jos ei onnistu
      */
-    public void tallenna() throws SailoException {
-        File tied = new File("karvatassu/omistajat.dat");
+    public void tallenna(String hakemisto) throws SailoException {
+        File tied = new File(hakemisto.toLowerCase() + "/omistajat.dat");
         try (PrintStream fo = new PrintStream(new FileOutputStream(tied.getCanonicalPath()))) {
-            fo.println("Karvatassu");
+            fo.println(hakemisto);
             for (int i = 0; i < getLkm(); i++) {
                 Omistaja omistaja = anna(i);
                 fo.println(omistaja.toString());
@@ -141,6 +131,34 @@ public class Omistajat implements Iterable<Omistaja> {
         } catch (IOException ex) {
             throw new SailoException("Tiedostoon " + tied.getName() + " kirjoittaminen ei onnistu.");
         }
+    }
+    
+    
+    /**
+     * Poistaa valitun omistajan
+     * @param omistaja mikä poistetaan
+     */
+    public void poista(Omistaja omistaja) {
+        int nro = omistaja.getTunnusNro();
+        
+        for (int i = 0; i < alkiot.size(); i++) {
+            Omistaja o = alkiot.get(i);
+            if(o.getTunnusNro() == nro) alkiot.remove(i);
+        }
+        lkm = alkiot.size();
+    }
+    
+
+    /**
+     * Etsii löytyykö annettulla id:llä omistajaa
+     * @param i id, jota etsitään
+     * @return true, jos löytyy. Muuten false.
+     */
+    public boolean loytyyko(int i) {
+        for (Omistaja o : alkiot) {
+            if (o.getTunnusNro() == i) return true;
+        }
+        return false;
     }
     
     

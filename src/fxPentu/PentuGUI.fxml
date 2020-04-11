@@ -2,6 +2,7 @@
 
 <?import fi.jyu.mit.fxgui.ComboBoxChooser?>
 <?import fi.jyu.mit.fxgui.ListChooser?>
+<?import fi.jyu.mit.fxgui.StringGrid?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ButtonBar?>
@@ -14,6 +15,7 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -95,19 +97,19 @@
                                                       <Label text="Äiti" GridPane.rowIndex="5" />
                                                       <Label text="Isä" GridPane.rowIndex="6" />
                                                       <Label text="Lisätietoja" GridPane.rowIndex="7" />
-                                                      <TextField text="Karvatassu Mirzam" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" />
-                                                      <TextField text="Nelli" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" />
-                                                      <TextField text="tyttö" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" />
-                                                      <TextField text="985 112 001 346 227" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="4" />
+                                                      <TextField fx:id="editNimi" text="Karvatassu Mirzam" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" />
+                                                      <TextField fx:id="editKutsumanimi" text="Nelli" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" />
+                                                      <TextField fx:id="editSirunro" text="985 112 001 346 227" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="4" />
                                                       <HBox GridPane.columnIndex="1" GridPane.rowIndex="8" />
-                                                      <TextArea prefHeight="50.0" prefWidth="148.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-                                                      <ChoiceBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                                                      <ChoiceBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-                                                      <DatePicker GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                                      <TextArea fx:id="editLisatietoja" prefHeight="50.0" prefWidth="148.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                                                      <ChoiceBox fx:id="cbAiti" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                                                      <ChoiceBox fx:id="cbIsa" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                                                      <DatePicker fx:id="dpSyntymapv" GridPane.columnIndex="1" GridPane.rowIndex="2">
                                                          <GridPane.margin>
                                                             <Insets left="4.0" />
                                                          </GridPane.margin>
                                                       </DatePicker>
+                                                      <ChoiceBox fx:id="cbSukupuoli" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                                                    </children>
                                                 </GridPane>
                                              </children>
@@ -291,11 +293,11 @@
                                                       <Label GridPane.rowIndex="2" />
                                                       <Label text="Puhelinnumero" GridPane.rowIndex="3" />
                                                       <Label text="Sähköpostiosoite" GridPane.rowIndex="4" />
-                                                      <TextField text="Ari Katajavuori" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" />
-                                                      <TextField text="Kuusitie 12" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" />
-                                                      <TextField text="56210 Virmutjoki" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" />
-                                                      <TextField text="0405632942" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" />
-                                                      <TextField text="ari.kvuori@gmail.com" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="4" />
+                                                      <TextField fx:id="editNimiO" text="Ari Katajavuori" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" />
+                                                      <TextField fx:id="editKatuosoite" text="Kuusitie 12" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" />
+                                                      <TextField fx:id="editPostinro" text="56210 Virmutjoki" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" />
+                                                      <TextField fx:id="editPuhelinnro" text="0405632942" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" />
+                                                      <TextField fx:id="editSPosti" text="ari.kvuori@gmail.com" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="4" />
                                                       <HBox GridPane.columnIndex="1" GridPane.rowIndex="5" />
                                                    </children>
                                                 </GridPane>
@@ -320,31 +322,14 @@
                                        <center>
                                           <VBox BorderPane.alignment="CENTER">
                                              <children>
-                                                <ScrollPane fx:id="panelElaimet" prefHeight="118.0" prefWidth="300.0">
+                                                <ScrollPane fx:id="panelElaimet" prefHeight="292.0" prefWidth="282.0">
                                                    <content>
-                                                      <ListChooser fx:id="chooserOmistajanElaimet" prefHeight="116.0" prefWidth="280.0" rivit="Karvatassu Rigel&#10;&#10;" />
+                                                      <StringGrid fx:id="tableOmistajanElaimet" editable="true" prefHeight="288.0" prefWidth="280.0" rivit="Nimi|Luovutuspäivämäärä">
+                                                         <columnResizePolicy>
+                                                            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                                         </columnResizePolicy></StringGrid>
                                                    </content>
                                                 </ScrollPane>
-                                                <GridPane>
-                                                  <columnConstraints>
-                                                    <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                                  </columnConstraints>
-                                                  <rowConstraints>
-                                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                  </rowConstraints>
-                                                   <children>
-                                                      <Label text="Luovutuspäivämäärä:">
-                                                         <GridPane.margin>
-                                                            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                                         </GridPane.margin>
-                                                      </Label>
-                                                      <Label fx:id="luovutusPv2" GridPane.rowIndex="1" />
-                                                   </children>
-                                                   <padding>
-                                                      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                                   </padding>
-                                                </GridPane>
                                              </children>
                                           </VBox>
                                        </center>

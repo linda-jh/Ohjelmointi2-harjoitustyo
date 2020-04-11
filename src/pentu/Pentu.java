@@ -131,20 +131,21 @@ public class Pentu {
     
     /**
      * Tallentaa tiedostot eläimistä ja omistajista.
+     * @param hakemisto minne tallennetaan
      * @throws SailoException jos ei onnistu
      */
-    public void tallenna() throws SailoException {
+    public void tallenna(String hakemisto) throws SailoException {
         String virhe = "";
         
         try {
-            elaimet.tallenna();
+            elaimet.tallenna(hakemisto);
         } catch (SailoException e) {
             // TODO Auto-generated catch block
             virhe += e.getMessage();
         }
         
         try {
-            omistajat.tallenna();
+            omistajat.tallenna(hakemisto);
         } catch (SailoException e) {
             // TODO Auto-generated catch block
             virhe += e.getMessage();
@@ -153,6 +154,43 @@ public class Pentu {
         if (virhe.length() > 0) {
             throw new SailoException(virhe);
         }
+    }
+    
+    
+    /**
+     * Poistaa valitun eläimen
+     * @param elain mikä poistetaan
+     */
+    public void poistaElain(Elain elain) {
+        elaimet.poista(elain);        
+    }
+    
+    
+    /**
+     * Poistaa valitun omistajan
+     * @param omistaja mikä poistetaan
+     */
+    public void poistaOmistaja(Omistaja omistaja) {
+        omistajat.poista(omistaja);
+    }
+    
+    /**
+     * Korvaa eläimen tiedot tietorakenteeseen. Etsitään samalla tunnusnumerolla oleva eläin
+     * ja jos ei löydy, niin listään uutena eläimenä.
+     * @param elain listätävän viite
+     */
+    public void korvaaTaiLisaa(Elain elain) {
+        elaimet.korvaaTaiLisaa(elain);
+    }
+    
+    
+    /**
+     * Etsii löytyykö omistajista henkilöä annetulla id:llä
+     * @param i id, jota etsitään
+     * @return true, jos löytyy ja jos ei niin false
+     */
+    public boolean loytyyko(int i) {
+        return omistajat.loytyyko(i);
     }
     
     

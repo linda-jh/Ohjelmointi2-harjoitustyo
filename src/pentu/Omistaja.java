@@ -38,6 +38,46 @@ public class Omistaja {
     
     
     /**
+     * @return omistajan nimen
+     */
+    public String getNimi() {
+        return nimi;
+    }
+
+
+    /**
+     * @return katuosoite
+     */
+    public String getKatuosoite() {
+        return katuosoite;
+    }
+
+
+    /**
+     * @return postinumero ja paikkakunta
+     */
+    public String getPostinro() {
+        return nroKaupunki;
+    }
+
+
+    /**
+     * @return puhelinnumero
+     */
+    public String getPuhelinnro() {
+        return puhelin;
+    }
+
+
+    /**
+     * @return sähköposti
+     */
+    public String getSPosti() {
+        return sposti;
+    }
+    
+    
+    /**
      * Lisätään omistajalle tunnusnumero
      * @return omistajan tunnusnumeron
      */
@@ -98,11 +138,11 @@ public class Omistaja {
      * @param i monesko eläin palautetaan
      * @return viite i:teen eläimeen 
      * @throws IndexOutOfBoundsException jos tulee poikkeus
-     */
+     
     public Elain annaElain(int i) throws IndexOutOfBoundsException {
         Elaimet elaimet = new Elaimet();
         return elaimet.anna(i);
-    }
+    }*/
     
     
     /**
@@ -179,13 +219,5 @@ public class Omistaja {
         ainoA.taytaTiedoilla();
         ainoA.rekisteroi();
         ainoA.tulosta(System.out);
-    }
-
-
-    /**
-     * @return omistajan nimen
-     */
-    public String getNimi() {
-        return nimi;
     }
 }
