@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<BorderPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxPentu.OmistajaDialogController">
+<BorderPane stylesheets="@pentu.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxPentu.OmistajaDialogController">
    <center>
       <GridPane hgap="10.0" BorderPane.alignment="CENTER">
          <columnConstraints>

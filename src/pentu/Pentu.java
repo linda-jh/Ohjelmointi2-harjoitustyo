@@ -130,6 +130,16 @@ public class Pentu {
     
     
     /**
+     * Hakee eläinten nimet listaan sukupuolen perusteella. Kohdalla olevan eläimen nimi jätetään listasta pois.
+     * @param s määrittää sukupuolen. 0 jos haetaan poikia, 1 jos tyttöjä.
+     * @return listan nimistä.
+     */
+    public ArrayList<String> getNimet(int s) {
+        return elaimet.getNimet(s);
+    }
+    
+    
+    /**
      * Tallentaa tiedostot eläimistä ja omistajista.
      * @param hakemisto minne tallennetaan
      * @throws SailoException jos ei onnistu
@@ -185,12 +195,33 @@ public class Pentu {
     
     
     /**
+     * Korvaa omistajan tiedot tietorakenteeseen. Etsitään samalla tunnusnumerolla oleva omistaja
+     * ja jos ei löydy, niin listään uutena omistajana.
+     * @param omistaja listätävän viite
+     */
+    public void korvaaTaiLisaa(Omistaja omistaja) {
+        omistajat.korvaaTaiLisaa(omistaja);
+    }
+    
+    
+    /**
      * Etsii löytyykö omistajista henkilöä annetulla id:llä
      * @param i id, jota etsitään
      * @return true, jos löytyy ja jos ei niin false
      */
     public boolean loytyyko(int i) {
         return omistajat.loytyyko(i);
+    }
+    
+    
+    /**
+     * Palauttaa listassa hakuehtoon vastaavien eläinten viitteet
+     * @param ehto hakuehto
+     * @param k etsittävän kentän indeksi
+     * @return lista löydetyistä eläimistä
+     */
+    public ArrayList<Elain> etsi(String ehto, int k) {
+        return elaimet.etsi(ehto, k);
     }
     
     

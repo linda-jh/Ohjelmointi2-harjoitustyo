@@ -7,7 +7,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
+
+import fi.jyu.mit.ohj2.WildChars;
 
 /**
  * Hoitelee sen, että monta jäsentä (CRC-kortit)
@@ -22,6 +25,7 @@ public class Elaimet {
     private Elain[]             alkiot;
     private boolean             muutettu;
     private String              tiedostonNimi   = "";
+    private Elain               apuelain        = new Elain();
     
     
 
@@ -158,6 +162,29 @@ public class Elaimet {
     
     
     /**
+     * Hakee eläinten nimet listaan sukupuolen perusteella. Kohdalla olevan eläimen nimi jätetään listasta pois.
+     * @param s määrittää sukupuolen. 0 jos haetaan poikia, 1 jos tyttöjä.
+     * @return listan nimistä.
+     */
+    public ArrayList<String> getNimet(int s) {
+        ArrayList<String> nimet = new ArrayList<String>();
+                
+        if (alkiot.length != 0) {
+            if (s == 0) {
+                for (int i = 0; i < lkm; i++) {
+                        if (alkiot[i].onkoPoika()) nimet.add(alkiot[i].getNimi());
+                }
+            } else {
+                for (int i = 0; i < lkm; i++) {
+                        if (!alkiot[i].onkoPoika()) nimet.add(alkiot[i].getNimi());
+                }
+            }
+        }
+        return nimet;
+    }
+    
+    
+    /**
      * Tallentaa eläinten tiedot tiedostoon.
      * @param hakemisto minne tallennetaan
      * @throws SailoException jos ei onnistu
@@ -217,6 +244,59 @@ public class Elaimet {
              if (id == alkiot[i].getTunnusNro()) return i; 
         return -1; 
     } 
+    
+    
+    /**
+     * Palauttaa listassa hakuehtoon vastaavien eläinten viitteet
+     * @param hakuehto hakuehto
+     * @param k etsittävän kentän indeksi
+     * @return lista löydetyistä eläimistä
+     * @example
+     * <pre name="test">
+     * Elaimet elaimet = new Elaimet();
+     * Elain elain1 = new Elain(); elain1.parse("1|Karvatassu Rigel|Simba|15.04.2018|poika|985112001635024|5|6|0||-|");
+     * Elain elain2 = new Elain(); elain2.parse("2|Karvatassu Spica|Nala|15.04.2018|tyttö|985112001635025|5|6|2|22.07.2018|-|");
+     * Elain elain3 = new Elain(); elain3.parse("3|Karvatassu Castor|Mufasa|15.04.2018|poika|985112001635026|5|6|3|27.07.2018|-|");
+     * Elain elain4 = new Elain(); elain4.parse("4|Karvatassu Hadar|Pumba|15.04.2018|poika|985112001635027|5|6|0||-|");
+     * Elain elain5 = new Elain(); elain5.parse("5|Karvatassu Mirzam|Nelli|20.07.2015|tyttö|985112001346227|7|0|0||-|");
+     * Elain elain6 = new Elain(); elain5.parse("6|Karvatassu Regor|Pörrö|02.03.2016|poika|985112001401021|0|0|0||-|");
+     * Elain elain7 = new Elain(); elain5.parse("7|Karvatassu Jupiter|Pilkku|30.05.2017|tyttö|985112001499302|0|0|0||-|");
+     * elaimet.lisaa(elain1); elaimet.lisaa(elain2); elaimet.lisaa(elain3); elaimet.lisaa(elain4); elaimet.lisaa(elain5); 
+     * elaimet.lisaa(elain6); elaimet.lisaa(elain7);
+     * List<Elain> lista;
+     * lista = elaimet.etsi("*i*", 1);
+     * lista.size() === 3;
+     * lista.get(0) == elain1 === true;
+     * lista.get(2) == elain5 === true;
+     * 
+     * lista = elaimet.etsi(null, -1);
+     * lista.size() === 7;
+     * </pre>
+     */
+    public ArrayList<Elain> etsi(String hakuehto, int k) {
+        String ehto = "*";
+        if (hakuehto != null && hakuehto.length() > 0) ehto = hakuehto;
+        int hk = k;
+        if (hk < 0) hk = apuelain.ekaKentta();
+        
+        ArrayList<Elain> lista = new ArrayList<Elain>();
+        
+        if (hk == 5 || hk == 6 || hk == 7) {
+            for (int i = 1; i < lkm; i++) {
+                String nimi = anna(hk).getNimi();
+                if (WildChars.onkoSamat(nimi, ehto))
+                    lista.add(alkiot[i]);
+            }
+        } else {
+            for (int i = 1; i < lkm; i++) {
+                if (WildChars.onkoSamat(alkiot[i].anna(hk), ehto))
+                    lista.add(alkiot[i]);
+            }
+        }
+        Collections.sort(lista, new Elain.Vertailija(hk));
+        
+        return lista;
+    }
     
 
     /**

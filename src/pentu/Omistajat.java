@@ -20,6 +20,7 @@ public class Omistajat implements Iterable<Omistaja> {
     private final ArrayList<Omistaja> alkiot         = new ArrayList<Omistaja>();
     
     private int                       lkm            = 0;
+    private boolean                   muutettu;
     private String                    tiedostonNimi  = "";
 
     @Override
@@ -159,6 +160,24 @@ public class Omistajat implements Iterable<Omistaja> {
             if (o.getTunnusNro() == i) return true;
         }
         return false;
+    }
+    
+    
+    /**
+     * @param omistaja lisättävän viite
+     */
+    public void korvaaTaiLisaa(Omistaja omistaja) {
+        int id = omistaja.getTunnusNro();
+        int i = 0;
+        for (Omistaja o : alkiot) {
+            if (o.getTunnusNro() == id) {
+                alkiot.set(i, omistaja);
+                muutettu = true;
+                return;
+            }
+            i++;
+        }
+        lisaa(omistaja);
     }
     
     

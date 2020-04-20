@@ -10,7 +10,7 @@ import fi.jyu.mit.ohj2.Mjonot;
  * @version 11.3.2020
  *
  */
-public class Omistaja {
+public class Omistaja implements Cloneable {
     private int              tunnusNro       = 0;
     private String           nimi            = "";
     private String           katuosoite      = "";
@@ -26,6 +26,24 @@ public class Omistaja {
      */
     public Omistaja() {
         nimi = "Kasvattaja";
+    }
+    
+    
+    /**
+     * Palauttaa omistajan kenttien lukumäärän
+     * @return kenttien lukumäärä
+     */
+    public int getKenttia() {
+        return 6;
+    }
+    
+    
+    /**
+     * Ensimmäinen kenttä, joka on mielekäs kysyttäväksi
+     * @return kentän indeksi
+     */
+    public int ekaKentta() {
+        return 1;
     }
     
     
@@ -74,6 +92,62 @@ public class Omistaja {
      */
     public String getSPosti() {
         return sposti;
+    }
+    
+    
+    /**
+     * Asettaa olion nimen
+     * @param s nimi
+     * @return virheilmoitus, null jos ok
+     */
+    public String setNimi(String s) {
+        nimi = s;
+        return null;
+    }
+    
+    
+    /**
+     * Asettaa olion katuosoitteen
+     * @param s osoite
+     * @return virheilmoitus, null jos ok
+     */
+    public String setKatuosoite(String s) {
+        katuosoite = s;
+        return null;
+    }
+    
+    
+    /**
+     * Asettaa postinumeron ja kaupungin
+     * @param s postinumero ja kaupunki
+     * @return virheilmoitus, null jos ok
+     */
+    public String setPostinro(String s) {
+        // if (!s.matches("[0-9]*")) return "Sirunumeron on oltava numeerinen";
+        nroKaupunki = s;
+        return null;
+    }
+    
+    
+    /**
+     * Asettaa olion puhelinnumeron
+     * @param s numero
+     * @return virheilmoitus, null jos ok
+     */
+    public String setPuhelin(String s) {
+        puhelin = s;
+        return null;
+    }
+    
+    
+    /**
+     * Asettaa olion sähköpostin
+     * @param s sähköpostiosoite
+     * @return virheilmoitus, null jos ok
+     */
+    public String setSPosti(String s) {
+        sposti = s;
+        return null;
     }
     
     
@@ -177,7 +251,7 @@ public class Omistaja {
         if (tunnusNro >= seuraavaNro) seuraavaNro = tunnusNro + 1;
     }
     
-    
+    /**
     /**
      * Selvitää harrastuksen tiedot | erotellusta merkkijonosta.
      * Pitää huolen että seuraavaNro on suurempi kuin tuleva tunnusnro.
@@ -204,6 +278,75 @@ public class Omistaja {
         nroKaupunki = Mjonot.erota(sb, '|', nroKaupunki);
         puhelin = Mjonot.erota(sb, '|', puhelin);
         sposti = Mjonot.erota(sb, '|', sposti);
+    }
+    
+    
+    /**
+
+    public int getKenttia() {
+        return 6;
+    }
+   
+    public int ekaKentta() {
+        return 1;
+    }
+    
+    public String anna(int k) {
+        switch ( k ) {
+        case 0: return "" + tunnusNro;
+        case 1: return "" + nimi;
+        case 2: return "" + katuosoite;
+        case 3: return "" + nroKaupunki;
+        case 4: return "" + puhelin;
+        case 5: return "" + sposti;
+        default: return "Äääliö";
+        }
+    }
+    
+    public String aseta(int k, String jono) {
+        String tjono = jono.trim();
+        StringBuffer sb = new StringBuffer(tjono);
+        switch ( k ) {
+        case 0:
+            setTunnusNro(Mjonot.erota(sb, '§', getTunnusNro()));
+            return null;
+        case 1:
+            nimi = tjono;
+            return null;
+        case 2:
+            katuosoite = tjono;
+            return null;
+        case 3:
+            nroKaupunki = tjono;
+            return null;
+        case 4:
+            puhelin = tjono;
+            return null;
+        case 5:
+            sposti = tjono;
+            return null;
+        default:
+            return "ÄÄliö";
+        }
+    }
+
+    public String getKysymys(int k) {
+        switch (k) {
+        case 0: return "Tunnusnumero";
+        case 1: return "Nimi";
+        case 2: return "Osoite";
+        case 3: return "Postinumero";
+        case 4: return "Puhelinnumero";
+        case 5: return "Sähköpostiosoite";
+        default: return "Ääliö";
+        }
+    }*/
+    
+    
+    @Override
+    public Omistaja clone() throws CloneNotSupportedException {
+        Omistaja uusi = (Omistaja) super.clone();
+        return uusi;
     }
     
     /**

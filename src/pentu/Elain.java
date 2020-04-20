@@ -1,6 +1,7 @@
 package pentu;
 
 import java.io.PrintStream;
+import java.util.Comparator;
 
 import fi.jyu.mit.ohj2.Mjonot;
 
@@ -18,20 +19,125 @@ public class Elain implements Cloneable {
     private String      syntymapaiva     = "";
     private String      sukupuoli        = "";
     private long        sirunumero       = 0;
-    private String      lisatietoja      = "";
     private int         aitiId           = 0;
     private int         isaId            = 0;  
+    private String      lisatietoja      = "";
     private int         omistajaId       = 0;
     private String      luovutusPv       = "";
     
     private static int  seuraavaNro      = 1;
     
+    /**
+     * Vertailee tietyn kentän mukaan.
+     * @author linda
+     * @version 18.4.2020
+     *
+     */
+    public static class Vertailija implements Comparator<Elain> {
+        
+        private int k;
+        
+        /**
+         * @param k minkä kentän mukaan vertaillaan.
+         */
+        public Vertailija(int k) {
+            this.k = k;
+        }
+
+        @Override
+        public int compare(Elain elain1, Elain elain2) {
+            return elain1.getAvain(k).compareToIgnoreCase(elain2.getAvain(k));
+        }
+    }
     
     /**
      * Oletusmuodostaja
      */
     public Elain() {
         //
+    }
+    
+    
+    /**
+     * Palauttaa kentän k mukaisen lajitteluavaimen
+     * @param k mikä kenttä
+     * @return lajitteluavain
+     */
+    public String getAvain(int k) {
+        switch ( k ) {
+        case 0: return "" + tunnusNro;
+        case 1: return "" + nimi;
+        case 2: return "" + kutsumanimi;
+        case 3: String pv = kaannaPv(syntymapaiva); return "" + pv;
+        case 4: return "" + sukupuoli;
+        case 5: return "" + String.format("%15", sirunumero);
+        case 6: return "" + aitiId;
+        case 7: return "" + isaId;
+        default: return "Ääliö";
+        }
+    }
+    
+    
+    /**
+     * Kääntää päivämäärän toisinpäin. pp.kk.vvvv -> vvvv.kk.pp.
+     * @param paiva päivämäärä
+     * @return käännetty päivä
+     * @example
+     * <pre name="test">
+     * String pv = "22.02.1997";
+     * kaannaPv(pv) === "1997.02.22";
+     * String pv1 = "22.02.";
+     * kaannaPv(pv1) === "0000.02.22";
+     * </pre>
+     */
+    public static String kaannaPv(String paiva) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(paiva);
+        String pp = Mjonot.erota(sb, '.', "00");
+        String kk = Mjonot.erota(sb, '.', "00");
+        if (sb.toString().equals("")) sb.append("0000");
+        sb.append("." + kk);
+        sb.append("." + pp);
+        return sb.toString();
+    }
+    
+    
+    /**
+     * Palauttaa eläimen kenttien lukumäärän
+     * @return kenttien lukumäärä
+     */
+    public int getKenttia() {
+        return 9;
+    }
+    
+    
+    /**
+     * Ensimmäinen kenttä, joka on mielekäs kysyttäväksi
+     * @return kentän indeksi
+     */
+    public int ekaKentta() {
+        return 1;
+    }
+    
+    
+    /**
+     * Palauttaa eläimen kentän kysymyksen, joka vastaa k:ta.
+     * @param k monennenko kentän kysymys palautatetaan
+     * @return kysymys, joka vastaa k:tta kenttää
+     */
+    public String getKysymys(int k) {
+        switch (k) {
+        case 0: return "Tunnusnumero";
+        case 1: return "Nimi";
+        case 2: return "Kutsumanimi";
+        case 3: return "Syntymäpäivä";
+        case 4: return "Sukupuoli";
+        case 5: return "Sirunumero";
+        case 6: return "Äiti";
+        case 7: return "Isä";
+        case 8: return "Lisätietoja";
+        default: return "Ääliö";
+        }
     }
     
     
@@ -70,6 +176,24 @@ public class Elain implements Cloneable {
     public String getNimi() {
         return nimi;
     }
+    
+    
+    /**
+     * Hakee eläimen kutsumanimen.
+     * @return kutsumanimi
+     */
+    public String getKutsumanimi() {
+        return kutsumanimi;
+    }
+    
+    
+    /**
+     * Hakee eläimen sirunumeron
+     * @return sirunumero
+     */
+    public String getSiruNro() {
+        return Long.toString(sirunumero);
+    }
       
     
     /**
@@ -96,24 +220,6 @@ public class Elain implements Cloneable {
      */
     public String getLuovutusPv() {
         return luovutusPv;
-    }
-    
-    
-    /**
-     * Palauttaa eläimen kutsumanimen
-     * @return kutsumanimi
-     */
-    public String getKutsumanimi() {
-        return kutsumanimi;
-    }
-
-
-    /**
-     * Palauttaa sirunumeron merkkijonona
-     * @return sirunumero
-     */
-    public String getSiruNro() {
-        return Long.toString(sirunumero);
     }
 
     
@@ -251,6 +357,73 @@ public class Elain implements Cloneable {
     
     
     /**
+     * Antaa k:n kentän sisällön merkkijonona
+     * @param k monenenko kentän sisältö palautetaan
+     * @return kentän sisältö merkkijonona
+     */
+    public String anna(int k) {
+        switch ( k ) {
+        case 0: return "" + tunnusNro;
+        case 1: return "" + nimi;
+        case 2: return "" + kutsumanimi;
+        case 3: return "" + syntymapaiva;
+        case 4: return "" + sukupuoli;
+        case 5: return "" + sirunumero;
+        case 6: return "" + aitiId;
+        case 7: return "" + isaId;
+        case 8: return "" + lisatietoja;
+        default: return "Äääliö";
+        }
+    }
+    
+    
+    /**
+     * Asettaa k:n kentän arvoksi parametrina tuodun merkkijonon arvon
+     * @param k kuinka monennen kentän arvo asetetaan
+     * @param jono jonoa joka asetetaan kentän arvoksi
+     * @return null jos asettaminen onnistuu, muuten vastaava virheilmoitus.
+     * TODO: testit
+     * TODO: tarkistukset tähän ohjelmaan
+     */
+    public String aseta(int k, String jono) {
+        String tjono = jono.trim();
+        StringBuffer sb = new StringBuffer(tjono);
+        switch ( k ) {
+        case 0:
+            setTunnusNro(Mjonot.erota(sb, '§', getTunnusNro()));
+            return null;
+        case 1:
+            nimi = tjono;
+            return null;
+        case 2:
+            kutsumanimi = tjono;
+            return null;
+        case 3:
+            syntymapaiva = tjono;
+            return null;
+        case 4:
+            sukupuoli = tjono;
+            return null;
+        case 5:
+            sirunumero = Long.parseLong(tjono);
+            return null;
+        case 6:
+            // Elain elain = pentu.Elaimet.anna(Integer.parseInt(tjono));
+            // aiti = elain.getNimi();
+            aitiId = Integer.parseInt(tjono); // TODO: korjaa tämä!
+            return null;
+        case 7:
+            isaId = Integer.parseInt(tjono); // TODO: korjaa tämä!
+            return null;
+        case 8:
+            lisatietoja = tjono;
+            return null;
+        default:
+            return "ÄÄliö";
+        }
+    }
+    
+    /**
      * Palauttaa eläimen tiedot merkkijonona jonka voi tallentaa tiedostoon.
      * @return jäsen tolppaeroteltuna merkkijonona 
      * @example
@@ -318,6 +491,12 @@ public class Elain implements Cloneable {
         Elain[] t = new Elain[5];
         t[0] = mirzam;
         t[1] = mirzam2;
+        
+        
+        String pv = "22.02.1997";
+        System.out.println(kaannaPv(pv));
+        String pv1 = "22.02.";
+        System.out.println(kaannaPv(pv1));
               
 
     }

@@ -5,6 +5,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
+import static fxPentu.PentuDialogController.getFieldId;
 import fi.jyu.mit.fxgui.ComboBoxChooser;
 import fi.jyu.mit.fxgui.Dialogs;
 import fi.jyu.mit.fxgui.ListChooser;
@@ -17,6 +18,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
 import pentu.Elain;
 import pentu.Omistaja;
 import pentu.Pentu;
@@ -28,7 +30,8 @@ import pentu.SailoException;
  *
  */
 public class PentuGUIController implements Initializable{
-    @FXML ComboBoxChooser<String> cbHaku;
+    @FXML private ComboBoxChooser<String> cbHaku;
+    @FXML private TextField textHaku;
     @FXML private ScrollPane panelElain;
     @FXML private ScrollPane panelOmistaja;
     @FXML private ScrollPane panelPennut;
@@ -40,8 +43,7 @@ public class PentuGUIController implements Initializable{
     @FXML private Label pentujenLkm;
     @FXML private Label omistajaNimi;
     @FXML private Label luovutusPv;
-    @FXML private Label luovutusPv2;    
-    @FXML private TextField textHaku;
+    @FXML private Label luovutusPv2;
     @FXML private TextField editNimi;
     @FXML private TextField editKutsumanimi;
     @FXML private TextField editSirunro;
@@ -53,12 +55,16 @@ public class PentuGUIController implements Initializable{
     @FXML private TextField editPuhelinnro;
     @FXML private TextField editSPosti;
     
+    @FXML private GridPane gridElain;
+    
     private String kasvattajannimi = "Karvatassu";
     private Pentu pentu;
     private Elain elainKohdalla;
     private Omistaja omistajaKohdalla;
     private TextField[] edits;
     private TextField[] editsO;
+    private int kentta = 0;
+    private static Elain apuelain = new Elain();
 
     
     @Override
@@ -78,7 +84,6 @@ public class PentuGUIController implements Initializable{
      * Käsittelee tapahtuman, kun painetaan lopeta tai suljetaan ikkuna ruksista 
      */
     @FXML private void handleLopeta() {
-        // Dialogs.showMessageDialog("Ei osata tätä vielä.");
         lopeta();
     }
     
@@ -93,20 +98,7 @@ public class PentuGUIController implements Initializable{
      * Käsittelee tapahtuman, kun hakukenttään kirjoitetaan
      */
     @FXML private void handleHaku() {
-        String hakukentta = cbHaku.getSelectedText();
-        String ehto = textHaku.getText(); 
-        if ( ehto.isEmpty() )
-            naytaVirhe(null);
-        else
-            naytaVirhe("Ei osata vielä hakea " + hakukentta + ": " + ehto);
-    }
-    
-    
-    /**
-     * Käsittelee tapahtuman, kun painetaan kumoa
-     */
-    @FXML private void handleKumoa() {
-        Dialogs.showMessageDialog("Ei osata tätä vielä.");
+        hae(0);
     }
     
     
@@ -123,7 +115,6 @@ public class PentuGUIController implements Initializable{
      */
     @FXML private void handlePoistaOmistaja() {
         poistaOmistaja();
-        // Dialogs.showQuestionDialog("Poisto?", "Poistetaanko tiedot? ", "Kyllä", "Ei");
     }
     
     
@@ -156,7 +147,7 @@ public class PentuGUIController implements Initializable{
      * Käsittelee tapahtuman, kun halutaan muokata valitun eläimen tietoja
      */
     @FXML private void handleMuokkaaElain() {
-        muokkaa();   
+        muokkaa(1);   
     }
     
     
@@ -167,11 +158,22 @@ public class PentuGUIController implements Initializable{
         muokkaaOmistaja();
     }
     
+    
+    @FXML private void handleLisaaLuovutus() {
+        //
+    }
+    
+    
+    @FXML private void handleMuokkaaLuovutus() {
+        //
+    }
+    
+    
     /**
      * Käsittelee tapahtuman, kun halutaan muokata tietoja
      */
     @FXML private void handleMuokkaa() {
-        muokkaa();
+        muokkaa(1);
     }
     
     @FXML private void handleAvaa() {
@@ -196,11 +198,24 @@ public class PentuGUIController implements Initializable{
         chooserOmistajat.clear();
         chooserOmistajat.addSelectionListener(e -> naytaOmistaja());
         
-        edits = new TextField[] {editNimi, editKutsumanimi, editSirunro} ;
+        edits = PentuDialogController.luoKentat(gridElain);
         editsO = new TextField[] {editNimiO, editKatuosoite, editPostinro, editPuhelinnro, editSPosti} ;
+        for (TextField edit : edits) 
+            if (edit != null) {
+                edit.setEditable(false);
+                edit.setOnMouseClicked(e -> { 
+                    if (e.getClickCount() > 1) muokkaa(getFieldId(edit, 0)); 
+                });
+                edit.focusedProperty().addListener((a,o,n) -> kentta = getFieldId(edit,kentta));
+            }
         
         chooserPennut.clear();        
         cbHaku.clear();
+        
+        for (int k = apuelain.ekaKentta(); k < apuelain.getKenttia() - 1; k++) {
+            cbHaku.add(apuelain.getKysymys(k), null);
+        }
+        cbHaku.getSelectionModel().select(0);
     }
     
     
@@ -245,7 +260,8 @@ public class PentuGUIController implements Initializable{
         
         // -----------------------Lisätään omistajan pennut listaan-----------------------------
         
-        haeOmistajanElaimet(omistajaKohdalla);         
+        haeOmistajanElaimet(omistajaKohdalla);
+        tableOmistajanElaimet.setOnMouseClicked( e -> {if (  e.getClickCount() == 2)  naytaElain();} ); //TODO: korjaa
     }
     
     
@@ -292,15 +308,27 @@ public class PentuGUIController implements Initializable{
      * @param enro eläimen numero, joka aktivoidaan haun jälkeen
      */
     private void hae(int enro) {
+        int nro = enro;
+        if (nro <= 0) {
+            Elain kohdalla = elainKohdalla;
+            if (kohdalla != null) nro = kohdalla.getTunnusNro();
+        }
+        int k = cbHaku.getSelectionModel().getSelectedIndex() + apuelain.ekaKentta();
+        String ehto = textHaku.getText(); 
+        if (ehto.indexOf('*') < 0) ehto = "*" + ehto + "*";
+
         chooserElaimet.clear();
 
         int index = 0;
-        for (int i = 1; i < pentu.getElaimia(); i++) {
-            Elain elain = pentu.annaElain(i);
-            if (elain.getTunnusNro() == enro) index = i;
-            chooserElaimet.add(elain.getNimi(), elain);
+        ArrayList<Elain> elaimet = pentu.etsi(ehto, k);
+        int i = 0;
+        for (Elain e : elaimet) {
+            if (e.getTunnusNro() == 0) continue;
+            if (e.getTunnusNro() == nro) index = i;
+            chooserElaimet.add(e.getNimi(), e);
+            i++;
         }
-        chooserElaimet.setSelectedIndex(index); // tästä tulee muutosviesti joka näyttää jäsenen
+        chooserElaimet.setSelectedIndex(index); // tästä tulee muutosviesti joka näyttää eläimen
     }
     
     
@@ -317,7 +345,7 @@ public class PentuGUIController implements Initializable{
             if (o.getTunnusNro() == enro) index = i;
             chooserOmistajat.add(o.getNimi(), o);
         }
-        chooserOmistajat.setSelectedIndex(index); // tästä tulee muutosviesti joka näyttää jäsenen
+        chooserOmistajat.setSelectedIndex(index); // tästä tulee muutosviesti joka näyttää omistajan
     }
     
     
@@ -342,12 +370,14 @@ public class PentuGUIController implements Initializable{
     
     
     /**
-     * Hakee omistajan eläimet tiedot listaan
+     * Hakee omistajan eläinten nimet ja luovutuspäivämäärät listaan
      */
     private void haeOmistajanElaimet(Omistaja omistaja) {        
         tableOmistajanElaimet.clear();
-        if (omistaja == null) return;
+        tableOmistajanElaimet.setEditable(false);
+        tableOmistajanElaimet.setSortable(-1, false);
         
+        if (omistaja == null) return;
         ArrayList<Elain> elaimet = pentu.getElaimet(omistajaKohdalla);
         if (elaimet.size() == 0) return;
         for (Elain e : elaimet) {
@@ -355,13 +385,16 @@ public class PentuGUIController implements Initializable{
         }
     }
 
+    public ArrayList<String> getNimet(int s) {
+        return pentu.getNimet(s);
+    }
     
     /**
      * Luodaan uusi eläin, rekisteröidään se, täytetään tiedoilla ja lisätään listaan
      */
     private void uusiElain() {
         Elain uusi = new Elain();
-        uusi = PentuDialogController.kysyElain(null, uusi);
+        uusi = PentuDialogController.kysyElain(null, uusi, 1);
         if (uusi == null) return;
         uusi.rekisteroi();
         // uusi.taytaElainTiedoilla();
@@ -379,18 +412,19 @@ public class PentuGUIController implements Initializable{
      * Tekee uuden tyhjän omistajan editointia varten 
      */ 
     public void uusiOmistaja() { 
-        /*if(pentu.getOmistajia() == 0) {
+        if(pentu.getOmistajia() == 0) {
             Omistaja u = new Omistaja();
             u.rekisteroi();
             pentu.lisaa(u);
             haeOmistaja(u.getTunnusNro());
-        } else {*/
+        } else {
             Omistaja uusi = new Omistaja();
+            uusi = OmistajaDialogController.kysyOmistaja(null, uusi);
+            if (uusi == null) return;
             uusi.rekisteroi();
-            uusi.taytaTiedoilla();
             pentu.lisaa(uusi);
             haeOmistaja(uusi.getTunnusNro());
-        // }
+        }
     }
 
     
@@ -453,20 +487,18 @@ public class PentuGUIController implements Initializable{
     
     /**
      * Avaa ikkunan, jossa voidaan muokata tietoja
+     * @param k kentän id numero
      */
-    private void muokkaa() {
+    private void muokkaa(int k) {
         if (elainKohdalla == null) return;
-        Elain elain;
         try {
-            elain = PentuDialogController.kysyElain(null, elainKohdalla.clone());
+            Elain elain = PentuDialogController.kysyElain(null, elainKohdalla.clone(), k);
             if (elain == null) return;
             pentu.korvaaTaiLisaa(elain);
             hae(elain.getTunnusNro()); 
         } catch (CloneNotSupportedException e) {
-            // TODO Auto-generated catch block
-            // e.printStackTrace();
-        }
-               
+            //
+        }      
     }
     
     
@@ -474,8 +506,16 @@ public class PentuGUIController implements Initializable{
      * Avaa ikkunan, jossa voidaan muokata tietoja
      */
     private void muokkaaOmistaja() {
-        OmistajaDialogController.kysyOmistaja(null, omistajaKohdalla);
-        
+        if (omistajaKohdalla == null);
+        Omistaja omistaja;
+        try {
+            omistaja = OmistajaDialogController.kysyOmistaja(null, omistajaKohdalla.clone());
+            if (omistaja == null) return;
+            pentu.korvaaTaiLisaa(omistaja);
+            haeOmistaja(omistaja.getTunnusNro());
+        } catch (CloneNotSupportedException e) {
+            //
+        }
     }
      
     
@@ -485,6 +525,11 @@ public class PentuGUIController implements Initializable{
      */
     public void setPentu(Pentu pentu) {
         this.pentu = pentu;
+    }
+    
+    
+    public Elain getElain() {
+        return elainKohdalla;
     }
 
 
