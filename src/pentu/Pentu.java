@@ -127,17 +127,10 @@ public class Pentu {
     public ArrayList<Elain> getElaimet(Omistaja o) {
         return elaimet.omistajanElaimet(o);        
     }
-    
-    
-    /**
-     * Hakee eläinten nimet listaan sukupuolen perusteella. Kohdalla olevan eläimen nimi jätetään listasta pois.
-     * @param s määrittää sukupuolen. 0 jos haetaan poikia, 1 jos tyttöjä.
-     * @return listan nimistä.
-     */
-    public ArrayList<String> getNimet(int s) {
+
+    public ArrayList<Elain> getNimet(int s) {
         return elaimet.getNimet(s);
     }
-    
     
     /**
      * Tallentaa tiedostot eläimistä ja omistajista.
@@ -222,6 +215,17 @@ public class Pentu {
      */
     public ArrayList<Elain> etsi(String ehto, int k) {
         return elaimet.etsi(ehto, k);
+    }
+
+    
+    /**
+     * Palauttaa listassa hakuehtoon vastaavien omistajien viitteet
+     * @param ehto hakuehto
+     * @param k etsittävän kentän indeksi
+     * @return lista löydetyistä eläimistä
+     */
+    public ArrayList<Omistaja> etsiO(String ehto, int k) {
+        return omistajat.etsi(ehto, k);
     }
     
     

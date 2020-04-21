@@ -1,8 +1,10 @@
 package fxPentu;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
+import fi.jyu.mit.fxgui.ComboBoxChooser;
 import fi.jyu.mit.fxgui.Dialogs;
 import fi.jyu.mit.fxgui.ModalController;
 import fi.jyu.mit.fxgui.ModalControllerInterface;
@@ -15,7 +17,11 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import pentu.Elaimet;
 import pentu.Elain;
+import pentu.Omistaja;
+import pentu.Omistajat;
+import pentu.Pentu;
 
 /**
  * @author linda
@@ -36,8 +42,11 @@ public class PentuDialogController implements ModalControllerInterface<Elain>, I
 
     private TextField[] edits;
     private static Elain apuelain = new Elain(); // Eläin, jolta voidaan kysyä tietoja.
+    private static Elaimet apuelaimet = new Elaimet();
+    private static Omistajat apuomistajat = new Omistajat();
     private Elain elainKohdalla;
     private int kentta = 0;
+    private static Pentu pentu;
     
     //@FXML ListChooser<Elain> chooserElaimet;
     
@@ -65,11 +74,9 @@ public class PentuDialogController implements ModalControllerInterface<Elain>, I
 //----------------------------------------------------------------------------------------------------------------
     
     private void alusta() {
-        edits =  luoKentat(gridElain); 
-        // edits = new TextField[] {editNimi, editKutsumanimi, editSirunro, editSyntymapaivaD };
-        // int i = 0;
+        // edits =  luoKentat(gridElain);
+        edits =  luoEditKentat(gridElain);
         for (TextField edit : edits) {
-            // final int k = ++i;
             if ( edit != null)
                 edit.setOnKeyReleased(e -> kasitteleMuutosElaimeen((TextField)(e.getSource())));
         }
@@ -158,16 +165,22 @@ public class PentuDialogController implements ModalControllerInterface<Elain>, I
      * @param modalityStage mille ollaan modaalisia, null = sovellukselle
      * @param oletus mitä näytetään oletuksena
      * @param k kenttä, joka saa fokuksen kun näytetään
+     * @param p pentu
      * @return null, jos painetaan Kumoa, muuten tietue
      */
-    public static Elain kysyElain(Stage modalityStage, Elain oletus, int k) {
+    public static Elain kysyElain(Stage modalityStage, Elain oletus, int k, Pentu p) {
         return ModalController.<Elain, PentuDialogController>showModal(
                 PentuDialogController.class.getResource("PentuDialogView.fxml"), 
                 "Muokkaa",
-                modalityStage, oletus, ctrl -> ctrl.setKentta(k));
+                modalityStage, oletus, ctrl -> {ctrl.setPentu(p); ctrl.setKentta(k);});
     }
 
     
+    private void setPentu(Pentu p) {
+        pentu = p;
+    }
+
+
     private void naytaVirhe(String virhe) {
         if (virhe == null || virhe.isEmpty()) {
             labelVirhe.setText("");
@@ -200,6 +213,70 @@ public class PentuDialogController implements ModalControllerInterface<Elain>, I
             edits[k] = edit;
             edit.setId("e"+k);
             gridElain.add(edit,  1, i);
+        }
+        return edits;
+    }
+    
+    
+    /**
+     * Luodaan GridPaneen eläinten tiedot
+     * @param gridElain mihin tiedot luodaan
+     * @return luodut tekstikentät
+     */
+    public static TextField[] luoEditKentat(GridPane gridElain) {
+        gridElain.getChildren().clear();
+        TextField[] edits = new TextField[apuelain.getKenttia()];
+        
+        for (int i = 0, k = apuelain.ekaKentta(); k < apuelain.getKenttia(); k++, i++) {
+            Label label = new Label(apuelain.getKysymys(k));
+            gridElain.add(label, 0, i);
+            if (i == 3 || i == 5 || i == 6 || i == 7) {
+                if (i == 3) {
+                    ComboBoxChooser<String> edit = new ComboBoxChooser<String>();
+                    edit.setId("e"+k);
+                    if (i == 3) {
+                        edit.add("tyttö");
+                        edit.add("poika");
+                    }
+                    gridElain.add(edit,  1, i);
+                }
+                
+                if (i == 5 || i == 6) {   
+                    ComboBoxChooser<Elain> edit = new ComboBoxChooser<Elain>();
+                    ArrayList<Elain> elaimet = new ArrayList<Elain>();
+                    if (i == 5) {
+                        elaimet = pentu.getNimet(1);
+                        for (Elain e : elaimet) {
+                            edit.add(e.getNimi(), e);
+                        }
+                        gridElain.add(edit,  1, i);
+                    }else {
+                        elaimet = apuelaimet.getNimet(0);
+                        for (Elain e : elaimet) {
+                            edit.add(e.getNimi(), e);
+                        }
+                        gridElain.add(edit,  1, i);
+                    }
+                    
+                } 
+                
+                if ( i == 7) {
+                    ComboBoxChooser<Omistaja> edit = new ComboBoxChooser<Omistaja>();
+                    ArrayList<Omistaja> omistajat = new ArrayList<Omistaja>();
+                    if (i == 5) {
+                        omistajat = apuomistajat.getNimet();
+                        for (Omistaja o : omistajat) {
+                            edit.add(o.getNimi(), o);
+                        }
+                        gridElain.add(edit,  1, i);
+                    }
+                }
+            } else {
+                TextField edit = new TextField();
+                edits[k] = edit;
+                edit.setId("e"+k);
+                gridElain.add(edit,  1, i);
+            }
         }
         return edits;
     }

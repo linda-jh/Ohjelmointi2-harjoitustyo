@@ -73,6 +73,8 @@ public class Elain implements Cloneable {
         case 5: return "" + String.format("%15", sirunumero);
         case 6: return "" + aitiId;
         case 7: return "" + isaId;
+        case 8: return "" + omistajaId;
+        case 9: return "" + luovutusPv;
         default: return "Ääliö";
         }
     }
@@ -107,7 +109,7 @@ public class Elain implements Cloneable {
      * @return kenttien lukumäärä
      */
     public int getKenttia() {
-        return 9;
+        return 11;
     }
     
     
@@ -135,7 +137,9 @@ public class Elain implements Cloneable {
         case 5: return "Sirunumero";
         case 6: return "Äiti";
         case 7: return "Isä";
-        case 8: return "Lisätietoja";
+        case 8: return "Omistaja";
+        case 9: return "Luovutuspäivämäärä";
+        case 10: return "Lisätietoja";
         default: return "Ääliö";
         }
     }
@@ -371,7 +375,9 @@ public class Elain implements Cloneable {
         case 5: return "" + sirunumero;
         case 6: return "" + aitiId;
         case 7: return "" + isaId;
-        case 8: return "" + lisatietoja;
+        case 8: return "" + omistajaId;
+        case 9: return "" + luovutusPv;
+        case 10: return "" + lisatietoja;
         default: return "Äääliö";
         }
     }
@@ -416,6 +422,12 @@ public class Elain implements Cloneable {
             isaId = Integer.parseInt(tjono); // TODO: korjaa tämä!
             return null;
         case 8:
+            omistajaId = Integer.parseInt(tjono); //TODO: korjaa!
+            return null;
+        case 9:
+            luovutusPv = tjono;
+            return null;
+        case 10:
             lisatietoja = tjono;
             return null;
         default:

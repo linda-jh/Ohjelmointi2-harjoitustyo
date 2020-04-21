@@ -40,8 +40,6 @@
             <items>
                   <MenuItem mnemonicParsing="false" onAction="#handleLisaaElain" text="Lisää uusi eläin..." />
                   <MenuItem mnemonicParsing="false" onAction="#handleLisaaOmistaja" text="Lisää uusi omistaja..." />
-              <MenuItem mnemonicParsing="false" onAction="#handleMuokkaa" text="Muokkaa..." />
-                  <MenuItem mnemonicParsing="false" onAction="#handlePoista" text="Poista..." />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Apua">
@@ -238,20 +236,7 @@
                                                 <Insets bottom="20.0" top="30.0" />
                                              </padding>
                                           </GridPane>
-                                          <HBox prefHeight="100.0" prefWidth="200.0">
-                                             <children>
-                                                <Button mnemonicParsing="false" onAction="#handleLisaaLuovutus" text="Lisää ">
-                                                   <HBox.margin>
-                                                      <Insets bottom="10.0" left="10.0" right="5.0" top="10.0" />
-                                                   </HBox.margin>
-                                                </Button>
-                                                <Button mnemonicParsing="false" onAction="#handleMuokkaaLuovutus" text="Muokkaa">
-                                                   <HBox.margin>
-                                                      <Insets bottom="10.0" left="5.0" right="10.0" top="10.0" />
-                                                   </HBox.margin>
-                                                </Button>
-                                             </children>
-                                          </HBox>
+                                          <HBox prefHeight="100.0" prefWidth="200.0" />
                                        </children>
                                     </VBox>
                                  </children>
@@ -343,7 +328,7 @@
                            <top>
                               <HBox BorderPane.alignment="CENTER">
                                  <children>
-                                    <ComboBoxChooser rivit="Nimi">
+                                    <ComboBoxChooser fx:id="cbHakuO" onAction="#handleHakuO" rivit="Nimi">
                                        <HBox.margin>
                                           <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                        </HBox.margin>
@@ -353,7 +338,7 @@
                                           <Insets bottom="15.0" left="30.0" right="5.0" top="15.0" />
                                        </HBox.margin>
                                     </Label>
-                                    <TextField>
+                                    <TextField fx:id="textHakuO" onKeyReleased="#handleHakuO">
                                        <HBox.margin>
                                           <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                        </HBox.margin>

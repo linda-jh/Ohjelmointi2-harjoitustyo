@@ -7,8 +7,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.Scanner;
+
+import fi.jyu.mit.ohj2.WildChars;
 
 /**
  * @author linda
@@ -17,11 +20,12 @@ import java.util.Scanner;
  */
 public class Omistajat implements Iterable<Omistaja> {
     /** Taulukko omistajista */
-    private final ArrayList<Omistaja> alkiot         = new ArrayList<Omistaja>();
+    private final ArrayList<Omistaja> alkiot;
     
     private int                       lkm            = 0;
     private boolean                   muutettu;
     private String                    tiedostonNimi  = "";
+    private Omistaja                  apuomistaja    = new Omistaja();
 
     @Override
     public Iterator<Omistaja> iterator() {
@@ -33,7 +37,7 @@ public class Omistajat implements Iterable<Omistaja> {
      * Oletusmuodostaja.
      */
     public Omistajat() {
-        //
+        alkiot = new ArrayList<Omistaja>();
     }
     
     
@@ -49,7 +53,7 @@ public class Omistajat implements Iterable<Omistaja> {
     
     /**
      * Palauttaa viitteen i:teen omistajaan.
-     * @param i monennenko eläimen viite halutaan
+     * @param i monennenko omistajan viite halutaan
      * @return viite omistajaan, jonka indeksi on i
      * @throws IndexOutOfBoundsException jos i ei ole sallitulla alueella
      */
@@ -57,6 +61,19 @@ public class Omistajat implements Iterable<Omistaja> {
         if (i < 0 || lkm <= i)
             throw new IndexOutOfBoundsException("Laitoin indeksi: " + i);
         return alkiot.get(i);
+    }
+    
+    
+    /**
+     * Palauttaa listan omistajista.
+     * @return lista
+     */
+    public ArrayList<Omistaja> getNimet() {
+        ArrayList<Omistaja> omistajat = new ArrayList<Omistaja>();
+        for (Omistaja o : alkiot) {
+            omistajat.add(o);
+        }
+        return omistajat;
     }
     
     
@@ -178,6 +195,59 @@ public class Omistajat implements Iterable<Omistaja> {
             i++;
         }
         lisaa(omistaja);
+    }
+    
+    
+    /**
+     * Palauttaa listassa hakuehtoon vastaavien eläinten viitteet
+     * @param hakuehto hakuehto
+     * @param k etsittävän kentän indeksi
+     * @return lista löydetyistä eläimistä
+     * @example
+     * <pre name="test">
+     * Elaimet elaimet = new Elaimet();
+     * Elain elain1 = new Elain(); elain1.parse("1|Karvatassu Rigel|Simba|15.04.2018|poika|985112001635024|5|6|0||-|");
+     * Elain elain2 = new Elain(); elain2.parse("2|Karvatassu Spica|Nala|15.04.2018|tyttö|985112001635025|5|6|2|22.07.2018|-|");
+     * Elain elain3 = new Elain(); elain3.parse("3|Karvatassu Castor|Mufasa|15.04.2018|poika|985112001635026|5|6|3|27.07.2018|-|");
+     * Elain elain4 = new Elain(); elain4.parse("4|Karvatassu Hadar|Pumba|15.04.2018|poika|985112001635027|5|6|0||-|");
+     * Elain elain5 = new Elain(); elain5.parse("5|Karvatassu Mirzam|Nelli|20.07.2015|tyttö|985112001346227|7|0|0||-|");
+     * Elain elain6 = new Elain(); elain5.parse("6|Karvatassu Regor|Pörrö|02.03.2016|poika|985112001401021|0|0|0||-|");
+     * Elain elain7 = new Elain(); elain5.parse("7|Karvatassu Jupiter|Pilkku|30.05.2017|tyttö|985112001499302|0|0|0||-|");
+     * elaimet.lisaa(elain1); elaimet.lisaa(elain2); elaimet.lisaa(elain3); elaimet.lisaa(elain4); elaimet.lisaa(elain5); 
+     * elaimet.lisaa(elain6); elaimet.lisaa(elain7);
+     * List<Elain> lista;
+     * lista = elaimet.etsi("*i*", 1);
+     * lista.size() === 3;
+     * lista.get(0) == elain1 === true;
+     * lista.get(2) == elain5 === true;
+     * 
+     * lista = elaimet.etsi(null, -1);
+     * lista.size() === 7;
+     * </pre>
+     */
+    public ArrayList<Omistaja> etsi(String hakuehto, int k) {
+        String ehto = "*";
+        if (hakuehto != null && hakuehto.length() > 0) ehto = hakuehto;
+        int hk = k;
+        if (hk < 0) hk = apuomistaja.ekaKentta();
+        
+        ArrayList<Omistaja> lista = new ArrayList<Omistaja>();
+        
+        if (hk == 5 || hk == 6 || hk == 7) {
+            for (int i = 1; i < lkm; i++) {
+                String nimi = anna(hk).getNimi();
+                if (WildChars.onkoSamat(nimi, ehto))
+                    lista.add(alkiot.get(i));
+            }
+        } else {
+            for (int i = 1; i < lkm; i++) {
+                if (WildChars.onkoSamat(alkiot.get(i).anna(hk), ehto))
+                    lista.add(alkiot.get(i));
+            }
+        }
+        Collections.sort(lista, new Omistaja.Vertailija(hk));
+        
+        return lista;
     }
     
     

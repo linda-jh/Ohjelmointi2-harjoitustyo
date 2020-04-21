@@ -2,6 +2,8 @@ package pentu;
 
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.util.Comparator;
+
 import fi.jyu.mit.ohj2.Mjonot;
 
 
@@ -12,7 +14,7 @@ import fi.jyu.mit.ohj2.Mjonot;
  */
 public class Omistaja implements Cloneable {
     private int              tunnusNro       = 0;
-    private String           nimi            = "";
+    private String           nimi            = "Kasvattaja";
     private String           katuosoite      = "";
     private String           nroKaupunki     = "";
     private String           puhelin         = "";
@@ -22,10 +24,62 @@ public class Omistaja implements Cloneable {
     
     
     /**
+     * Vertailee tietyn kentän mukaan.
+     * @author linda
+     * @version 18.4.2020
+     *
+     */
+    public static class Vertailija implements Comparator<Omistaja> {
+        
+        private int k;
+        
+        /**
+         * @param k minkä kentän mukaan vertaillaan.
+         */
+        public Vertailija(int k) {
+            this.k = k;
+        }
+
+        @Override
+        public int compare(Omistaja omistaja1, Omistaja omistaja2) {
+            return omistaja1.getAvain(k).compareToIgnoreCase(omistaja2.getAvain(k));
+        }
+    }
+    
+    
+    /**
+     * Palauttaa kentän k mukaisen lajitteluavaimen
+     * @param k mikä kenttä
+     * @return lajitteluavain
+     */
+    public String getAvain(int k) {
+        switch ( k ) {
+        case 0: return "" + tunnusNro;
+        case 1: String n = kaannaNimi(nimi); return "" + n;
+        case 2: return "" + katuosoite;
+        case 3: return "" + nroKaupunki;
+        case 4: return "" + puhelin;
+        case 5: return "" + sposti;
+        default: return "Ääliö";
+        }
+    }
+    
+    
+    private String kaannaNimi(String n) {
+        StringBuilder sb = new StringBuilder();
+        String s = n;
+        sb.append(s);
+        String etunimi = Mjonot.erota(sb, ' ', "");
+        sb.append(" " + etunimi);
+        return sb.toString();
+    }
+    
+    
+    /**
      * Oletusmuodostaja
      */
     public Omistaja() {
-        nimi = "Kasvattaja";
+        //
     }
     
     
@@ -282,15 +336,10 @@ public class Omistaja implements Cloneable {
     
     
     /**
-
-    public int getKenttia() {
-        return 6;
-    }
-   
-    public int ekaKentta() {
-        return 1;
-    }
-    
+     * Antaa k:n kentän sisällön merkkijonona
+     * @param k monenenko kentän sisältö palautetaan
+     * @return kentän sisältö merkkijonona
+     */
     public String anna(int k) {
         switch ( k ) {
         case 0: return "" + tunnusNro;
@@ -302,7 +351,7 @@ public class Omistaja implements Cloneable {
         default: return "Äääliö";
         }
     }
-    
+    /**
     public String aseta(int k, String jono) {
         String tjono = jono.trim();
         StringBuffer sb = new StringBuffer(tjono);
@@ -328,19 +377,24 @@ public class Omistaja implements Cloneable {
         default:
             return "ÄÄliö";
         }
-    }
-
+    }*/
+    
+    /**
+     * Palauttaa omistajan kentän kysymykset/aiheet.
+     * @param k monesko kenttä
+     * @return aihe/kysymys, joka vastaa k:tta kenttää
+     */
     public String getKysymys(int k) {
         switch (k) {
         case 0: return "Tunnusnumero";
         case 1: return "Nimi";
         case 2: return "Osoite";
-        case 3: return "Postinumero";
+        case 3: return "Kaupunki";
         case 4: return "Puhelinnumero";
         case 5: return "Sähköpostiosoite";
         default: return "Ääliö";
         }
-    }*/
+    }
     
     
     @Override

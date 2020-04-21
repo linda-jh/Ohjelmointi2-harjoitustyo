@@ -162,21 +162,21 @@ public class Elaimet {
     
     
     /**
-     * Hakee eläinten nimet listaan sukupuolen perusteella. Kohdalla olevan eläimen nimi jätetään listasta pois.
+     * Hakee listaan eläinten viitteet sukupuolen perusteella. Kohdalla olevan eläimen nimi jätetään listasta pois.
      * @param s määrittää sukupuolen. 0 jos haetaan poikia, 1 jos tyttöjä.
      * @return listan nimistä.
      */
-    public ArrayList<String> getNimet(int s) {
-        ArrayList<String> nimet = new ArrayList<String>();
+    public ArrayList<Elain> getNimet(int s) {
+        ArrayList<Elain> nimet = new ArrayList<Elain>();
                 
         if (alkiot.length != 0) {
             if (s == 0) {
                 for (int i = 0; i < lkm; i++) {
-                        if (alkiot[i].onkoPoika()) nimet.add(alkiot[i].getNimi());
+                        if (alkiot[i].onkoPoika()) nimet.add(alkiot[i]);
                 }
             } else {
                 for (int i = 0; i < lkm; i++) {
-                        if (!alkiot[i].onkoPoika()) nimet.add(alkiot[i].getNimi());
+                        if (!alkiot[i].onkoPoika()) nimet.add(alkiot[i]);
                 }
             }
         }
