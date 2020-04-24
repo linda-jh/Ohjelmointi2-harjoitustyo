@@ -14,7 +14,6 @@
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
@@ -25,7 +24,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxPentu.PentuGUIController">
+<BorderPane style="-fx-background-color: #fcfcfc;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxPentu.PentuGUIController">
    <top>
       <MenuBar BorderPane.alignment="CENTER">
         <menus>
@@ -61,14 +60,14 @@
                            <center>
                               <VBox>
                                  <children>
-                                    <ScrollPane fx:id="panelElain" fitToWidth="true">
+                                    <ScrollPane fx:id="panelElain" fitToWidth="true" prefHeight="318.0" prefWidth="306.0">
                                       <content>
-                                        <AnchorPane minHeight="0.0" minWidth="0.0">
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="316.0" prefWidth="306.0">
                                              <children>
-                                                <GridPane fx:id="gridElain" hgap="10.0" prefHeight="325.0">
+                                                <GridPane fx:id="gridElain" hgap="10.0" prefHeight="316.0" prefWidth="306.0" style="-fx-background-color: #fcfcfc;">
                                                   <columnConstraints>
-                                                    <ColumnConstraints fillWidth="false" halignment="RIGHT" hgrow="SOMETIMES" maxWidth="118.19998779296876" minWidth="10.0" prefWidth="108.60001220703126" />
-                                                    <ColumnConstraints fillWidth="false" halignment="RIGHT" hgrow="SOMETIMES" maxWidth="192.0000122070313" minWidth="10.0" prefWidth="152.59998779296873" />
+                                                    <ColumnConstraints fillWidth="false" halignment="RIGHT" hgrow="SOMETIMES" maxWidth="126.20003204345703" minWidth="10.0" prefWidth="116.39998779296874" />
+                                                    <ColumnConstraints fillWidth="false" halignment="RIGHT" hgrow="SOMETIMES" maxWidth="197.2000244140625" minWidth="10.0" prefWidth="158.80001220703122" />
                                                   </columnConstraints>
                                                   <rowConstraints>
                                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -78,11 +77,11 @@
                                                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                      <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-                                                      <RowConstraints vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                   </rowConstraints>
                                                    <padding>
-                                                      <Insets bottom="10.0" left="10.0" right="20.0" top="10.0" />
+                                                      <Insets bottom="5.0" left="5.0" right="20.0" top="10.0" />
                                                    </padding>
                                                    <children>
                                                       <Label text="Nimi" />
@@ -92,12 +91,9 @@
                                                       <Label text="Sirunumero" GridPane.rowIndex="4" />
                                                       <Label text="Äiti" GridPane.rowIndex="5" />
                                                       <Label text="Isä" GridPane.rowIndex="6" />
-                                                      <Label text="Lisätietoja" GridPane.rowIndex="7" />
                                                       <TextField fx:id="editNimi" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" />
                                                       <TextField fx:id="editKutsumanimi" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" />
                                                       <TextField fx:id="editSirunro" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="4" />
-                                                      <HBox GridPane.columnIndex="1" GridPane.rowIndex="8" />
-                                                      <TextArea fx:id="editLisatietoja" prefHeight="50.0" prefWidth="148.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
                                                       <TextField fx:id="editSyntymapv" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                                       <TextField fx:id="editSukupuoli" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                                                       <TextField fx:id="editAiti" GridPane.columnIndex="1" GridPane.rowIndex="5" />
@@ -108,13 +104,13 @@
                                           </AnchorPane>
                                       </content>
                                     </ScrollPane>
-                                    <BorderPane>
+                                    <BorderPane style="-fx-background-color: #fcfcfc;">
                                        <center>
                                           <ScrollPane fx:id="panelPennut" BorderPane.alignment="CENTER">
                                             <content>
-                                              <AnchorPane minHeight="0.0" minWidth="0.0">
+                                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="161.0" prefWidth="284.0">
                                                    <children>
-                                                      <ListChooser fx:id="chooserPennut" prefHeight="158.0" prefWidth="283.0" />
+                                                      <ListChooser fx:id="chooserPennut" prefHeight="161.0" prefWidth="284.0" />
                                                    </children>
                                                 </AnchorPane>
                                             </content>
@@ -156,7 +152,7 @@
                            <top>
                               <HBox BorderPane.alignment="CENTER">
                                  <children>
-                                    <ComboBoxChooser fx:id="cbHaku" onAction="#handleHaku" rivit="Nimi">
+                                    <ComboBoxChooser fx:id="cbHaku" onAction="#handleHaku" prefWidth="150.0" rivit="Nimi">
                                        <HBox.margin>
                                           <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                        </HBox.margin>
@@ -177,7 +173,7 @@
                            <left>
                               <VBox BorderPane.alignment="CENTER">
                                  <children>
-                                    <ListChooser fx:id="chooserElaimet" prefHeight="292.0" rivit="Karvatassu Mirzam&#10;Karvatassu Regor&#10;Karvatassu Jupiter&#10;Karvatassu Rigel&#10;Karvatassu Spica&#10;Karvatassu Castor&#10;Karvatassu Hadar&#10;&#10;" />
+                                    <ListChooser fx:id="chooserElaimet" prefHeight="518.0" prefWidth="306.0" rivit="Karvatassu Mirzam&#10;Karvatassu Regor&#10;Karvatassu Jupiter&#10;Karvatassu Rigel&#10;Karvatassu Spica&#10;Karvatassu Castor&#10;Karvatassu Hadar&#10;&#10;" />
                                     <HBox>
                                        <children>
                                           <Button mnemonicParsing="false" onAction="#handleLisaaElain" text="Lisää">
@@ -197,48 +193,6 @@
                                           </Button>
                                        </children>
                                     </HBox>
-                                    <VBox>
-                                       <children>
-                                          <GridPane>
-                                            <columnConstraints>
-                                              <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="207.199951171875" minWidth="10.0" prefWidth="139.2" />
-                                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="185.60001220703126" minWidth="10.0" prefWidth="167.2" />
-                                            </columnConstraints>
-                                            <rowConstraints>
-                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                            </rowConstraints>
-                                             <children>
-                                                <Label text="Nimi:" GridPane.rowIndex="1">
-                                                   <GridPane.margin>
-                                                      <Insets left="10.0" right="10.0" />
-                                                   </GridPane.margin>
-                                                </Label>
-                                                <Label text="Luovutuspäivämäärä:" GridPane.rowIndex="2">
-                                                   <GridPane.margin>
-                                                      <Insets left="10.0" right="10.0" />
-                                                   </GridPane.margin>
-                                                </Label>
-                                                <Label fx:id="omistajaNimi" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                                                   <GridPane.margin>
-                                                      <Insets />
-                                                   </GridPane.margin>
-                                                </Label>
-                                                <Label text="Omistaja" GridPane.columnSpan="2" GridPane.halignment="CENTER">
-                                                   <font>
-                                                      <Font name="System Bold" size="12.0" />
-                                                   </font>
-                                                </Label>
-                                                <Label fx:id="luovutusPv" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                             </children>
-                                             <padding>
-                                                <Insets bottom="20.0" top="30.0" />
-                                             </padding>
-                                          </GridPane>
-                                          <HBox prefHeight="100.0" prefWidth="200.0" />
-                                       </children>
-                                    </VBox>
                                  </children>
                               </VBox>
                            </left>
@@ -257,12 +211,12 @@
                                  <children>
                                     <ScrollPane fx:id="panelOmistaja" prefHeight="172.0" prefWidth="302.0">
                                       <content>
-                                        <AnchorPane minHeight="0.0" minWidth="0.0">
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="169.0" prefWidth="300.0" style="-fx-background-color: #fcfcfc;">
                                              <children>
-                                                <GridPane hgap="10.0" layoutX="1.0" layoutY="7.0" prefHeight="162.0" prefWidth="296.0">
+                                                <GridPane hgap="10.0" layoutX="1.0" layoutY="7.0" prefHeight="164.0" prefWidth="300.0" style="-fx-background-color: #fcfcfc;">
                                                    <columnConstraints>
-                                                      <ColumnConstraints fillWidth="false" halignment="RIGHT" hgrow="SOMETIMES" maxWidth="118.19998779296876" minWidth="10.0" prefWidth="97.600048828125" />
-                                                      <ColumnConstraints fillWidth="false" halignment="RIGHT" hgrow="SOMETIMES" maxWidth="192.0000122070313" minWidth="10.0" prefWidth="163.99995117187498" />
+                                                      <ColumnConstraints fillWidth="false" halignment="RIGHT" hgrow="SOMETIMES" maxWidth="118.40000762939454" minWidth="10.0" prefWidth="116.1999755859375" />
+                                                      <ColumnConstraints fillWidth="false" halignment="RIGHT" hgrow="SOMETIMES" maxWidth="192.0000122070313" minWidth="10.0" prefWidth="158.6000244140625" />
                                                    </columnConstraints>
                                                    <rowConstraints>
                                                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -273,7 +227,7 @@
                                                       <RowConstraints vgrow="SOMETIMES" />
                                                    </rowConstraints>
                                                    <padding>
-                                                      <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                                      <Insets bottom="5.0" left="5.0" right="10.0" />
                                                    </padding>
                                                    <children>
                                                       <Label text="Nimi" />
@@ -312,7 +266,7 @@
                                              <children>
                                                 <ScrollPane fx:id="panelElaimet" prefHeight="292.0" prefWidth="282.0">
                                                    <content>
-                                                      <StringGrid fx:id="tableOmistajanElaimet" editable="true" prefHeight="288.0" prefWidth="280.0" rivit="Nimi|Luovutuspäivämäärä">
+                                                      <StringGrid fx:id="tableOmistajanElaimet" editable="true" prefHeight="289.0" prefWidth="280.0" rivit="Nimi|Luovutuspäivämäärä">
                                                          <columnResizePolicy>
                                                             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                                                          </columnResizePolicy></StringGrid>
@@ -328,7 +282,7 @@
                            <top>
                               <HBox BorderPane.alignment="CENTER">
                                  <children>
-                                    <ComboBoxChooser fx:id="cbHakuO" onAction="#handleHakuO" rivit="Nimi">
+                                    <ComboBoxChooser fx:id="cbHakuO" onAction="#handleHakuO" prefWidth="150.0" rivit="Nimi">
                                        <HBox.margin>
                                           <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                        </HBox.margin>

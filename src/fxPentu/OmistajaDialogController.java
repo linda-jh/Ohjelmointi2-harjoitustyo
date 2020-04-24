@@ -6,18 +6,17 @@ import java.util.ResourceBundle;
 import fi.jyu.mit.fxgui.Dialogs;
 import fi.jyu.mit.fxgui.ModalController;
 import fi.jyu.mit.fxgui.ModalControllerInterface;
-import fi.jyu.mit.ohj2.Mjonot;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import pentu.Omistaja;
 
 /**
- * @author linda
+ * Omistajan muokkaus dialogi. Avaa uuden ikkunan omistajan tietojen muokkausta varten.
+ * @author Linda
+ * ljhovila@student.jyu.fi
  * @version 6.4.2020
  *
  */
@@ -28,10 +27,8 @@ public class OmistajaDialogController implements ModalControllerInterface<Omista
     @FXML private TextField editPostinro;
     @FXML private TextField editPuhelinnro;
     @FXML private TextField editSPosti;
-    // @FXML private GridPane gridOmistaja;
     
     private Omistaja omistajaKohdalla;
-    // private static Omistaja apuomistaja;
     private TextField[] edits;
 
     @Override
@@ -157,7 +154,7 @@ public class OmistajaDialogController implements ModalControllerInterface<Omista
     public static Omistaja kysyOmistaja(Stage modalityStage, Omistaja oletus) {
         return ModalController.showModal(
                 OmistajaDialogController.class.getResource("OmistajaDialogView.fxml"), 
-                "Muokkaa",
+                "Penturekisteri",
                 modalityStage, oletus, null);
     }
     

@@ -13,38 +13,38 @@ import java.util.Scanner;
 import fi.jyu.mit.ohj2.WildChars;
 
 /**
- * Hoitelee sen, että monta jäsentä (CRC-kortit)
- * @author linda
+ * Pitää yllä varsinaista rekisteriä. Osaa lukea ja kirjottaa tiedostoon sekä poistata, lisätä, lajitella ja etsiä eläimiä.
+ * @author Linda
+ * ljhovila@stundent.jyu.fi
  * @version 17.2.2020
- *
  */
 public class Elaimet {
     
     private static final int    MAX_ELAIMIA     = 5;
     private int                 lkm             = 0;
     private Elain[]             alkiot;
-    private boolean             muutettu;
     private String              tiedostonNimi   = "";
     private Elain               apuelain        = new Elain();
     
-    
 
-    
-    
     /**
      * Oletusmuodostaja. Lisää eläinten taulukkoon automaattisesti tyhjän eläimen.
      */
     public Elaimet() {
         alkiot = new Elain[MAX_ELAIMIA];
+        // lisaa(new Elain());
     }
     
     
     /**
-     * Palauttaa eläin taulukon.
-     * @return elain taulukon
+     * Asettaa ComboBoxChoosereista saadut tiedot. Viedään eteenpäin myös taulukko eläimistä parametrinä.
+     * @param elain kenen kohdalla ollaan
+     * @param k mikä kenttä
+     * @param s kentän teksti
+     * @return virheilmoitus, jos tuli. Muuten null
      */
-    public Elain[] getElaimet() {
-        return alkiot;
+    public String aseta(Elain elain, int k, String s) {
+        return elain.aseta(k, s, alkiot, tiedostonNimi);
     }
     
     
@@ -97,38 +97,37 @@ public class Elaimet {
     /**
      * Palauttaa viitteen i:teen eläimeen.
      * @param i monennenko eläimen viite halutaan
-     * @return viite elläimeen, jonka indeksi on i
+     * @return viite eläimeen, jonka indeksi on i
      * @throws IndexOutOfBoundsException jos i ei ole sallitulla alueella
      */
     public Elain anna(int i) throws IndexOutOfBoundsException {
         if (i < 0 || lkm <= i)
-            throw new IndexOutOfBoundsException("Laitoin indeksi: " + i);
+            throw new IndexOutOfBoundsException("Laiton indeksi: " + i);
         return alkiot[i];
     }
-    
-    
-    /**
-     * Etsii eläimen vanhemmat ja alustaa ne. 
-     *
-    public void vanhemmat() {
-        Elain[] e = getElaimet();
-        Elain e2;
-        Elain vali;
-        for(int i = 0; i < e.length; i++) {
-            if(tunnusNro != e[i].tunnusNro) {
-                if(tunnusNro == e[i].isa || tunnusNro == e[i].aiti) {
-                    if(e[i].onkoPoika() == true) isa = e[i].getTunnusNro();
-                    else aiti = e[i].getTunnusNro();
-                }
-            }
-        }
-    }*/
     
     
     /**
      * Etsii eläimen pennut ja lisää ne listaan. 
      * @param e eläin
      * @return lista pennuista
+     * @example
+     * <pre name="test">
+     * Elaimet elaimet = new Elaimet();
+     * Elain elain = new Elain();
+     * Elain elain1 = new Elain(); elain1.parse("1|Karvatassu Rigel|Simba|15.04.2018||985112001635024|poika|5|6|0|");
+     * Elain elain2 = new Elain(); elain2.parse("2|Karvatassu Spica|Nala|15.04.2018|22.07.2018|985112001635025|tyttö|5|6|2|");
+     * Elain elain3 = new Elain(); elain3.parse("3|Karvatassu Castor|Mufasa|15.04.2018|27.07.2018|985112001635026|poika|5|6|3|");
+     * Elain elain4 = new Elain(); elain4.parse("4|Karvatassu Hadar|Pumba|15.04.2018||985112001635027|poika|5|6|0|");
+     * Elain elain5 = new Elain(); elain5.parse("5|Karvatassu Mirzam|Nelli|20.07.2015||985112001346227|tyttö|7|0|0|");
+     * Elain elain6 = new Elain(); elain6.parse("6|Karvatassu Regor|Pörrö|02.03.2016||985112001401021|poika|0|0|0|");
+     * Elain elain7 = new Elain(); elain7.parse("7|Karvatassu Jupiter|Pilkku|30.05.2017||985112001499302|tyttö|0|0|0|");
+     * elaimet.lisaa(elain); elaimet.lisaa(elain1); elaimet.lisaa(elain2); elaimet.lisaa(elain3); elaimet.lisaa(elain4); 
+     * elaimet.lisaa(elain5); elaimet.lisaa(elain6); elaimet.lisaa(elain7);
+     * ArrayList<Elain> p = elaimet.pennut(elain5);
+     * p.size() === 4;
+     * p.get(3).getTunnusNro() === 4;
+     * </pre>
      */
     public ArrayList<Elain> pennut(Elain e) {
         ArrayList<Elain> l = new ArrayList<Elain>();
@@ -149,6 +148,24 @@ public class Elaimet {
      * Haetaan omistajan omistamat eläimet
      * @param o kenen eläimet haetaan
      * @return lista eläimistä
+     * @example
+     * <pre name="test">
+     * Elaimet elaimet = new Elaimet();
+     * Elain elain = new Elain();
+     * Elain elain1 = new Elain(); elain1.parse("1|Karvatassu Rigel|Simba|15.04.2018||985112001635024|poika|5|6|0|");
+     * Elain elain2 = new Elain(); elain2.parse("2|Karvatassu Spica|Nala|15.04.2018|22.07.2018|985112001635025|tyttö|5|6|2|");
+     * Elain elain3 = new Elain(); elain3.parse("3|Karvatassu Castor|Mufasa|15.04.2018|27.07.2018|985112001635026|poika|5|6|3|");
+     * Elain elain4 = new Elain(); elain4.parse("4|Karvatassu Hadar|Pumba|15.04.2018||985112001635027|poika|5|6|0|");
+     * Elain elain5 = new Elain(); elain5.parse("5|Karvatassu Mirzam|Nelli|20.07.2015||985112001346227|tyttö|7|0|0|");
+     * Elain elain6 = new Elain(); elain6.parse("6|Karvatassu Regor|Pörrö|02.03.2016||985112001401021|poika|0|0|0|");
+     * Elain elain7 = new Elain(); elain7.parse("7|Karvatassu Jupiter|Pilkku|30.05.2017||985112001499302|tyttö|0|0|0|");
+     * elaimet.lisaa(elain); elaimet.lisaa(elain1); elaimet.lisaa(elain2); elaimet.lisaa(elain3); elaimet.lisaa(elain4); 
+     * elaimet.lisaa(elain5); elaimet.lisaa(elain6); elaimet.lisaa(elain7);
+     * Omistaja o = new Omistaja();
+     * ArrayList<Elain> p = elaimet.omistajanElaimet(o);
+     * p.size() === 6;
+     * p.get(3).getTunnusNro() === 5;
+     * </pre>
      */
     public ArrayList<Elain> omistajanElaimet(Omistaja o) {
         ArrayList<Elain> l = new ArrayList<Elain>();
@@ -162,9 +179,27 @@ public class Elaimet {
     
     
     /**
-     * Hakee listaan eläinten viitteet sukupuolen perusteella. Kohdalla olevan eläimen nimi jätetään listasta pois.
+     * Hakee listaan eläinten viitteet sukupuolen perusteella.
      * @param s määrittää sukupuolen. 0 jos haetaan poikia, 1 jos tyttöjä.
      * @return listan nimistä.
+     * @example
+     * <pre name="test">
+     * Elaimet elaimet = new Elaimet();
+     * Elain elain1 = new Elain(); elain1.parse("1|Karvatassu Rigel|Simba|15.04.2018||985112001635024|poika|5|6|0|");
+     * Elain elain2 = new Elain(); elain2.parse("2|Karvatassu Spica|Nala|15.04.2018|22.07.2018|985112001635025|tyttö|5|6|2|");
+     * Elain elain3 = new Elain(); elain3.parse("3|Karvatassu Castor|Mufasa|15.04.2018|27.07.2018|985112001635026|poika|5|6|3|");
+     * Elain elain4 = new Elain(); elain4.parse("4|Karvatassu Hadar|Pumba|15.04.2018||985112001635027|poika|5|6|0|");
+     * Elain elain5 = new Elain(); elain5.parse("5|Karvatassu Mirzam|Nelli|20.07.2015||985112001346227|tyttö|7|0|0|");
+     * Elain elain6 = new Elain(); elain6.parse("6|Karvatassu Regor|Pörrö|02.03.2016||985112001401021|poika|0|0|0|");
+     * Elain elain7 = new Elain(); elain7.parse("7|Karvatassu Jupiter|Pilkku|30.05.2017||985112001499302|tyttö|0|0|0|");
+     * elaimet.lisaa(elain1); elaimet.lisaa(elain2); elaimet.lisaa(elain3); elaimet.lisaa(elain4); 
+     * elaimet.lisaa(elain5); elaimet.lisaa(elain6); elaimet.lisaa(elain7);
+     * ArrayList<Elain> p = elaimet.getNimet(1);
+     * p.size() === 3;
+     * p.get(1).getTunnusNro() === 5;
+     * ArrayList<Elain> p2 = elaimet.getNimet(0);
+     * p2.size() === 4;
+     * </pre>
      */
     public ArrayList<Elain> getNimet(int s) {
         ArrayList<Elain> nimet = new ArrayList<Elain>();
@@ -172,11 +207,11 @@ public class Elaimet {
         if (alkiot.length != 0) {
             if (s == 0) {
                 for (int i = 0; i < lkm; i++) {
-                        if (alkiot[i].onkoPoika()) nimet.add(alkiot[i]);
+                        if (alkiot[i].onkoPoika() == true) nimet.add(alkiot[i]);
                 }
             } else {
                 for (int i = 0; i < lkm; i++) {
-                        if (!alkiot[i].onkoPoika()) nimet.add(alkiot[i]);
+                        if (alkiot[i].onkoPoika() == false) nimet.add(alkiot[i]);
                 }
             }
         }
@@ -212,7 +247,7 @@ public class Elaimet {
      * @throws SailoException jos lukeminen epäonnistuu
      */
     public void lueTiedostosta(String hakemisto) throws SailoException {
-        File tied = new File(hakemisto + "/elaimet.dat");
+        File tied = new File(hakemisto.toLowerCase() + "/elaimet.dat");
         tiedostonNimi = hakemisto;
         
         try (Scanner fi = new Scanner(new FileInputStream(tied.getCanonicalPath()))) {
@@ -254,20 +289,20 @@ public class Elaimet {
      * @example
      * <pre name="test">
      * Elaimet elaimet = new Elaimet();
-     * Elain elain1 = new Elain(); elain1.parse("1|Karvatassu Rigel|Simba|15.04.2018|poika|985112001635024|5|6|0||-|");
-     * Elain elain2 = new Elain(); elain2.parse("2|Karvatassu Spica|Nala|15.04.2018|tyttö|985112001635025|5|6|2|22.07.2018|-|");
-     * Elain elain3 = new Elain(); elain3.parse("3|Karvatassu Castor|Mufasa|15.04.2018|poika|985112001635026|5|6|3|27.07.2018|-|");
-     * Elain elain4 = new Elain(); elain4.parse("4|Karvatassu Hadar|Pumba|15.04.2018|poika|985112001635027|5|6|0||-|");
-     * Elain elain5 = new Elain(); elain5.parse("5|Karvatassu Mirzam|Nelli|20.07.2015|tyttö|985112001346227|7|0|0||-|");
-     * Elain elain6 = new Elain(); elain5.parse("6|Karvatassu Regor|Pörrö|02.03.2016|poika|985112001401021|0|0|0||-|");
-     * Elain elain7 = new Elain(); elain5.parse("7|Karvatassu Jupiter|Pilkku|30.05.2017|tyttö|985112001499302|0|0|0||-|");
-     * elaimet.lisaa(elain1); elaimet.lisaa(elain2); elaimet.lisaa(elain3); elaimet.lisaa(elain4); elaimet.lisaa(elain5); 
-     * elaimet.lisaa(elain6); elaimet.lisaa(elain7);
-     * List<Elain> lista;
-     * lista = elaimet.etsi("*i*", 1);
-     * lista.size() === 3;
-     * lista.get(0) == elain1 === true;
-     * lista.get(2) == elain5 === true;
+     * Elain elain = new Elain();
+     * Elain elain1 = new Elain(); elain1.parse("1|Karvatassu Rigel|Simba|15.04.2018||985112001635024|poika|5|6|0||");
+     * Elain elain2 = new Elain(); elain2.parse("2|Karvatassu Spica|Nala|15.04.2018|22.07.2018|985112001635025|tyttö|5|6|2|");
+     * Elain elain3 = new Elain(); elain3.parse("3|Karvatassu Castor|Mufasa|15.04.2018|27.07.2018|985112001635026|poika|5|6|3|");
+     * Elain elain4 = new Elain(); elain4.parse("4|Karvatassu Hadar|Pumba|15.04.2018||985112001635027|poika|5|6|0|");
+     * Elain elain5 = new Elain(); elain5.parse("5|Karvatassu Mirzam|Nelli|20.07.2015||985112001346227|tyttö|7|0|0|");
+     * Elain elain6 = new Elain(); elain6.parse("6|Karvatassu Regor|Pörrö|02.03.2016||985112001401021|poika|0|0|0|");
+     * Elain elain7 = new Elain(); elain7.parse("7|Karvatassu Jupiter|Pilkku|30.05.2017||985112001499302|tyttö|0|0|0|");
+     * elaimet.lisaa(elain); elaimet.lisaa(elain1); elaimet.lisaa(elain2); elaimet.lisaa(elain3); elaimet.lisaa(elain4); 
+     * elaimet.lisaa(elain5); elaimet.lisaa(elain6); elaimet.lisaa(elain7);
+     * ArrayList<Elain> lista = elaimet.etsi("*i*", 1);
+     * lista.size() === 4;
+     * lista.get(0) == elain7 === true;
+     * lista.get(2) == elain1 === true;
      * 
      * lista = elaimet.etsi(null, -1);
      * lista.size() === 7;
@@ -278,14 +313,18 @@ public class Elaimet {
         if (hakuehto != null && hakuehto.length() > 0) ehto = hakuehto;
         int hk = k;
         if (hk < 0) hk = apuelain.ekaKentta();
-        
         ArrayList<Elain> lista = new ArrayList<Elain>();
         
-        if (hk == 5 || hk == 6 || hk == 7) {
+        if (hk == 7 || hk == 8) { 
             for (int i = 1; i < lkm; i++) {
-                String nimi = anna(hk).getNimi();
+                String s = alkiot[i].anna(hk);
+                String nimi = "";
+                for (int n = 0; n < alkiot.length; n++) {
+                    if (alkiot[n].getTunnusNro() == Integer.parseInt(s)) nimi = alkiot[n].getNimi();
+                }
                 if (WildChars.onkoSamat(nimi, ehto))
                     lista.add(alkiot[i]);
+                
             }
         } else {
             for (int i = 1; i < lkm; i++) {
@@ -293,7 +332,32 @@ public class Elaimet {
                     lista.add(alkiot[i]);
             }
         }
+        
         Collections.sort(lista, new Elain.Vertailija(hk));
+        return lista;
+    }
+    
+    
+    /**
+     * Etsii eläimiä omistaja-kentän perusteella.
+     * @param hakuehto kentän teksti
+     * @param omistajat lista omistajista
+     * @return listan löydetyistä eläimistä
+     */
+    public ArrayList<Elain> etsiOmistajanPerusteella(String hakuehto, ArrayList<Omistaja> omistajat) {
+        String ehto = "*";
+        ArrayList<Elain> lista = new ArrayList<Elain>();
+        if (hakuehto != null && hakuehto.length() > 0) ehto = hakuehto;
+        
+        for (int i = 0; i < lkm; i++) {
+            String s = alkiot[i].anna(9);
+            String nimi = "";
+            for (Omistaja o : omistajat) {
+                if (o.getTunnusNro() == Integer.parseInt(s)) nimi = o.getNimi();
+            }
+            if (WildChars.onkoSamat(nimi, ehto))
+                lista.add(alkiot[i]);
+        }
         
         return lista;
     }
@@ -302,21 +366,31 @@ public class Elaimet {
     /**
      * Poistaa eläimen tiedostosta ja taulukosta.
      * @param elain mikä eläin poistetaan
+     * @example
+     * <pre name="test">
+     *  Elaimet e = new Elaimet();
+     *  Elain a = new Elain(); Elain b = new Elain(); Elain c = new Elain();
+     *  e.lisaa(a); e.lisaa(b); e.lisaa(c);
+     *  e.getLkm() === 3;
+     *  e.poista(b);
+     *  e.getLkm() === 2;
+     * </pre>
      */
     public void poista(Elain elain) {
         int nro = elain.getTunnusNro();
         int ind = etsiId(nro);
         
-        if (ind < 0) return; 
-            lkm--; 
-            for (int i = ind; i < lkm; i++) 
-                 alkiot[i] = alkiot[i + 1]; 
-            alkiot[lkm] = null; 
-            // muutettu = true; 
-         // return 1; 
+        if (ind < 0) return;
+        lkm--; 
+        for (int i = ind; i < lkm; i++) 
+             alkiot[i] = alkiot[i + 1]; 
+        alkiot[lkm] = null;
     }
     
+    
     /**
+     * Korvaa eläimen tiedot tietorakenteeseen. Etsitään samalla tunnusnumerolla oleva eläin
+     * ja jos ei löydy, niin lisätään uutena eläimenä.
      * @param elain lisättävän viite
      */
     public void korvaaTaiLisaa(Elain elain) {
@@ -324,7 +398,6 @@ public class Elaimet {
         for (int i = 0; i < lkm; i++) {
             if (alkiot[i].getTunnusNro() == id) {
                 alkiot[i] = elain;
-                muutettu = true;
                 return;
             }
         }

@@ -3,18 +3,22 @@ package pentu;
 import java.util.ArrayList;
 
 /**
- * CRC korteista samat tekstit
- * @author linda
+ * Huolehtii Elaimet ja Omistajat -luokkien välisestä yhteistyöstä ja välittää tietoja pyydettäessä, esimerkiksi
+ * lukee tiedostosta ja kirjoittaa siihen.
+ * 
+ * @author Linda
+ * ljhovila@student.jyu.fi
  * @version 18.2.2020
  *
  */
 public class Pentu {
     
     private Elaimet elaimet = new Elaimet();
-    private Omistajat omistajat = new Omistajat(); // <- tämä tulee sitten kun on omistajat luokka tehty yms
+    private Omistajat omistajat = new Omistajat();
+    
     
     /**
-     * Alustetaan Pennun tiedot (tätä ei ole pakko tehdä)
+     * Oletusmuodostaja
      */
     public Pentu() {
         // ei tarvitse tehdä mitään
@@ -24,13 +28,11 @@ public class Pentu {
     /**
      * Listätään uusia eläimiä rekisteriin
      * @param elain lisättävä eläin
-     * @throws SailoException jos ei mahdu
      * @example
      * <pre name="test">
-     * #THROWS SailoException 
-     * Elaimet elaimet = new Elaimet();
+     * Pentu pentu = new Pentu();
      * Elain mirz1 = new Elain(), mirz2 = new Elain();
-     * pentu.getLkm() === 0;
+     * pentu.getElaimia() === 0;
      * pentu.lisaa(mirz1); pentu.getElaimia() === 1;
      * pentu.lisaa(mirz2); pentu.getElaimia() === 2;
      * pentu.lisaa(mirz1); pentu.getElaimia() === 3;
@@ -40,12 +42,11 @@ public class Pentu {
      * pentu.annaElain(1) == mirz1 === false;
      * pentu.annaElain(1) == mirz2 === true;
      * pentu.annaElain(3) === mirz1; #THROWS IndexOutOfBoundsException 
-     * pentu.lisaa(aku1); pentu.getElaimia() === 4;
-     * pentu.lisaa(aku1); pentu.getElaimia() === 5;
-     * pentu.lisaa(aku1);  #THROWS SailoException
+     * pentu.lisaa(mirz1); pentu.getElaimia() === 4;
+     * pentu.lisaa(mirz2); pentu.getElaimia() === 5;
      * </pre>
      */
-    public void lisaa(Elain elain) throws SailoException {
+    public void lisaa(Elain elain) {
         elaimet.lisaa(elain);
     }
     
@@ -53,6 +54,23 @@ public class Pentu {
     /**
      * Listään uusi harrastus kerhoon
      * @param o lisättävä omistaja 
+     * @example
+     * <pre name="test">
+     * Pentu pentu = new Pentu();
+     * Omistaja a = new Omistaja(), b = new Omistaja();
+     * pentu.getOmistajia() === 0;
+     * pentu.lisaa(a); pentu.getOmistajia() === 1;
+     * pentu.lisaa(b); pentu.getOmistajia() === 2;
+     * pentu.lisaa(a); pentu.getOmistajia() === 3;
+     * pentu.annaOmistaja(0) === a;
+     * pentu.annaOmistaja(1) === b;
+     * pentu.annaOmistaja(2) === a;
+     * pentu.annaOmistaja(1) == a === false;
+     * pentu.annaOmistaja(1) == b === true;
+     * pentu.annaOmistaja(3) === a; #THROWS IndexOutOfBoundsException 
+     * pentu.lisaa(a); pentu.getOmistajia() === 4;
+     * pentu.lisaa(b); pentu.getOmistajia() === 5;
+     * </pre>
      */
     public void lisaa(Omistaja o) {
         omistajat.lisaa(o);
@@ -68,22 +86,26 @@ public class Pentu {
         elaimet.lueTiedostosta(nimi);
         omistajat.lueTiedostosta(nimi);
     }
-       
+    
     
     /**
-     * Haetaan eläinten lukumäärän eläimet luokasta
-     * @return palauttaa lukumäärän
+     * @param elain eläin, jonka kohdalla ollaan
+     * @param k mikä kenttä
+     * @param s kentän teksti
+     * @return palautetaan virheilmoitus, jos tuli, mutta muuten null
      */
-    public int getElaimia() {
-        return elaimet.getLkm();
+    public String aseta(Elain elain, int k, String s) {
+        return elaimet.aseta(elain, k, s);
     }
     
+    
     /**
-     * Haetaan omistajien lukumäärän omistajat luokasta
-     * @return palauttaa lukumäärän
+     * Asettaa eläimen tietoihin omistajan
+     * @param elain mikä eläin
+     * @param s omistajan nimi
      */
-    public int getOmistajia() {
-        return omistajat.getLkm();
+    public void asetaOmistaja(Elain elain, String s) {
+        omistajat.aseta(elain, s);
     }
     
     
@@ -92,6 +114,17 @@ public class Pentu {
      * @param i monesko eläin palautetaan
      * @return viite i:teen eläimeen 
      * @throws IndexOutOfBoundsException jos tulee poikkeus
+     * @example
+     * <pre name="test">
+     * Pentu pentu = new Pentu();
+     * Elain mirz1 = new Elain(), mirz2 = new Elain();
+     * pentu.lisaa(mirz1); pentu.lisaa(mirz2); pentu.lisaa(mirz1);
+     * pentu.annaElain(0) === mirz1;
+     * pentu.annaElain(1) === mirz2;
+     * pentu.annaElain(2) === mirz1;
+     * pentu.annaElain(1) == mirz1 === false;
+     * pentu.annaElain(1) == mirz2 === true;
+     * </pre>
      */
     public Elain annaElain(int i) throws IndexOutOfBoundsException {
         return elaimet.anna(i);
@@ -103,9 +136,60 @@ public class Pentu {
      * @param i monesko omistaja palautetaan
      * @return viite i:teen eläimeen 
      * @throws IndexOutOfBoundsException jos tulee poikkeus
+     * @example
+     * <pre name="test">
+     * Pentu pentu = new Pentu();
+     * Omistaja a = new Omistaja(), b = new Omistaja();
+     * pentu.getOmistajia() === 0;
+     * pentu.lisaa(a);
+     * pentu.lisaa(b);
+     * pentu.lisaa(a);
+     * pentu.annaOmistaja(0) === a;
+     * pentu.annaOmistaja(1) === b;
+     * pentu.annaOmistaja(2) === a;
+     * pentu.annaOmistaja(1) == a === false;
+     * pentu.annaOmistaja(1) == b === true;
+     * </pre>
      */
     public Omistaja annaOmistaja(int i) throws IndexOutOfBoundsException {
         return omistajat.anna(i);
+    }
+    
+    
+    /**
+     * Haetaan eläinten lukumäärän eläimet luokasta
+     * @return palauttaa lukumäärän
+     */
+    public int getElaimia() {
+        return elaimet.getLkm();
+    }
+    
+    
+    /**
+     * Hakee omistajan eläimet
+     * @param o kenen eläimet haetaan
+     * @return lista eläimistä
+     */
+    public ArrayList<Elain> getElaimet(Omistaja o) {
+        return elaimet.omistajanElaimet(o);        
+    }
+    
+    
+    /**
+     * Haetaan omistajien lukumäärän omistajat luokasta
+     * @return palauttaa lukumäärän
+     */
+    public int getOmistajia() {
+        return omistajat.getLkm();
+    }
+    
+    
+    /**
+     * Palauttaa listan omistajista.
+     * @return lista
+     */
+    public ArrayList<Omistaja> getOmistajat() {
+        return omistajat.getOmistajat();
     }
     
     
@@ -118,19 +202,16 @@ public class Pentu {
         return elaimet.pennut(e);
     }
     
-    
+
     /**
-     * Hakee omistajan eläimet
-     * @param o kenen eläimet haetaan
+     * Palauttaa eläimet listassa sukupuolen mukaan
+     * @param s jos halutaan tyttöjä niin pitää olla 1, muuten 0
      * @return lista eläimistä
      */
-    public ArrayList<Elain> getElaimet(Omistaja o) {
-        return elaimet.omistajanElaimet(o);        
-    }
-
     public ArrayList<Elain> getNimet(int s) {
         return elaimet.getNimet(s);
     }
+    
     
     /**
      * Tallentaa tiedostot eläimistä ja omistajista.
@@ -143,14 +224,12 @@ public class Pentu {
         try {
             elaimet.tallenna(hakemisto);
         } catch (SailoException e) {
-            // TODO Auto-generated catch block
             virhe += e.getMessage();
         }
         
         try {
             omistajat.tallenna(hakemisto);
         } catch (SailoException e) {
-            // TODO Auto-generated catch block
             virhe += e.getMessage();
         }
         
@@ -165,6 +244,7 @@ public class Pentu {
      * @param elain mikä poistetaan
      */
     public void poistaElain(Elain elain) {
+        if(elain == null) return;
         elaimet.poista(elain);        
     }
     
@@ -174,6 +254,7 @@ public class Pentu {
      * @param omistaja mikä poistetaan
      */
     public void poistaOmistaja(Omistaja omistaja) {
+        if (omistaja == null) return;
         omistajat.poista(omistaja);
     }
     
@@ -214,6 +295,10 @@ public class Pentu {
      * @return lista löydetyistä eläimistä
      */
     public ArrayList<Elain> etsi(String ehto, int k) {
+        if (k == 9) {
+            ArrayList<Omistaja> omist = omistajat.getOmistajat();
+            return elaimet.etsiOmistajanPerusteella(ehto, omist);
+        }
         return elaimet.etsi(ehto, k);
     }
 
@@ -247,20 +332,15 @@ public class Pentu {
         ari.rekisteroi();
         ari.taytaTiedoilla();
         
-        
-        try {
-            pentu.lisaa(mirzam2);
-            pentu.lisaa(mirzam);
-            pentu.lisaa(mirzam2);
-            pentu.lisaa(mirzam);
-            pentu.lisaa(mirzam2);
-            pentu.lisaa(mirzam);
-            pentu.lisaa(mirzam2);
-            pentu.lisaa(mirzam);
-        } catch (SailoException e) {
-            System.err.println(e.getMessage());
-            System.err.flush();
-        }
+
+        pentu.lisaa(mirzam2);
+        pentu.lisaa(mirzam);
+        pentu.lisaa(mirzam2);
+        pentu.lisaa(mirzam);
+        pentu.lisaa(mirzam2);
+        pentu.lisaa(mirzam);
+        pentu.lisaa(mirzam2);
+        pentu.lisaa(mirzam);
         
         ArrayList<Elain> p = pentu.getPennut(mirzam2);
         

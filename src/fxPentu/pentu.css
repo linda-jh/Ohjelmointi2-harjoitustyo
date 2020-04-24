@@ -9,9 +9,23 @@
 }
 
 .table-row-cell:empty {
+	/* @SuppressWarning */
    -fx-background-color: white;
 }
 
 .table-row-cell:empty .table-cell { 
+	/* @SuppressWarning */
    -fx-border-width:     0px;
+}
+
+.tab {
+	/* @SuppressWarning */
+	-fx-border-color: lightgray;
+}
+
+.tab:selected {
+	/* @SuppressWarning */
+	-fx-background-color: #fcfcfc;
+	/* @SuppressWarning */
+	-fx-border-color: #fcfcfc;
 }

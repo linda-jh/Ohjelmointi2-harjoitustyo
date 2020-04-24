@@ -1,7 +1,9 @@
 package pentu;
 
 /**
- * @author linda
+ * Poikkeusluokka tietorakenteesta aiheutuville poikkeuksille.
+ * @author Linda
+ * ljhovila@student.jyu.fi
  * @version 17.2.2020
  *
  */

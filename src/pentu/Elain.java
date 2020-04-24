@@ -1,35 +1,43 @@
 package pentu;
 
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.Comparator;
 
 import fi.jyu.mit.ohj2.Mjonot;
 
 /**
- * CRC-kortit
- * @author linda
+ * Tietää eläimen kentät (nimi, syntymäpäivä, jne.) ja osaa tarkistaa niiden oikeellisuuden. Osaa muuttaa 
+ * 1|Karvatassu Rigel|..| - merkkijonon eläimen tiedoiksi. Osaa antaa tietyn kentän tiedot ja myös asettaa tietoa 
+ * tiettyyn kenttään.
+ * @author Linda
+ * ljhovila@student.jyu.fi
  * @version 17.2.2020
+ * 
+ * Mikä ei toimi:
+ * - Kun nimen kirjoittamisesta tulee virhe, virheilmoituksen näyttökohdasta punainen väri ei lähde pois,
+ *   vaikka virhettä ei enää olisi
  *
  */
 public class Elain implements Cloneable {
     
     private int         tunnusNro;   
-    private String      nimi             = "(tyhjä)";
+    private String      nimi             = "-";
     private String      kutsumanimi      = "";
     private String      syntymapaiva     = "";
     private String      sukupuoli        = "";
     private long        sirunumero       = 0;
     private int         aitiId           = 0;
-    private int         isaId            = 0;  
-    private String      lisatietoja      = "";
+    private int         isaId            = 0;
     private int         omistajaId       = 0;
     private String      luovutusPv       = "";
-    
+      
     private static int  seuraavaNro      = 1;
+    
     
     /**
      * Vertailee tietyn kentän mukaan.
-     * @author linda
+     * @author Linda
      * @version 18.4.2020
      *
      */
@@ -50,6 +58,7 @@ public class Elain implements Cloneable {
         }
     }
     
+    
     /**
      * Oletusmuodostaja
      */
@@ -68,14 +77,14 @@ public class Elain implements Cloneable {
         case 0: return "" + tunnusNro;
         case 1: return "" + nimi;
         case 2: return "" + kutsumanimi;
-        case 3: String pv = kaannaPv(syntymapaiva); return "" + pv;
-        case 4: return "" + sukupuoli;
-        case 5: return "" + String.format("%15", sirunumero);
-        case 6: return "" + aitiId;
-        case 7: return "" + isaId;
-        case 8: return "" + omistajaId;
-        case 9: return "" + luovutusPv;
-        default: return "Ääliö";
+        case 3: return "" + String.format("%15d", sirunumero);
+        case 4: String pv = kaannaPv(syntymapaiva); return "" + pv;
+        case 5: String pv2 = kaannaPv(luovutusPv); return "" + pv2;
+        case 6: return "" + sukupuoli;
+        case 7: return "" + aitiId;
+        case 8: return "" + isaId;
+        case 9: return "" + omistajaId;
+        default: return "Virhe";
         }
     }
     
@@ -109,7 +118,7 @@ public class Elain implements Cloneable {
      * @return kenttien lukumäärä
      */
     public int getKenttia() {
-        return 11;
+        return 10;
     }
     
     
@@ -132,15 +141,14 @@ public class Elain implements Cloneable {
         case 0: return "Tunnusnumero";
         case 1: return "Nimi";
         case 2: return "Kutsumanimi";
-        case 3: return "Syntymäpäivä";
-        case 4: return "Sukupuoli";
-        case 5: return "Sirunumero";
-        case 6: return "Äiti";
-        case 7: return "Isä";
-        case 8: return "Omistaja";
-        case 9: return "Luovutuspäivämäärä";
-        case 10: return "Lisätietoja";
-        default: return "Ääliö";
+        case 3: return "Sirunumero";
+        case 4: return "Syntymäpäivä";
+        case 5: return "Luovutuspäivämäärä";
+        case 6: return "Sukupuoli";
+        case 7: return "Äiti";
+        case 8: return "Isä";
+        case 9: return "Omistaja";
+        default: return "Virhe";
         }
     }
     
@@ -150,7 +158,7 @@ public class Elain implements Cloneable {
      * @return true, jos on. Muuten false.
      */
     public boolean onkoPoika() {
-        if(sukupuoli == "poika") return true;
+        if(sukupuoli.equals("poika")) return true;
         return false;
     }
     
@@ -183,20 +191,11 @@ public class Elain implements Cloneable {
     
     
     /**
-     * Hakee eläimen kutsumanimen.
-     * @return kutsumanimi
+     * Hakee eläimen sukupuolen.
+     * @return sukupuoli
      */
-    public String getKutsumanimi() {
-        return kutsumanimi;
-    }
-    
-    
-    /**
-     * Hakee eläimen sirunumeron
-     * @return sirunumero
-     */
-    public String getSiruNro() {
-        return Long.toString(sirunumero);
+    public String getSukupuoli() {
+        return sukupuoli;
     }
       
     
@@ -219,8 +218,8 @@ public class Elain implements Cloneable {
     
     
     /**
-     * Palauttaa eläimen omistajan id:n
-     * @return omistajan id
+     * Palauttaa eläimen luovutuspäivämäärän
+     * @return luovutuspäivämäärä
      */
     public String getLuovutusPv() {
         return luovutusPv;
@@ -236,58 +235,7 @@ public class Elain implements Cloneable {
         tunnusNro = nr;
         if (tunnusNro >= seuraavaNro) seuraavaNro = tunnusNro + 1;
     }
-    
-    
-    /**
-     * Asettaa eläimen nimen
-     * @param s nimi
-     * @return virheilmoitus, null jos ok
-     */
-    public String setNimi(String s) {
-        nimi = s;
-        return null;
-    }
-    
-    
-    /**
-     * Asettaa eläimen kutsumanimen
-     * @param s kutsumanimi
-     * @return virheilmoitus, null jos ok
-     */
-    public String setKutsumanimi(String s) {
-        kutsumanimi = s;
-        return null;
-    }
-    
-    
-    /**
-     * Asettaa eläimen nimen
-     * @param s nimi
-     * @return virheilmoitus, null jos ok
-     */
-    public String setSirunumero(String s) {
-        if (!s.matches("[0-9]*")) return "Sirunumeron on oltava numeerinen";
-        sirunumero = Long.parseLong(s);
-        return null;
-    }
-    
-    
-    /**
-     * Asettaa eläimen omistajan id:n
-     * @param i id
-     */
-    public void setOmistajaId(int i) {
-        omistajaId = i;
-    }
-    
-    
-    /**
-     * Asettaa eläimen luovutuspäivämään
-     * @param s päivämäärä
-     */
-    public void setLuovutusPv(String s) {
-        luovutusPv = s;
-    }
+
 
     /**
      * Antaa jäsenelle seuraavan rekisterinumeron.
@@ -321,13 +269,16 @@ public class Elain implements Cloneable {
         sukupuoli = "tyttö";
         sirunumero = 985112001635024L;
         luovutusPv = "20.05.2015";
+        aitiId = 0;
+        isaId = 0;
+        omistajaId = 0;
     }
     
     
     /**
-     * Selvitää jäsenen tiedot | erotellusta merkkijonosta
+     * Selvittää eläimen tiedot | erotellusta merkkijonosta
      * Pitää huolen että seuraavaNro on suurempi kuin tuleva tunnusNro.
-     * @param rivi josta jäsenen tiedot otetaan
+     * @param rivi josta tiedot otetaan
      * 
      * @example
      * <pre name="test">
@@ -340,8 +291,7 @@ public class Elain implements Cloneable {
      *   int n = elain.getTunnusNro();
      *   elain.parse(""+(n+20));       // Otetaan merkkijonosta vain tunnusnumero
      *   elain.rekisteroi();           // ja tarkistetaan että seuraavalla kertaa tulee yhtä isompi
-     *   elain.getTunnusNro() === n+20+1;
-     *     
+     *   elain.getTunnusNro() === n+20+1;   
      * </pre>
      */
     public void parse(String rivi) {
@@ -349,14 +299,13 @@ public class Elain implements Cloneable {
         setTunnusNro(Mjonot.erota(sb, '|', getTunnusNro()));
         nimi = Mjonot.erota(sb, '|', nimi);
         kutsumanimi = Mjonot.erota(sb, '|', kutsumanimi);
-        syntymapaiva = Mjonot.erota(sb, '|', syntymapaiva);
-        sukupuoli = Mjonot.erota(sb, '|', sukupuoli);
         sirunumero = (long) Mjonot.erota(sb, '|', sirunumero);
+        syntymapaiva = Mjonot.erota(sb, '|', syntymapaiva);
+        luovutusPv = Mjonot.erota(sb, '|', luovutusPv);
+        sukupuoli = Mjonot.erota(sb, '|', sukupuoli);
         aitiId = Mjonot.erota(sb, '|', aitiId);
         isaId = Mjonot.erota(sb, '|', isaId);
         omistajaId = Mjonot.erota(sb, '|', omistajaId);
-        luovutusPv = Mjonot.erota(sb, '|', luovutusPv);
-        lisatietoja = Mjonot.erota(sb, '|', lisatietoja);
     }
     
     
@@ -370,70 +319,105 @@ public class Elain implements Cloneable {
         case 0: return "" + tunnusNro;
         case 1: return "" + nimi;
         case 2: return "" + kutsumanimi;
-        case 3: return "" + syntymapaiva;
-        case 4: return "" + sukupuoli;
-        case 5: return "" + sirunumero;
-        case 6: return "" + aitiId;
-        case 7: return "" + isaId;
-        case 8: return "" + omistajaId;
-        case 9: return "" + luovutusPv;
-        case 10: return "" + lisatietoja;
-        default: return "Äääliö";
+        case 3: return "" + sirunumero;
+        case 4: return "" + syntymapaiva;
+        case 5: return "" + luovutusPv;
+        case 6: return "" + sukupuoli;
+        case 7: return "" + aitiId;
+        case 8: return "" + isaId;
+        case 9: return "" + omistajaId;
+        default: return "Virhe";
         }
     }
     
     
     /**
-     * Asettaa k:n kentän arvoksi parametrina tuodun merkkijonon arvon
-     * @param k kuinka monennen kentän arvo asetetaan
-     * @param jono jonoa joka asetetaan kentän arvoksi
-     * @return null jos asettaminen onnistuu, muuten vastaava virheilmoitus.
-     * TODO: testit
-     * TODO: tarkistukset tähän ohjelmaan
+     * Asettaa kentän arvoksi parametrinä tuodun omistajan nimen
+     * @param jono omistajan nimi
+     * @param lista lista omistajista
      */
-    public String aseta(int k, String jono) {
+    public void asetaOmistaja(String jono, ArrayList<Omistaja> lista) {
         String tjono = jono.trim();
-        StringBuffer sb = new StringBuffer(tjono);
+
+        Omistaja o = new Omistaja();
+        for (Omistaja omistaja : lista) {
+            if (omistaja.getNimi().equals(tjono)) o = omistaja;
+        }
+        omistajaId = o.getTunnusNro();
+    }
+    
+    
+    /**
+     * Asettaa k:n kentän arvoksi parametrina tuodun merkkijonon arvon
+     * @param k kuinka monennen kentän arvo asetetaan. Vain kentät 6-8
+     * @param jono jonoa joka asetetaan kentän arvoksi
+     * @param t taulukko eläimistä
+     * @param tiedosto kasvattajan nimi
+     * @return null jos asettaminen onnistuu, muuten vastaava virheilmoitus.
+     * @example
+     * <pre name="test">
+     *   Elain[] t = new Elain[5];
+     *   Elain e = new Elain();
+     *   String s = "Karhukolo";
+     *   e.aseta(1,"Karhukolo Puh", t, s) === null;
+     *   e.aseta(1,"Nalle Puh", t, s) === "Nimen täytyy sisältää kasvattajan nimi ja eläimen nimi";
+     *   e.aseta(3,"nalle", t, s) === "Sirunumeron on oltava numeerinen";
+     * </pre>
+     */
+    public String aseta(int k, String jono, Elain[] t, String tiedosto) {
+        String tjono = jono.trim();
+        StringBuilder sb = new StringBuilder(tjono);
         switch ( k ) {
         case 0:
             setTunnusNro(Mjonot.erota(sb, '§', getTunnusNro()));
             return null;
         case 1:
+            if (tjono.contains(tiedosto) == false) return "Nimen täytyy sisältää kasvattajan nimi ja eläimen nimi";
             nimi = tjono;
             return null;
-        case 2:
+        case 2: 
             kutsumanimi = tjono;
             return null;
         case 3:
-            syntymapaiva = tjono;
+            if (!tjono.matches("[0-9]*")) return "Sirunumeron on oltava numeerinen";
+            if (tjono.length() != 0) sirunumero = Long.parseLong(tjono);
             return null;
         case 4:
-            sukupuoli = tjono;
+            int vuosi = Mjonot.erota(sb, '-', 0000);
+            int kk = Mjonot.erota(sb, '-', 00);
+            String s = String.format("%02d", kk);
+            sb.append("." + s + "." + vuosi);
+            syntymapaiva = sb.toString();
             return null;
         case 5:
-            sirunumero = Long.parseLong(tjono);
+            int vv = Mjonot.erota(sb, '-', 0000);
+            int kk2 = Mjonot.erota(sb, '-', 00);
+            String ss = String.format("%02d", kk2);
+            sb.append("." + ss + "." + vv);
+            luovutusPv = sb.toString();
             return null;
         case 6:
-            // Elain elain = pentu.Elaimet.anna(Integer.parseInt(tjono));
-            // aiti = elain.getNimi();
-            aitiId = Integer.parseInt(tjono); // TODO: korjaa tämä!
+            sukupuoli = tjono;
             return null;
         case 7:
-            isaId = Integer.parseInt(tjono); // TODO: korjaa tämä!
+            Elain e = new Elain();
+            for (int i = 0; i < t.length; i++) {
+                if (t[i].getNimi().equals(tjono)) e = t[i];
+            }
+            aitiId = e.getTunnusNro();
             return null;
         case 8:
-            omistajaId = Integer.parseInt(tjono); //TODO: korjaa!
-            return null;
-        case 9:
-            luovutusPv = tjono;
-            return null;
-        case 10:
-            lisatietoja = tjono;
-            return null;
+            Elain e2 = new Elain();
+            for (int i = 0; i < t.length; i++) {
+                if (t[i].getNimi().equals(tjono)) e2 = t[i];
+            }
+            isaId = e2.getTunnusNro();
+            return null;        
         default:
-            return "ÄÄliö";
+            return "Virhe";
         }
     }
+    
     
     /**
      * Palauttaa eläimen tiedot merkkijonona jonka voi tallentaa tiedostoon.
@@ -451,14 +435,13 @@ public class Elain implements Cloneable {
                 getTunnusNro() + "|" +
                 nimi + "|" +
                 kutsumanimi + "|" +
-                syntymapaiva + "|" +
-                sukupuoli + "|" +
                 sirunumero + "|" +
+                syntymapaiva + "|" +
+                luovutusPv + "|" +
+                sukupuoli + "|" +
                 aitiId + "|" +
                 isaId + "|" +
-                omistajaId + "|" +
-                luovutusPv + "|" +
-                lisatietoja + "|";
+                omistajaId + "|";
     }
 
 
@@ -478,8 +461,23 @@ public class Elain implements Cloneable {
     public Elain clone() throws CloneNotSupportedException {
         Elain uusi = (Elain) super.clone();
         return uusi;
+    }    
+    
+    
+    /**
+     * Tulostetaan olion tiedot
+     * @param out tietovirta johon tulostetaan
+     */
+    public void tulosta(PrintStream out) {
+        out.println(String.format("%03d", tunnusNro) + " " + nimi + " " + kutsumanimi);
+        out.println("Syntymäpäivä: " + syntymapaiva);
+        out.println("Sukupuoli: " + sukupuoli);
+        out.println("Sirunumero: " + sirunumero);
+        out.println("Äidin indeksi: " + aitiId);
+        out.println("Isän indeksi: " + isaId);    
     }
 
+    
     /**
      * @param args ei käytössä
      */
@@ -511,20 +509,5 @@ public class Elain implements Cloneable {
         System.out.println(kaannaPv(pv1));
               
 
-    }
-    
-    
-    /**
-     * Tulostetaan olion tiedot
-     * @param out tietovirta johon tulostetaan
-     */
-    public void tulosta(PrintStream out) {
-        out.println(String.format("%03d", tunnusNro) + " " + nimi + " " + kutsumanimi);
-        out.println("Syntymäpäivä: " + syntymapaiva);
-        out.println("Sukupuoli: " + sukupuoli);
-        out.println("Sirunumero: " + sirunumero);
-        out.println("Äidin indeksi: " + aitiId);
-        out.println("Isän indeksi: " + isaId);
-        out.println("Lisätiedot: " + lisatietoja);       
     }
 }

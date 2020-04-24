@@ -14,19 +14,20 @@ import java.util.Scanner;
 import fi.jyu.mit.ohj2.WildChars;
 
 /**
- * @author linda
+ * Pitää yllä varsinaista rekisteriä omistajista. Osaa lukea tiedostosta ja kirjoittaa siihen.
+ * Osaa myös lisätä, poistaa, lajitella ja etsiä tietoa.  
+ * @author Linda
+ * ljhovila@student.jyu.fi
  * @version 11.3.2020
  *
  */
 public class Omistajat implements Iterable<Omistaja> {
-    /** Taulukko omistajista */
-    private final ArrayList<Omistaja> alkiot;
     
+    private final ArrayList<Omistaja> alkiot;
     private int                       lkm            = 0;
-    private boolean                   muutettu;
-    private String                    tiedostonNimi  = "";
     private Omistaja                  apuomistaja    = new Omistaja();
 
+    
     @Override
     public Iterator<Omistaja> iterator() {
         return alkiot.iterator();
@@ -38,12 +39,22 @@ public class Omistajat implements Iterable<Omistaja> {
      */
     public Omistajat() {
         alkiot = new ArrayList<Omistaja>();
+        // lisaa(new Omistaja());
     }
     
     
     /**
      * Lisätään omistaja omistajiin.
      * @param o lisättävä omistaja
+     * @example
+     * <pre name="test">
+     * Omistajat o = new Omistajat();
+     * Omistaja o2 = new Omistaja();
+     * Omistaja o3 = new Omistaja();
+     * Omistaja o4 = new Omistaja();
+     * o.lisaa(o2); o.lisaa(o3); o.lisaa(o4);
+     * o.getLkm() === 3;
+     * </pre>
      */
     public void lisaa(Omistaja o) {
         alkiot.add(o);
@@ -59,16 +70,37 @@ public class Omistajat implements Iterable<Omistaja> {
      */
     public Omistaja anna(int i) throws IndexOutOfBoundsException {
         if (i < 0 || lkm <= i)
-            throw new IndexOutOfBoundsException("Laitoin indeksi: " + i);
+            throw new IndexOutOfBoundsException("Laiton indeksi: " + i);
         return alkiot.get(i);
+    }
+    
+    
+    /**
+     * Hakee ja palauttaa omistajien lukumäärän
+     * @return omistajien lukumäärä
+     */
+    public int getLkm() {
+        return lkm;
     }
     
     
     /**
      * Palauttaa listan omistajista.
      * @return lista
+     * @example
+     * <pre name="test">
+     * Omistajat o = new Omistajat();
+     * Omistaja o1 = new Omistaja();
+     * Omistaja o2 = new Omistaja(); o2.parse("1|Ari Katajavuori|Kuusitie 12|10740 Helsinki|0405632942|ari.kvuori@gmail.com|");
+     * Omistaja o3 = new Omistaja(); o3.parse("2|Aino Alakiuttu|Pulukatu 24 B 5|40555 Pihtipudas|0503329471|aino4ever@hotmail.com|");
+     * Omistaja o4 = new Omistaja(); o4.parse("3|Pilvi Mannio|Linnantie 74|70860 Oulu|041542177|mannio.p@gmail.com|");
+     * o.lisaa(o1); o.lisaa(o2); o.lisaa(o3); o.lisaa(o4);
+     * ArrayList<Omistaja> omistajat = o.getOmistajat();
+     * omistajat.size() === 4;
+     * omistajat.get(2).getTunnusNro() === 2;
+     * </pre>
      */
-    public ArrayList<Omistaja> getNimet() {
+    public ArrayList<Omistaja> getOmistajat() {
         ArrayList<Omistaja> omistajat = new ArrayList<Omistaja>();
         for (Omistaja o : alkiot) {
             omistajat.add(o);
@@ -78,15 +110,22 @@ public class Omistajat implements Iterable<Omistaja> {
     
     
     /**
-     * Lukee omistajien tiedostosta.  
-     * TODO Kesken.
+     * Asettaa eläimen tietoihin omistajan
+     * @param elain mikä eläin
+     * @param s omistajan nimi
+     */
+    public void aseta(Elain elain, String s) {
+        elain.asetaOmistaja(s, alkiot);
+    }
+    
+    
+    /**
+     * Lukee omistajien tiedostosta.
      * @param hakemisto tiedoston hakemisto
      * @throws SailoException jos lukeminen epäonnistuu
      */
     public void lueTiedostosta(String hakemisto) throws SailoException {
         File tied = new File(hakemisto + "/omistajat.dat");
-        tiedostonNimi = hakemisto;
-        //throw new SailoException("Ei osata vielä lukea tiedostoa " + tiedostonNimi);
         
         try (Scanner fi = new Scanner(new FileInputStream(tied.getCanonicalPath()))) { // Jotta UTF8/ISO-8859 toimii
             String kokoNimi = fi.nextLine();
@@ -122,15 +161,6 @@ public class Omistajat implements Iterable<Omistaja> {
     
     
     /**
-     * Hakee ja palauttaa omistajien lukumäärän
-     * @return omistajien lukumäärä
-     */
-    public int getLkm() {
-        return lkm;
-    }
-    
-    
-    /**
      * Tallentaa omistajien tiedot tiedostoon.
      * @param hakemisto mihin tallennetaan
      * @throws SailoException jos ei onnistu
@@ -155,6 +185,18 @@ public class Omistajat implements Iterable<Omistaja> {
     /**
      * Poistaa valitun omistajan
      * @param omistaja mikä poistetaan
+     * @example
+     * <pre name="test">
+     * Omistajat o = new Omistajat();
+     * Omistaja o1 = new Omistaja();
+     * Omistaja o2 = new Omistaja(); o2.parse("1|Ari Katajavuori|Kuusitie 12|10740 Helsinki|0405632942|ari.kvuori@gmail.com|");
+     * Omistaja o3 = new Omistaja(); o3.parse("2|Aino Alakiuttu|Pulukatu 24 B 5|40555 Pihtipudas|0503329471|aino4ever@hotmail.com|");
+     * Omistaja o4 = new Omistaja(); o4.parse("3|Pilvi Mannio|Linnantie 74|70860 Oulu|041542177|mannio.p@gmail.com|");
+     * o.lisaa(o1); o.lisaa(o2); o.lisaa(o3); o.lisaa(o4);
+     * o.getLkm() === 4;
+     * o.poista(o2);
+     * o.getLkm() === 3;
+     * </pre>
      */
     public void poista(Omistaja omistaja) {
         int nro = omistaja.getTunnusNro();
@@ -171,6 +213,17 @@ public class Omistajat implements Iterable<Omistaja> {
      * Etsii löytyykö annettulla id:llä omistajaa
      * @param i id, jota etsitään
      * @return true, jos löytyy. Muuten false.
+     * @example
+     * <pre name="test">
+     * Omistajat o = new Omistajat();
+     * Omistaja o1 = new Omistaja();
+     * Omistaja o2 = new Omistaja(); o2.parse("1|Ari Katajavuori|Kuusitie 12|10740 Helsinki|0405632942|ari.kvuori@gmail.com|");
+     * Omistaja o3 = new Omistaja(); o3.parse("2|Aino Alakiuttu|Pulukatu 24 B 5|40555 Pihtipudas|0503329471|aino4ever@hotmail.com|");
+     * Omistaja o4 = new Omistaja(); o4.parse("3|Pilvi Mannio|Linnantie 74|70860 Oulu|041542177|mannio.p@gmail.com|");
+     * o.lisaa(o1); o.lisaa(o2); o.lisaa(o3); o.lisaa(o4);
+     * o.loytyyko(2) === true;
+     * o.loytyyko(5) === false;
+     * </pre>
      */
     public boolean loytyyko(int i) {
         for (Omistaja o : alkiot) {
@@ -181,6 +234,7 @@ public class Omistajat implements Iterable<Omistaja> {
     
     
     /**
+     * Korvaa omistajan tiedot tietorakenteeseen tai tekee uuden. Etsitään samalla tunnusnumerolla oleva omistaja.
      * @param omistaja lisättävän viite
      */
     public void korvaaTaiLisaa(Omistaja omistaja) {
@@ -189,7 +243,6 @@ public class Omistajat implements Iterable<Omistaja> {
         for (Omistaja o : alkiot) {
             if (o.getTunnusNro() == id) {
                 alkiot.set(i, omistaja);
-                muutettu = true;
                 return;
             }
             i++;
@@ -205,24 +258,19 @@ public class Omistajat implements Iterable<Omistaja> {
      * @return lista löydetyistä eläimistä
      * @example
      * <pre name="test">
-     * Elaimet elaimet = new Elaimet();
-     * Elain elain1 = new Elain(); elain1.parse("1|Karvatassu Rigel|Simba|15.04.2018|poika|985112001635024|5|6|0||-|");
-     * Elain elain2 = new Elain(); elain2.parse("2|Karvatassu Spica|Nala|15.04.2018|tyttö|985112001635025|5|6|2|22.07.2018|-|");
-     * Elain elain3 = new Elain(); elain3.parse("3|Karvatassu Castor|Mufasa|15.04.2018|poika|985112001635026|5|6|3|27.07.2018|-|");
-     * Elain elain4 = new Elain(); elain4.parse("4|Karvatassu Hadar|Pumba|15.04.2018|poika|985112001635027|5|6|0||-|");
-     * Elain elain5 = new Elain(); elain5.parse("5|Karvatassu Mirzam|Nelli|20.07.2015|tyttö|985112001346227|7|0|0||-|");
-     * Elain elain6 = new Elain(); elain5.parse("6|Karvatassu Regor|Pörrö|02.03.2016|poika|985112001401021|0|0|0||-|");
-     * Elain elain7 = new Elain(); elain5.parse("7|Karvatassu Jupiter|Pilkku|30.05.2017|tyttö|985112001499302|0|0|0||-|");
-     * elaimet.lisaa(elain1); elaimet.lisaa(elain2); elaimet.lisaa(elain3); elaimet.lisaa(elain4); elaimet.lisaa(elain5); 
-     * elaimet.lisaa(elain6); elaimet.lisaa(elain7);
-     * List<Elain> lista;
-     * lista = elaimet.etsi("*i*", 1);
-     * lista.size() === 3;
-     * lista.get(0) == elain1 === true;
-     * lista.get(2) == elain5 === true;
+     * Omistajat o = new Omistajat();
+     * Omistaja o1 = new Omistaja();
+     * Omistaja o2 = new Omistaja(); o2.parse("1|Ari Katajavuori|Kuusitie 12|10740 Helsinki|0405632942|ari.kvuori@gmail.com|");
+     * Omistaja o3 = new Omistaja(); o3.parse("2|Aino Alakiuttu|Pulukatu 24 B 5|40555 Pihtipudas|0503329471|aino4ever@hotmail.com|");
+     * Omistaja o4 = new Omistaja(); o4.parse("3|Pilvi Mannio|Linnantie 74|70860 Oulu|041542177|mannio.p@gmail.com|");
+     * o.lisaa(o1); o.lisaa(o2); o.lisaa(o3); o.lisaa(o4);
+     * ArrayList<Omistaja> lista = o.etsi("*v*", 1);
+     * lista.size() === 2;
+     * lista.get(0) == o2 === true;
+     * lista.get(1) == o4 === true;
      * 
-     * lista = elaimet.etsi(null, -1);
-     * lista.size() === 7;
+     * lista = o.etsi(null, -1);
+     * lista.size() === 3;
      * </pre>
      */
     public ArrayList<Omistaja> etsi(String hakuehto, int k) {
@@ -233,17 +281,10 @@ public class Omistajat implements Iterable<Omistaja> {
         
         ArrayList<Omistaja> lista = new ArrayList<Omistaja>();
         
-        if (hk == 5 || hk == 6 || hk == 7) {
-            for (int i = 1; i < lkm; i++) {
-                String nimi = anna(hk).getNimi();
-                if (WildChars.onkoSamat(nimi, ehto))
-                    lista.add(alkiot.get(i));
-            }
-        } else {
             for (int i = 1; i < lkm; i++) {
                 if (WildChars.onkoSamat(alkiot.get(i).anna(hk), ehto))
                     lista.add(alkiot.get(i));
-            }
+            
         }
         Collections.sort(lista, new Omistaja.Vertailija(hk));
         
@@ -252,6 +293,7 @@ public class Omistajat implements Iterable<Omistaja> {
     
     
     /**
+     * Testipääohjelma
      * @param args ei käytössä
      */
     public static void main(String[] args) {

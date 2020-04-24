@@ -9,8 +9,9 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 
-<BorderPane stylesheets="@pentu.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxPentu.OmistajaDialogController">
+<BorderPane style="-fx-background-color: #fcfcfc;" stylesheets="@pentu.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxPentu.OmistajaDialogController">
    <center>
       <GridPane hgap="10.0" BorderPane.alignment="CENTER">
          <columnConstraints>
@@ -18,7 +19,6 @@
             <ColumnConstraints fillWidth="false" halignment="RIGHT" hgrow="NEVER" maxWidth="192.0000122070313" minWidth="10.0" prefWidth="152.59998779296873" />
          </columnConstraints>
          <rowConstraints>
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -38,19 +38,23 @@
             <TextField fx:id="editPostinro" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <TextField fx:id="editPuhelinnro" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <TextField fx:id="editSPosti" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="4" />
-            <Label fx:id="labelVirhe" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="5" />
          </children>
       </GridPane>
    </center>
    <bottom>
-      <ButtonBar BorderPane.alignment="CENTER">
-        <buttons>
-          <Button defaultButton="true" mnemonicParsing="false" onAction="#handleOK" text="OK" />
-            <Button cancelButton="true" mnemonicParsing="false" onAction="#handleCancel" text="Kumoa" />
-        </buttons>
-         <BorderPane.margin>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-         </BorderPane.margin>
-      </ButtonBar>
+      <VBox BorderPane.alignment="CENTER">
+         <children>
+            <Label fx:id="labelVirhe" alignment="CENTER" prefHeight="18.0" prefWidth="303.0" />
+            <ButtonBar>
+              <buttons>
+                <Button defaultButton="true" mnemonicParsing="false" onAction="#handleOK" text="OK" />
+                  <Button cancelButton="true" mnemonicParsing="false" onAction="#handleCancel" text="Kumoa" />
+              </buttons>
+               <VBox.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </VBox.margin>
+            </ButtonBar>
+         </children>
+      </VBox>
    </bottom>
 </BorderPane>

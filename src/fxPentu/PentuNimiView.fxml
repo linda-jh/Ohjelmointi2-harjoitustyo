@@ -9,11 +9,11 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane style="-fx-background-color: darkseagreen;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxPentu.PentuNimiController">
+<BorderPane prefWidth="450.0" style="-fx-background-color: #fcfcfc;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxPentu.PentuNimiController">
    <top>
       <Label text="Penturekisteri" BorderPane.alignment="CENTER">
          <font>
-            <Font name="MS Outlook" size="67.0" />
+            <Font name="Haettenschweiler" size="85.0" />
          </font>
          <BorderPane.margin>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -28,7 +28,7 @@
                   <Insets bottom="10.0" left="60.0" right="10.0" top="14.0" />
                </HBox.margin>
                <font>
-                  <Font name="MS Outlook" size="14.0" />
+                  <Font name="Arial" size="14.0" />
                </font>
             </Label>
             <TextField fx:id="textNimi">

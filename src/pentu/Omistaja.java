@@ -8,7 +8,10 @@ import fi.jyu.mit.ohj2.Mjonot;
 
 
 /**
- * @author linda
+ * Tietää omistajan kentät ja osaa antaa niistä tietoa ja asettaa tietoa niihin.
+ * Osaa tarkistaa tietyn kentän oikeellisuuden. Osaa muuttaa 1|Ari Katajavuori|..| merkkijonon omistajan tiedoiksi.
+ * @author Linda
+ * ljhovila@student.jyu.fi
  * @version 11.3.2020
  *
  */
@@ -25,7 +28,7 @@ public class Omistaja implements Cloneable {
     
     /**
      * Vertailee tietyn kentän mukaan.
-     * @author linda
+     * @author Linda
      * @version 18.4.2020
      *
      */
@@ -44,34 +47,6 @@ public class Omistaja implements Cloneable {
         public int compare(Omistaja omistaja1, Omistaja omistaja2) {
             return omistaja1.getAvain(k).compareToIgnoreCase(omistaja2.getAvain(k));
         }
-    }
-    
-    
-    /**
-     * Palauttaa kentän k mukaisen lajitteluavaimen
-     * @param k mikä kenttä
-     * @return lajitteluavain
-     */
-    public String getAvain(int k) {
-        switch ( k ) {
-        case 0: return "" + tunnusNro;
-        case 1: String n = kaannaNimi(nimi); return "" + n;
-        case 2: return "" + katuosoite;
-        case 3: return "" + nroKaupunki;
-        case 4: return "" + puhelin;
-        case 5: return "" + sposti;
-        default: return "Ääliö";
-        }
-    }
-    
-    
-    private String kaannaNimi(String n) {
-        StringBuilder sb = new StringBuilder();
-        String s = n;
-        sb.append(s);
-        String etunimi = Mjonot.erota(sb, ' ', "");
-        sb.append(" " + etunimi);
-        return sb.toString();
     }
     
     
@@ -102,6 +77,7 @@ public class Omistaja implements Cloneable {
     
     
     /**
+     * Hakee omistajan id:n
      * @return tunnusnumero
      */
     public int getTunnusNro() {
@@ -110,6 +86,7 @@ public class Omistaja implements Cloneable {
     
     
     /**
+     * Hakee omistajan nimen
      * @return omistajan nimen
      */
     public String getNimi() {
@@ -118,6 +95,7 @@ public class Omistaja implements Cloneable {
 
 
     /**
+     * Hakee omistajan katuosoitteen
      * @return katuosoite
      */
     public String getKatuosoite() {
@@ -126,6 +104,7 @@ public class Omistaja implements Cloneable {
 
 
     /**
+     * Hakee omistajan postinumeron ja paikkakunnan
      * @return postinumero ja paikkakunta
      */
     public String getPostinro() {
@@ -134,6 +113,7 @@ public class Omistaja implements Cloneable {
 
 
     /**
+     * Hakee omistajan puhelinnumeron
      * @return puhelinnumero
      */
     public String getPuhelinnro() {
@@ -142,6 +122,7 @@ public class Omistaja implements Cloneable {
 
 
     /**
+     * Hakee omistajan sähköpostiosoitteen
      * @return sähköposti
      */
     public String getSPosti() {
@@ -177,7 +158,7 @@ public class Omistaja implements Cloneable {
      * @return virheilmoitus, null jos ok
      */
     public String setPostinro(String s) {
-        // if (!s.matches("[0-9]*")) return "Sirunumeron on oltava numeerinen";
+        if (!s.matches("[0-9].*[a-zA-Z]")) return "Postinumero tai kaupunki puuttuu";
         nroKaupunki = s;
         return null;
     }
@@ -189,6 +170,7 @@ public class Omistaja implements Cloneable {
      * @return virheilmoitus, null jos ok
      */
     public String setPuhelin(String s) {
+        if (!s.matches("[0-9]")) return "Puhelinnumero täytyy olla numeerinen";
         puhelin = s;
         return null;
     }
@@ -200,14 +182,66 @@ public class Omistaja implements Cloneable {
      * @return virheilmoitus, null jos ok
      */
     public String setSPosti(String s) {
+        if (!s.matches("[a-z].*[@].*[a-z]")) return "Sähköposti osoite ei ole oikeassa muodossa.";
         sposti = s;
         return null;
     }
     
     
     /**
+     * Palauttaa kentän k mukaisen lajitteluavaimen
+     * @param k mikä kenttä
+     * @return lajitteluavain
+     */
+    public String getAvain(int k) {
+        switch ( k ) {
+        case 0: return "" + tunnusNro;
+        case 1: String n = kaannaNimi(nimi); return "" + n;
+        case 2: return "" + katuosoite;
+        case 3: return "" + nroKaupunki;
+        case 4: return "" + puhelin;
+        case 5: return "" + sposti;
+        default: return "Ääliö";
+        }
+    }
+    
+    
+    /**
+     * Kääntää nimen Etunimi Sukunimi muodosta Sukunimi Etunimi muotoon.
+     * @param n nimi
+     * @return käännetty nimi
+     * @example
+     * <pre name="test">
+     *  Omistaja o = new Omistaja();
+     *  String s = "Aku Ankka";
+     *  String s2 = o.kaannaNimi(s);
+     *  s2 === "Ankka Aku";
+     * </pre>
+     */
+    public String kaannaNimi(String n) {
+        StringBuilder sb = new StringBuilder();
+        String s = n;
+        sb.append(s);
+        String etunimi = Mjonot.erota(sb, ' ', "");
+        sb.append(" " + etunimi);
+        return sb.toString();
+    }
+    
+    
+    /**
      * Lisätään omistajalle tunnusnumero
      * @return omistajan tunnusnumeron
+     * @example
+     * <pre name="test">
+     *  Omistaja a = new Omistaja();
+     *  a.getTunnusNro() === 0;
+     *  a.rekisteroi();
+     *  Omistaja b = new Omistaja();
+     *  b.rekisteroi();
+     *  int n1 = a.getTunnusNro();
+     *  int n2 = b.getTunnusNro();
+     *  n1 === n2 - 1;
+     * </pre>
      */
     public int rekisteroi() {
         tunnusNro = seuraavaNro;
@@ -262,18 +296,6 @@ public class Omistaja implements Cloneable {
     
     
     /**
-     * Palauttaa i:n eläimen
-     * @param i monesko eläin palautetaan
-     * @return viite i:teen eläimeen 
-     * @throws IndexOutOfBoundsException jos tulee poikkeus
-     
-    public Elain annaElain(int i) throws IndexOutOfBoundsException {
-        Elaimet elaimet = new Elaimet();
-        return elaimet.anna(i);
-    }*/
-    
-    
-    /**
      * Palauttaa eläimen tiedot merkkijonona jonka voi tallentaa tiedostoon.
      * @return jäsen tolppaeroteltuna merkkijonona 
      * @example
@@ -304,8 +326,8 @@ public class Omistaja implements Cloneable {
         tunnusNro = nr;
         if (tunnusNro >= seuraavaNro) seuraavaNro = tunnusNro + 1;
     }
+
     
-    /**
     /**
      * Selvitää harrastuksen tiedot | erotellusta merkkijonosta.
      * Pitää huolen että seuraavaNro on suurempi kuin tuleva tunnusnro.
@@ -351,33 +373,7 @@ public class Omistaja implements Cloneable {
         default: return "Äääliö";
         }
     }
-    /**
-    public String aseta(int k, String jono) {
-        String tjono = jono.trim();
-        StringBuffer sb = new StringBuffer(tjono);
-        switch ( k ) {
-        case 0:
-            setTunnusNro(Mjonot.erota(sb, '§', getTunnusNro()));
-            return null;
-        case 1:
-            nimi = tjono;
-            return null;
-        case 2:
-            katuosoite = tjono;
-            return null;
-        case 3:
-            nroKaupunki = tjono;
-            return null;
-        case 4:
-            puhelin = tjono;
-            return null;
-        case 5:
-            sposti = tjono;
-            return null;
-        default:
-            return "ÄÄliö";
-        }
-    }*/
+
     
     /**
      * Palauttaa omistajan kentän kysymykset/aiheet.
@@ -396,7 +392,9 @@ public class Omistaja implements Cloneable {
         }
     }
     
-    
+    /**
+     * Tekee omistajasta kloonin ja palauttaa sen.
+     */
     @Override
     public Omistaja clone() throws CloneNotSupportedException {
         Omistaja uusi = (Omistaja) super.clone();

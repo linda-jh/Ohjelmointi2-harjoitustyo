@@ -10,7 +10,9 @@ import javafx.fxml.FXMLLoader;
 
 
 /**
- * @author linda
+ * Pääohjelma Penturekisterin käynnistämiseksi.
+ * @author Linda
+ * ljhovila@student.jyu.fi
  * @version 4.2.2020
  *
  */
@@ -30,12 +32,10 @@ public class Main extends Application {
             final Scene scene = new Scene(root);
             scene.getStylesheets().add(getClass().getResource("pentu.css").toExternalForm());
             primaryStage.setScene(scene);
-            primaryStage.setTitle("Pentu");
+            primaryStage.setTitle("Penturekisteri");
             
             Pentu pentu = new Pentu();
             pentuCtrl.setPentu(pentu);
-            
-            // Platform.setImplicitExit(false); // tätä ei kai saa laittaa
 
             primaryStage.setOnCloseRequest((event) -> {
                     if ( !pentuCtrl.voikoSulkea() ) event.consume();

@@ -7,7 +7,9 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 /**
- * @author linda
+ * Avaa dialogin ohjelman auetessa ja kysyy käyttäjältä rekisterin nimen.
+ * @author Linda
+ * ljhovila@student.jyu.fi
  * @version 7.2.2020
  *
  */
@@ -57,7 +59,7 @@ public class PentuNimiController implements ModalControllerInterface<String> {
          public static String kysyNimi(Stage modalityStage, String oletus) {
              return ModalController.showModal(
                      PentuNimiController.class.getResource("PentuNimiView.fxml"),
-                     "Pentu", modalityStage, oletus);
+                     "Penturekisteri", modalityStage, oletus);
          }
 
     }
